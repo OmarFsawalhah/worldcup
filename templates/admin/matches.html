@@ -2,20 +2,84 @@
 {% block container_class %}max-w-7xl{% endblock %}
 {% block content %}
 {% set lang = current_lang() %}
+
 <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-  <h1 class="text-2xl font-display tracking-wide">{{ t('admin.matches') }}</h1>
+  <h1 class="text-xl sm:text-2xl font-display tracking-wide">{{ t('admin.matches') }}</h1>
   <div class="flex gap-2 flex-wrap">
     <form method="post" action="{{ url_for('admin.refresh_api') }}" class="inline">
-      <button class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800" title="{{ t('admin.refresh_tip') }}">
+      <button class="bg-blue-700 text-white px-3 sm:px-4 py-2 rounded hover:bg-blue-800 text-sm" title="{{ t('admin.refresh_tip') }}">
         🔄 {{ t('admin.refresh_api') }}
       </button>
     </form>
-    <a href="{{ url_for('admin.users') }}" class="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800">👥 {{ t('admin.users') }}</a>
-    <a href="{{ url_for('admin.match_new') }}" class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">+ {{ t('admin.add_match') }}</a>
+    <a href="{{ url_for('admin.users') }}" class="bg-slate-700 text-white px-3 sm:px-4 py-2 rounded hover:bg-slate-800 text-sm">👥 {{ t('admin.users') }}</a>
+    <a href="{{ url_for('admin.match_new') }}" class="bg-emerald-700 text-white px-3 sm:px-4 py-2 rounded hover:bg-emerald-800 text-sm">+ {{ t('admin.add_match') }}</a>
   </div>
 </div>
 
-<div class="card-pitch overflow-x-auto">
+{% macro action_buttons(m) %}
+  <a href="{{ url_for('admin.match_result', mid=m.id) }}" class="bg-emerald-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.result') }}</a>
+  {% if m.home_score is not none %}
+    {% if not m.calculated_by_id or m.calculated_by_id == current_user.id %}
+      <form method="post" action="{{ url_for('admin.match_calc_points', mid=m.id) }}" class="inline">
+        <button class="bg-green-700 text-white px-2 py-1 rounded text-xs font-bold hover:bg-green-800">
+          ⚡ {{ t('admin.calc_points') }}{% if m.calculated_by_id == current_user.id %} ↻{% endif %}
+        </button>
+      </form>
+    {% else %}
+      <span class="bg-slate-300 text-slate-500 px-2 py-1 rounded text-xs font-bold cursor-not-allowed"
+            title="{{ t('admin.already_calculated_by', who=m.calculated_by.username) }}">
+        ⚡ {{ t('admin.calc_points') }} 🔒
+      </span>
+    {% endif %}
+  {% endif %}
+  {% if m.trivia or not m.is_locked() %}
+    <a href="{{ url_for('admin.match_trivia', mid=m.id) }}" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.trivia') }}{% if m.trivia %} ✓{% endif %}</a>
+  {% else %}
+    <span class="bg-slate-300 text-slate-500 px-2 py-1 rounded text-xs cursor-not-allowed" title="{{ t('admin.trivia_locked_new') }}">{{ t('admin.trivia') }} 🔒</span>
+  {% endif %}
+  <a href="{{ url_for('admin.match_predictions', mid=m.id) }}" class="bg-slate-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.predictions') }}</a>
+  <a href="{{ url_for('admin.match_edit', mid=m.id) }}" class="bg-amber-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.edit_match') }}</a>
+  <form method="post" action="{{ url_for('admin.match_delete', mid=m.id) }}" class="inline" onsubmit="return confirm('Delete?')">
+    <button class="bg-red-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.delete') }}</button>
+  </form>
+{% endmacro %}
+
+{# ---------- Date filter tabs ---------- #}
+<div class="card-pitch mb-4 p-2 sm:p-3">
+  <div class="flex flex-wrap gap-1 sm:gap-2" id="admin-match-filters">
+    <button type="button" data-filter="all"
+      class="filter-btn active flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_all') }}
+    </button>
+    <button type="button" data-filter="today"
+      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_today') }}
+    </button>
+    <button type="button" data-filter="tomorrow"
+      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_tomorrow') }}
+    </button>
+    <button type="button" data-filter="week"
+      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_week') }}
+    </button>
+    <button type="button" data-filter="live"
+      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_live') }}
+    </button>
+    <button type="button" data-filter="finished"
+      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
+      {{ t('dashboard.filter_finished') }}
+    </button>
+  </div>
+</div>
+
+<div id="admin-no-matches" class="hidden card-pitch text-center text-slate-500 mb-4">
+  {{ t('dashboard.no_matches_filter') }}
+</div>
+
+{# ---------- Desktop / tablet: table view ---------- #}
+<div class="card-pitch overflow-x-auto hidden md:block">
   <table class="w-full text-sm">
     <thead class="bg-slate-100">
       <tr>
@@ -28,7 +92,10 @@
     </thead>
     <tbody>
       {% for m in matches %}
-      <tr class="border-t">
+      <tr class="border-t admin-match-row"
+          data-kickoff="{{ m.kickoff_aware().isoformat() }}"
+          data-status="{{ m.status }}"
+          data-finished="{{ '1' if m.has_finished() else '0' }}">
         <td class="p-2">
           {% if m.stage == 'group' %}{{ t('dashboard.group', letter=m.group_letter) }}
           {% else %}{{ t('dashboard.stage.' + m.stage) }}{% endif %}
@@ -44,36 +111,92 @@
         </td>
         <td class="p-2 font-mono text-xs">{{ m.kickoff_utc.strftime('%Y-%m-%d %H:%M') }}</td>
         <td class="p-2">{{ m.status }}</td>
-        <td class="p-2 text-end whitespace-nowrap"><div class="inline-flex flex-wrap gap-1 justify-end">
-          <a href="{{ url_for('admin.match_result', mid=m.id) }}" class="bg-emerald-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.result') }}</a>
-          {% if m.home_score is not none %}
-            {% if not m.calculated_by_id or m.calculated_by_id == current_user.id %}
-              <form method="post" action="{{ url_for('admin.match_calc_points', mid=m.id) }}" class="inline">
-                <button class="bg-green-700 text-white px-2 py-1 rounded text-xs font-bold hover:bg-green-800">
-                  ⚡ {{ t('admin.calc_points') }}{% if m.calculated_by_id == current_user.id %} ↻{% endif %}
-                </button>
-              </form>
-            {% else %}
-              <span class="bg-slate-300 text-slate-500 px-2 py-1 rounded text-xs font-bold cursor-not-allowed"
-                    title="{{ t('admin.already_calculated_by', who=m.calculated_by.username) }}">
-                ⚡ {{ t('admin.calc_points') }} 🔒
-              </span>
-            {% endif %}
-          {% endif %}
-          {% if m.trivia or not m.is_locked() %}
-            <a href="{{ url_for('admin.match_trivia', mid=m.id) }}" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.trivia') }}{% if m.trivia %} ✓{% endif %}</a>
-          {% else %}
-            <span class="bg-slate-300 text-slate-500 px-2 py-1 rounded text-xs cursor-not-allowed" title="{{ t('admin.trivia_locked_new') }}">{{ t('admin.trivia') }} 🔒</span>
-          {% endif %}
-          <a href="{{ url_for('admin.match_predictions', mid=m.id) }}" class="bg-slate-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.predictions') }}</a>
-          <a href="{{ url_for('admin.match_edit', mid=m.id) }}" class="bg-amber-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.edit_match') }}</a>
-          <form method="post" action="{{ url_for('admin.match_delete', mid=m.id) }}" class="inline" onsubmit="return confirm('Delete?')">
-            <button class="bg-red-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.delete') }}</button>
-          </form>
-        </div></td>
+        <td class="p-2 text-end whitespace-nowrap">
+          <div class="inline-flex flex-wrap gap-1 justify-end">{{ action_buttons(m) }}</div>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
+{# ---------- Mobile: card list ---------- #}
+<div class="md:hidden space-y-3">
+  {% for m in matches %}
+    <div class="card-pitch p-3 admin-match-card"
+         data-kickoff="{{ m.kickoff_aware().isoformat() }}"
+         data-status="{{ m.status }}"
+         data-finished="{{ '1' if m.has_finished() else '0' }}">
+      <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+        <span class="font-bold uppercase tracking-wide">
+          {% if m.stage == 'group' %}{{ t('dashboard.group', letter=m.group_letter) }}
+          {% else %}{{ t('dashboard.stage.' + m.stage) }}{% endif %}
+        </span>
+        <span class="badge badge-{{ m.status if m.status in ['live','finished'] else 'upcoming' }}">{{ m.status }}</span>
+      </div>
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm shrink-0">
+          <span class="text-sm font-medium truncate">{{ m.home_team.name(lang) }}</span>
+        </div>
+        {% if m.home_score is not none %}
+          <span class="font-display text-lg shrink-0">{{ m.home_score }} - {{ m.away_score }}</span>
+        {% else %}
+          <span class="text-slate-400 text-sm shrink-0">vs</span>
+        {% endif %}
+        <div class="flex items-center gap-2 min-w-0 flex-1 justify-end">
+          <span class="text-sm font-medium truncate text-end">{{ m.away_team.name(lang) }}</span>
+          <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm shrink-0">
+        </div>
+      </div>
+      <div class="text-xs font-mono text-slate-500 mb-3">⏰ {{ m.kickoff_utc.strftime('%Y-%m-%d %H:%M') }} UTC</div>
+      <div class="flex flex-wrap gap-1">{{ action_buttons(m) }}</div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+(function () {
+  const btns = document.querySelectorAll('#admin-match-filters .filter-btn');
+  const items = document.querySelectorAll('.admin-match-row, .admin-match-card');
+  const noMsg = document.getElementById('admin-no-matches');
+
+  function startOfDay(d) { const n = new Date(d); n.setHours(0,0,0,0); return n; }
+  function inRange(ts, from, to) { return ts >= from && ts < to; }
+
+  function matches(filter, ko, finished) {
+    const now = new Date();
+    const today0 = startOfDay(now);
+    const tom0 = new Date(today0.getTime() + 86400000);
+    const dayAfter = new Date(tom0.getTime() + 86400000);
+    const week = new Date(today0.getTime() + 7 * 86400000);
+    switch (filter) {
+      case 'today':    return inRange(ko, today0, tom0);
+      case 'tomorrow': return inRange(ko, tom0, dayAfter);
+      case 'week':     return inRange(ko, today0, week);
+      case 'live':     return (ko <= now) && !finished;
+      case 'finished': return finished;
+      default:         return true;
+    }
+  }
+
+  function apply(filter) {
+    btns.forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+    let shownDesktop = 0, shownMobile = 0;
+    items.forEach(el => {
+      const ko = new Date(el.dataset.kickoff);
+      const ok = matches(filter, ko, el.dataset.finished === '1');
+      el.classList.toggle('hidden', !ok);
+      if (ok) {
+        if (el.classList.contains('admin-match-card')) shownMobile += 1;
+        else shownDesktop += 1;
+      }
+    });
+    // Show no-results message only when nothing is visible in EITHER layout
+    noMsg.classList.toggle('hidden', (shownDesktop + shownMobile) > 0);
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => apply(b.dataset.filter)));
+})();
+</script>
 {% endblock %}

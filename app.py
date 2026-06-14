@@ -113,7 +113,32 @@ def _auto_migrate():
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE matches ADD COLUMN calculated_by_id INTEGER"))
     if "predictions" in insp.get_table_names():
-        cols = {c["name"] for c in insp.get_columns("predictions")}
+        cols_info = {c["name"]: c for c in insp.get_columns("predictions")}
+        cols = set(cols_info.keys())
+        # Loosen NOT NULL on winner_prediction
+        if "winner_prediction" in cols:
+            is_not_null = not cols_info["winner_prediction"].get("nullable", True)
+            if is_not_null:
+                if db.engine.dialect.name == "postgresql":
+                    try:
+                        with db.engine.begin() as conn:
+                            conn.execute(text("ALTER TABLE predictions ALTER COLUMN winner_prediction DROP NOT NULL"))
+                    except Exception:
+                        pass
+                elif db.engine.dialect.name == "sqlite":
+                    # SQLite doesn't support ALTER COLUMN — rebuild table preserving data
+                    try:
+                        col_names = [c["name"] for c in insp.get_columns("predictions")]
+                        cols_sql = ", ".join(col_names)
+                        with db.engine.begin() as conn:
+                            conn.execute(text("ALTER TABLE predictions RENAME TO predictions_old"))
+                        db.create_all()
+                        with db.engine.begin() as conn:
+                            conn.execute(text(f"INSERT INTO predictions ({cols_sql}) SELECT {cols_sql} FROM predictions_old"))
+                            conn.execute(text("DROP TABLE predictions_old"))
+                    except Exception as e:
+                        # Best-effort: leave schema as-is
+                        print(f"[migrate] SQLite predictions rebuild failed: {e}")
         if "winner_prediction" not in cols:
             with db.engine.begin() as conn:
                 row_count = conn.execute(text("SELECT COUNT(*) FROM predictions")).scalar() or 0

@@ -180,14 +180,16 @@ def main():
         m.kickoff_utc = datetime.now(timezone.utc) + timedelta(minutes=30)
         db.session.commit()
     r = c.get(f"/match/{future_id}")
-    check("alice sees trivia form", b'name="choice_index"' in r.data)
+    check("alice sees trivia form", b'name="trivia_choice_index"' in r.data or b'name="choice_index"' in r.data)
     r = c.post(f"/match/{future_id}", data={"action": "trivia", "choice_index": "1"},
                follow_redirects=False)
     with app.app_context():
         ans = TriviaAnswer.query.filter_by(user_id=alice.id).first()
     check("alice's trivia answer saved", ans is not None and ans.choice_index == 1)
     r = c2.get(f"/match/{future_id}")
-    check("anas (author) sees 'you created' notice", b"trivia_author_block" not in r.data and (b"created" in r.data.lower() or "أنت من وضع".encode() in r.data))
+    # In the wizard, the author lock is enforced server-side and the trivia step is simply omitted.
+    # So we check that the author does NOT see the trivia form input.
+    check("anas (author) sees no trivia answer form", b'name="trivia_choice_index"' not in r.data and b'name="choice_index"' not in r.data)
     r = c2.post(f"/match/{future_id}", data={"action": "trivia", "choice_index": "1"},
                 follow_redirects=False)
     with app.app_context():

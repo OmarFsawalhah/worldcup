@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block container_class %}max-w-7xl{% endblock %}
 {% block content %}
-<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.users_title') }}</h1>
+<h1 class="text-2xl sm:text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.users_title') }}</h1>
 
-<div class="card-pitch overflow-x-auto">
+{# ---------- Desktop: table ---------- #}
+<div class="card-pitch overflow-x-auto hidden md:block">
   <table class="w-full text-sm">
     <thead class="bg-green-800 text-white">
       <tr>
@@ -45,6 +46,46 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
+
+{# ---------- Mobile: cards ---------- #}
+<div class="md:hidden space-y-3">
+  {% for r in rows %}
+    <div class="card-pitch p-3 {{ 'border-l-4 border-amber-400' if r.user.is_admin else '' }}">
+      <div class="flex items-center justify-between mb-2">
+        <span class="font-bold text-base">{{ r.user.username }}</span>
+        {% if r.user.is_admin %}
+          <span class="text-xs font-bold bg-amber-200 text-amber-900 px-2 py-1 rounded">{{ t('admin.role_admin') }}</span>
+        {% else %}
+          <span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded">{{ t('admin.role_user') }}</span>
+        {% endif %}
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center mb-3 text-xs">
+        <div class="bg-slate-50 rounded p-2">
+          <div class="text-slate-500">{{ t('admin.predictions_count') }}</div>
+          <div class="font-mono font-bold text-base">{{ r.predictions }}</div>
+        </div>
+        <div class="bg-slate-50 rounded p-2">
+          <div class="text-slate-500">{{ t('leaderboard.exact_hits') }}</div>
+          <div class="font-mono font-bold text-base">{{ r.exact }}</div>
+        </div>
+        <div class="bg-emerald-50 rounded p-2">
+          <div class="text-slate-500">{{ t('leaderboard.points') }}</div>
+          <div class="font-display text-emerald-800 text-xl">{{ r.points }}</div>
+        </div>
+      </div>
+      <form method="post" action="{{ url_for('admin.user_adjust', uid=r.user.id) }}" class="flex items-center gap-2">
+        <label class="text-xs text-slate-600 whitespace-nowrap">{{ t('admin.bonus_label') }}:</label>
+        <input type="number" name="bonus_points" value="{{ r.bonus }}"
+               class="border rounded flex-1 text-center font-mono py-1"
+               title="{{ t('admin.bonus_tip') }}">
+        <button class="bg-emerald-700 text-white px-3 py-1 rounded text-xs hover:bg-emerald-800">
+          {{ t('admin.bonus_save') }}
+        </button>
+      </form>
+      <div class="text-xs text-slate-400 font-mono mt-2 text-end">{{ r.user.created_at.strftime('%Y-%m-%d') }}</div>
+    </div>
+  {% endfor %}
 </div>
 
 <div class="mt-4 card-pitch text-sm text-slate-600">

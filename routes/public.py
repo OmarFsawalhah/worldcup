@@ -57,23 +57,21 @@ def match_detail(match_id):
 
     if request.method == "POST":
         action = request.form.get("action")
-        if action == "predict":
+        if action in ("predict", "wizard"):
             if match.is_locked():
                 flash(t("match.locked_msg"), "error")
                 return redirect(url_for("public.match_detail", match_id=match.id))
-            winner = request.form.get("winner_prediction")
-            if winner not in ("home", "draw", "away"):
-                flash(t("match.winner_required"), "error")
-                return redirect(url_for("public.match_detail", match_id=match.id))
-            # Optional exact-score guess
+            # Winner is now OPTIONAL — the wizard allows skipping every step.
+            winner = request.form.get("winner_prediction") or None
+            if winner not in (None, "home", "draw", "away"):
+                winner = None
             hs_raw = (request.form.get("home_score") or "").strip()
             as_raw = (request.form.get("away_score") or "").strip()
             hs = int(hs_raw) if hs_raw else None
             as_ = int(as_raw) if as_raw else None
-            # Both score fields must be filled together, or both empty
             if (hs is None) != (as_ is None):
-                flash(t("match.score_pair_required"), "error")
-                return redirect(url_for("public.match_detail", match_id=match.id))
+                # Only one score box filled — treat as no score guess (skip silently)
+                hs = as_ = None
             fs = request.form.get("first_scorer_id") or None
             mm = request.form.get("motm_id") or None
             fs = int(fs) if fs else None
@@ -90,9 +88,31 @@ def match_detail(match_id):
                 prediction.away_score = as_
                 prediction.first_scorer_id = fs
                 prediction.motm_id = mm
+
+            # Wizard may also include the trivia answer in the same submit.
+            if action == "wizard" and match.trivia and match.trivia_open() \
+                    and match.trivia.author_id != current_user.id:
+                triv_raw = (request.form.get("trivia_choice_index") or "").strip()
+                if triv_raw != "":
+                    try:
+                        choice = int(triv_raw)
+                        choices = json.loads(match.trivia.choices_json)
+                        if 0 <= choice < len(choices):
+                            if trivia_answer is None:
+                                trivia_answer = TriviaAnswer(
+                                    user_id=current_user.id,
+                                    question_id=match.trivia.id,
+                                    choice_index=choice,
+                                )
+                                db.session.add(trivia_answer)
+                            else:
+                                trivia_answer.choice_index = choice
+                    except (TypeError, ValueError):
+                        pass
+
             db.session.commit()
-            flash(t("match.updated"), "success")
-            return redirect(url_for("public.match_detail", match_id=match.id))
+            flash(t("match.thanks") if action == "wizard" else t("match.updated"), "success")
+            return redirect(url_for("public.match_detail", match_id=match.id, done=1))
 
         if action == "trivia" and match.trivia and match.trivia_open():
             if match.trivia.author_id == current_user.id:

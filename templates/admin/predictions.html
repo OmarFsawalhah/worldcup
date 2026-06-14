@@ -26,7 +26,10 @@
       {% for p in predictions %}
         <tr class="border-t">
           <td class="p-2 font-medium">{{ p.user.username }}</td>
-          <td class="p-2 text-center font-mono">{{ p.home_score }} - {{ p.away_score }}</td>
+          <td class="p-2 text-center font-mono">
+            {% if p.winner_prediction %}<div class="text-xs font-bold text-emerald-700">{{ p.winner_prediction }}</div>{% endif %}
+            {% if p.home_score is not none %}{{ p.home_score }} - {{ p.away_score }}{% else %}<span class="text-slate-300">—</span>{% endif %}
+          </td>
           <td class="p-2">{{ p.first_scorer.name(lang) if p.first_scorer else '—' }}</td>
           <td class="p-2">{{ p.motm.name(lang) if p.motm else '—' }}</td>
           <td class="p-2 text-end font-bold text-emerald-700">{{ p.points_awarded }}</td>
