@@ -94,7 +94,7 @@
   "match.no_pred": "لم يتم إرسال توقع.",
   "match.points": "النقاط",
   "match.trivia": "سؤال عن كأس العالم",
-  "match.trivia_locked": "يفتح السؤال قبل ساعة من المباراة.",
+  "match.trivia_locked": "أُغلق السؤال — بدأت المباراة.",
   "match.trivia_submit": "إرسال الإجابة",
   "match.trivia_saved": "تم حفظ الإجابة.",
   "match.trivia_author_block": "أنت من وضع هذا السؤال — لا يمكنك الإجابة عليه. اللاعبون الآخرون فقط يستطيعون.",

@@ -94,7 +94,7 @@
   "match.no_pred": "No prediction submitted.",
   "match.points": "Points",
   "match.trivia": "Trivia Question (Arabic)",
-  "match.trivia_locked": "Trivia opens 1 hour before kickoff.",
+  "match.trivia_locked": "Trivia is closed — the match has started.",
   "match.trivia_submit": "Submit Answer",
   "match.trivia_saved": "Answer saved.",
   "match.trivia_author_block": "You created this question — only other players can answer it.",

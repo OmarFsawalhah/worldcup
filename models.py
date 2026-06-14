@@ -95,11 +95,11 @@ class Match(db.Model):
         return self.status == "finished" and self.home_score is not None
 
     def trivia_open(self):
+        # Trivia is part of the prediction wizard now — answerable any time
+        # before kickoff (no longer gated to the T-1h window).
         if not self.trivia:
             return False
-        now = utcnow()
-        ko = self.kickoff_aware()
-        return (ko - now).total_seconds() <= 3600 and now < ko
+        return utcnow() < self.kickoff_aware()
 
 
 class Prediction(db.Model):
