@@ -115,6 +115,21 @@ def match_calc_points(mid):
     return redirect(url_for("admin.matches"))
 
 
+@bp.route("/refresh-api", methods=["POST"])
+@admin_required
+def refresh_api():
+    from services.api_refresh import refresh_match_statuses
+    try:
+        result = refresh_match_statuses()
+    except Exception as e:
+        flash(f"Refresh failed: {e}", "error")
+        return redirect(url_for("admin.matches"))
+    flash(t("admin.refresh_done",
+            statuses=result["updated_status"], scores=result["updated_score"]),
+          "success")
+    return redirect(url_for("admin.matches"))
+
+
 @bp.route("/users")
 @admin_required
 def users():

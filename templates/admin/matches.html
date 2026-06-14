@@ -4,7 +4,12 @@
 {% set lang = current_lang() %}
 <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
   <h1 class="text-2xl font-display tracking-wide">{{ t('admin.matches') }}</h1>
-  <div class="flex gap-2">
+  <div class="flex gap-2 flex-wrap">
+    <form method="post" action="{{ url_for('admin.refresh_api') }}" class="inline">
+      <button class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800" title="{{ t('admin.refresh_tip') }}">
+        🔄 {{ t('admin.refresh_api') }}
+      </button>
+    </form>
     <a href="{{ url_for('admin.users') }}" class="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800">👥 {{ t('admin.users') }}</a>
     <a href="{{ url_for('admin.match_new') }}" class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">+ {{ t('admin.add_match') }}</a>
   </div>
