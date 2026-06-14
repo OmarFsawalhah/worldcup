@@ -26,7 +26,7 @@
       <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl">👑</div>
       <div class="podium-rank podium-rank-1">1</div>
       {% if top|length >= 1 %}
-        <div class="podium-name text-lg sm:text-xl">{{ top[0].username }}</div>
+        <div class="podium-name">{{ top[0].username }}</div>
         <div class="podium-pts text-3xl text-amber-700">{{ top[0].points }}</div>
         <div class="podium-pts-label">pts</div>
       {% else %}

@@ -583,30 +583,38 @@ html[dir="rtl"] body {
 
 .podium {
   display: grid;
-  grid-template-columns: 1fr 1.15fr 1fr;
-  gap: 0.5rem;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 0.4rem;
   align-items: end;
   margin-bottom: 1.5rem;
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .podium { gap: 0.75rem; }
 }
 .podium-slot {
   background: var(--surface);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  padding: 1rem 0.5rem 1.25rem;
+  padding: 0.85rem 0.5rem 1rem;
   text-align: center;
   position: relative;
   border: 1px solid rgba(15, 23, 42, 0.06);
   color: var(--text-on-light);
+  min-width: 0;          /* critical: lets grid item shrink below content width */
+  overflow: hidden;       /* clip any overflowing content */
 }
 .podium-name {
   display: block;
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: clamp(0.7rem, 2.8vw, 1rem);   /* shrinks on narrow screens */
+  line-height: 1.15;
   color: var(--text-on-light);
   margin-top: 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 0 0.15rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 .podium-pts {
   font-family: "Oswald", sans-serif;
