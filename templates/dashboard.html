@@ -1,66 +1,67 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-  <h1 class="text-2xl sm:text-3xl font-display tracking-wider text-white drop-shadow">{{ t('dashboard.title') }}</h1>
+
+{# ===== Hero header ===== #}
+<div class="mb-5 sm:mb-7">
+  <div class="flex items-center justify-between gap-3 flex-wrap">
+    <div>
+      <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">FIFA World Cup 2026</div>
+      <h1 class="page-title text-3xl sm:text-4xl">{{ t('dashboard.title') }}</h1>
+    </div>
+  </div>
 </div>
 
-{# ----- Date filter tabs ----- #}
-<div class="card-pitch mb-6 p-2 sm:p-3">
-  <div class="flex flex-wrap gap-1 sm:gap-2" id="match-filters">
-    <button type="button" data-filter="all"
-      class="filter-btn active flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_all') }}
-    </button>
-    <button type="button" data-filter="today"
-      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_today') }}
-    </button>
-    <button type="button" data-filter="tomorrow"
-      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_tomorrow') }}
-    </button>
-    <button type="button" data-filter="week"
-      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_week') }}
-    </button>
-    <button type="button" data-filter="live"
-      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_live') }}
-    </button>
-    <button type="button" data-filter="finished"
-      class="filter-btn flex-1 min-w-[80px] sm:flex-none px-3 py-2 rounded text-sm font-bold transition">
-      {{ t('dashboard.filter_finished') }}
-    </button>
+{# ===== Filter tabs ===== #}
+<div class="glass rounded-2xl p-2 mb-5">
+  <div class="flex flex-wrap gap-1" id="match-filters">
+    {% set filters = [
+      ('all', t('dashboard.filter_all')),
+      ('today', t('dashboard.filter_today')),
+      ('tomorrow', t('dashboard.filter_tomorrow')),
+      ('week', t('dashboard.filter_week')),
+      ('live', t('dashboard.filter_live')),
+      ('finished', t('dashboard.filter_finished')),
+    ] %}
+    {% for code, label in filters %}
+      <button type="button" data-filter="{{ code }}"
+        class="filter-btn {% if code == 'all' %}active{% endif %} flex-1 min-w-[80px] sm:flex-none sm:min-w-[100px] px-3 py-2 rounded-xl text-xs sm:text-sm">
+        {{ label }}
+      </button>
+    {% endfor %}
   </div>
 </div>
 
 <div id="no-matches-msg" class="hidden card-pitch text-center text-slate-500 mb-6">
-  {{ t('dashboard.no_matches_filter') }}
+  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-2 text-slate-300"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+  <p>{{ t('dashboard.no_matches_filter') }}</p>
 </div>
 
+{# ===== Sections ===== #}
 {% for (stage, letter), matches in sections %}
-  <section class="mb-8 match-section">
-    <h2 class="group-header text-xl sm:text-2xl mb-3 pb-1 border-b-2 border-white/40">
+  <section class="mb-7 match-section">
+    <h2 class="group-header text-lg sm:text-xl mb-3">
       {% if stage == 'group' %}
         {{ t('dashboard.group', letter=letter) }}
       {% else %}
         {{ t('dashboard.stage.' + stage) }}
       {% endif %}
     </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {% for m in matches %}
         {% set ko_iso = m.kickoff_aware().isoformat() %}
         <a href="{{ url_for('public.match_detail', match_id=m.id) }}"
-           class="match-card card-pitch block hover:scale-[1.01] transition-transform"
+           class="match-card card-pitch block"
            data-kickoff="{{ ko_iso }}"
            data-status="{{ m.status }}"
            data-finished="{{ '1' if m.has_finished() else '0' }}">
-          <div class="flex items-center justify-between text-xs sm:text-sm text-slate-500 mb-2 gap-2">
-            <span class="font-mono truncate" data-countdown="{{ ko_iso }}">{{ ko_iso }}</span>
-            <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+
+          <div class="flex items-center justify-between text-xs mb-3 gap-2">
+            <span class="font-mono text-slate-500 truncate" data-countdown="{{ ko_iso }}">{{ ko_iso }}</span>
+            <div class="flex items-center gap-1.5 shrink-0">
               {% if m.id in predicted_ids %}
-                <span class="bg-emerald-600 text-white text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded-full" title="{{ t('dashboard.predicted_tip') }}">
-                  ✓ {{ t('dashboard.predicted') }}
+                <span class="badge badge-predicted" title="{{ t('dashboard.predicted_tip') }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {{ t('dashboard.predicted') }}
                 </span>
               {% endif %}
               {% set badge = m.status %}
@@ -68,24 +69,34 @@
               <span class="badge badge-{{ badge }}">{{ t('status.' + badge) }}</span>
             </div>
           </div>
+
           <div class="flex items-center justify-between gap-2">
+            {# Home #}
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <img src="{{ flag_url(m.home_team) }}" alt="{{ m.home_team.name_en }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
-              <span class="font-display text-sm sm:text-lg truncate">{{ m.home_team.name(current_lang()) }}</span>
+              <span class="font-display text-sm sm:text-base truncate">{{ m.home_team.name(current_lang()) }}</span>
             </div>
+
+            {# Center #}
             {% if m.has_finished() %}
-              <span class="score-display text-2xl sm:text-4xl shrink-0">{{ m.home_score }} - {{ m.away_score }}</span>
+              <span class="score-display text-xl sm:text-2xl shrink-0 mx-2">{{ m.home_score }}<span class="opacity-50 mx-1">-</span>{{ m.away_score }}</span>
             {% else %}
-              <span class="text-slate-400 font-display text-lg sm:text-2xl shrink-0">vs</span>
+              <span class="text-slate-300 font-display text-base sm:text-lg shrink-0 mx-2">vs</span>
             {% endif %}
+
+            {# Away #}
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-end">
-              <span class="font-display text-sm sm:text-lg truncate text-end">{{ m.away_team.name(current_lang()) }}</span>
+              <span class="font-display text-sm sm:text-base truncate text-end">{{ m.away_team.name(current_lang()) }}</span>
               <img src="{{ flag_url(m.away_team) }}" alt="{{ m.away_team.name_en }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
             </div>
           </div>
+
           {% if m.venue %}
             <div class="halfway-line"></div>
-            <div class="text-[10px] sm:text-xs text-slate-500 text-center truncate">{{ m.venue }}</div>
+            <div class="flex items-center justify-center gap-1.5 text-[11px] sm:text-xs text-slate-500">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span class="truncate">{{ m.venue }}</span>
+            </div>
           {% endif %}
         </a>
       {% endfor %}
@@ -130,7 +141,6 @@
       card.classList.toggle('hidden', !ok);
       if (ok) shown += 1;
     });
-    // Hide empty sections
     sections.forEach(sec => {
       const anyVisible = sec.querySelectorAll('.match-card:not(.hidden)').length > 0;
       sec.classList.toggle('hidden', !anyVisible);

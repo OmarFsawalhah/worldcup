@@ -1,38 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 {% set lang = current_lang() %}
-<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.result') }}</h1>
-<div class="flex items-center justify-center gap-3 mb-4 text-white font-display text-xl">
-  <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-md">
-  <span>{{ match.home_team.name(lang) }}</span>
-  <span class="text-yellow-300">vs</span>
-  <span>{{ match.away_team.name(lang) }}</span>
-  <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-md">
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
+  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.result') }}</h1>
 </div>
 
-<form method="post" class="card-pitch space-y-4 max-w-xl">
-  <div class="flex items-center justify-center gap-3">
+<div class="card-pitch mb-4 text-center">
+  <div class="flex items-center justify-center gap-3 sm:gap-5 font-display text-lg sm:text-xl">
+    <div class="flex items-center gap-2">
+      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-md">
+      <span>{{ match.home_team.name(lang) }}</span>
+    </div>
+    <span class="text-slate-300">vs</span>
+    <div class="flex items-center gap-2">
+      <span>{{ match.away_team.name(lang) }}</span>
+      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-md">
+    </div>
+  </div>
+</div>
+
+<form method="post" class="card-pitch space-y-5 max-w-xl">
+  <div class="flex items-center justify-center gap-4">
     <div class="text-center">
-      <div class="flex items-center justify-center gap-2 mb-1">
+      <div class="flex items-center justify-center gap-2 mb-2">
         <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm">
         <span class="text-sm font-medium">{{ match.home_team.name(lang) }}</span>
       </div>
-      <input type="number" min="0" name="home_score" required value="{{ match.home_score if match.home_score is not none else '' }}"
-             class="border rounded w-20 text-center text-2xl py-1">
+      <input type="number" min="0" name="home_score" required value="{{ match.home_score if match.home_score is not none else '' }}" class="score-box">
     </div>
-    <span class="text-2xl">-</span>
+    <span class="font-display text-3xl text-slate-300 mt-7">–</span>
     <div class="text-center">
-      <div class="flex items-center justify-center gap-2 mb-1">
+      <div class="flex items-center justify-center gap-2 mb-2">
         <span class="text-sm font-medium">{{ match.away_team.name(lang) }}</span>
         <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm">
       </div>
-      <input type="number" min="0" name="away_score" required value="{{ match.away_score if match.away_score is not none else '' }}"
-             class="border rounded w-20 text-center text-2xl py-1">
+      <input type="number" min="0" name="away_score" required value="{{ match.away_score if match.away_score is not none else '' }}" class="score-box">
     </div>
   </div>
+
   <div>
-    <label class="block text-sm font-medium">{{ t('match.first_scorer') }}</label>
-    <select name="first_scorer_id" class="w-full border rounded px-3 py-2">
+    <label class="label">{{ t('match.first_scorer') }}</label>
+    <select name="first_scorer_id" class="input">
       <option value="">—</option>
       {% for p in players %}
         <option value="{{ p.id }}" {{ 'selected' if match.first_scorer_id == p.id }}>{{ p.name(lang) }} ({{ p.team.name(lang) }})</option>
@@ -40,17 +50,18 @@
     </select>
   </div>
   <div>
-    <label class="block text-sm font-medium">{{ t('match.motm') }}</label>
-    <select name="motm_id" class="w-full border rounded px-3 py-2">
+    <label class="label">{{ t('match.motm') }}</label>
+    <select name="motm_id" class="input">
       <option value="">—</option>
       {% for p in players %}
         <option value="{{ p.id }}" {{ 'selected' if match.motm_id == p.id }}>{{ p.name(lang) }} ({{ p.team.name(lang) }})</option>
       {% endfor %}
     </select>
   </div>
-  <div class="flex gap-2">
-    <button class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">{{ t('admin.save') }}</button>
-    <a href="{{ url_for('admin.matches') }}" class="bg-slate-300 px-4 py-2 rounded">{{ t('admin.cancel') }}</a>
+
+  <div class="flex gap-2 pt-2">
+    <button class="btn btn-primary">{{ t('admin.save') }}</button>
+    <a href="{{ url_for('admin.matches') }}" class="btn btn-soft">{{ t('admin.cancel') }}</a>
   </div>
 </form>
 {% endblock %}

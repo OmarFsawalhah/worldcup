@@ -1,29 +1,85 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">🏆 {{ t('leaderboard.title') }}</h1>
-<div class="card-pitch overflow-x-auto">
-  <table class="w-full text-sm">
-    <thead class="bg-green-800 text-white">
-      <tr>
-        <th class="p-3 text-start">{{ t('leaderboard.rank') }}</th>
-        <th class="p-3 text-start">{{ t('leaderboard.user') }}</th>
-        <th class="p-3 text-end">{{ t('leaderboard.points') }}</th>
-        <th class="p-3 text-end">{{ t('leaderboard.exact_hits') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for r in rows %}
-        <tr class="border-t">
-          <td class="p-3 font-display text-lg">{{ loop.index }}</td>
-          <td class="p-3 font-medium">
-            {{ r.username }}
-            {% if r.is_admin %}<span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded ml-1 rtl:ml-0 rtl:mr-1">{{ t('admin.role_admin') }}</span>{% endif %}
-          </td>
-          <td class="p-3 text-end font-display text-xl text-green-800">{{ r.points }}</td>
-          <td class="p-3 text-end font-mono">{{ r.exact }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+
+<div class="mb-5 sm:mb-7">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Ranking</div>
+  <h1 class="page-title text-3xl sm:text-4xl">🏆 {{ t('leaderboard.title') }}</h1>
 </div>
+
+{% if rows %}
+  {# ===== Top-3 Podium ===== #}
+  {% set top = rows[:3] %}
+  {% if top|length >= 1 %}
+  <div class="podium">
+    {# 2nd place #}
+    <div class="podium-slot podium-2 {{ 'opacity-30' if top|length < 2 }}">
+      {% if top|length >= 2 %}
+        <div class="podium-rank podium-rank-2">2</div>
+        <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[1].username }}</div>
+        <div class="text-2xl font-score text-slate-700 mt-1">{{ top[1].points }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+      {% endif %}
+    </div>
+    {# 1st place #}
+    <div class="podium-slot podium-1">
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl">👑</div>
+      <div class="podium-rank podium-rank-1">1</div>
+      <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[0].username }}</div>
+      <div class="text-3xl font-score text-amber-700 mt-1">{{ top[0].points }}</div>
+      <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+    </div>
+    {# 3rd place #}
+    <div class="podium-slot podium-3 {{ 'opacity-30' if top|length < 3 }}">
+      {% if top|length >= 3 %}
+        <div class="podium-rank podium-rank-3">3</div>
+        <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[2].username }}</div>
+        <div class="text-xl font-score text-amber-800 mt-1">{{ top[2].points }}</div>
+        <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {# ===== Full ranked list ===== #}
+  <div class="card-pitch p-0 overflow-hidden">
+    <div class="px-4 py-3 bg-slate-50 border-b border-slate-200">
+      <div class="grid grid-cols-12 gap-2 text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+        <div class="col-span-2">{{ t('leaderboard.rank') }}</div>
+        <div class="col-span-5">{{ t('leaderboard.user') }}</div>
+        <div class="col-span-3 text-end">{{ t('leaderboard.exact_hits') }}</div>
+        <div class="col-span-2 text-end">{{ t('leaderboard.points') }}</div>
+      </div>
+    </div>
+    {% for r in rows %}
+      <div class="grid grid-cols-12 gap-2 px-4 py-3 items-center border-b border-slate-100 hover:bg-slate-50 transition
+                  {{ 'bg-yellow-50/40' if loop.index <= 3 }}">
+        <div class="col-span-2">
+          {% if loop.index == 1 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-slate-900 font-display font-bold shadow shadow-yellow-500/40">1</span>
+          {% elif loop.index == 2 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900 font-display font-bold">2</span>
+          {% elif loop.index == 3 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-amber-700 to-amber-800 text-white font-display font-bold">3</span>
+          {% else %}
+            <span class="inline-flex items-center justify-center w-8 h-8 text-slate-500 font-display font-semibold">{{ loop.index }}</span>
+          {% endif %}
+        </div>
+        <div class="col-span-5 font-medium truncate flex items-center gap-2">
+          <span class="truncate">{{ r.username }}</span>
+          {% if r.is_admin %}
+            <span class="text-[10px] font-bold bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded uppercase tracking-wider">{{ t('admin.role_admin') }}</span>
+          {% endif %}
+        </div>
+        <div class="col-span-3 text-end font-mono text-sm text-slate-600">{{ r.exact }}</div>
+        <div class="col-span-2 text-end font-display text-lg text-emerald-700">{{ r.points }}</div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-10">
+    <div class="text-4xl mb-2">🎯</div>
+    <p>No players yet.</p>
+  </div>
+{% endif %}
+
 {% endblock %}

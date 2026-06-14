@@ -1,42 +1,58 @@
 {% extends "base.html" %}
 {% block content %}
 {% set lang = current_lang() %}
-<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.trivia') }}</h1>
-<div class="flex items-center justify-center gap-3 mb-4 text-white font-display text-xl">
-  <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
-  <span>{{ match.home_team.name(lang) }}</span>
-  <span class="text-yellow-300">vs</span>
-  <span>{{ match.away_team.name(lang) }}</span>
-  <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
+  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.trivia') }}</h1>
 </div>
 
-<form method="post" class="card-pitch space-y-4 max-w-xl">
+<div class="card-pitch mb-4 text-center">
+  <div class="flex items-center justify-center gap-3 sm:gap-5 font-display text-lg sm:text-xl">
+    <div class="flex items-center gap-2">
+      <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
+      <span>{{ match.home_team.name(lang) }}</span>
+    </div>
+    <span class="text-slate-300">vs</span>
+    <div class="flex items-center gap-2">
+      <span>{{ match.away_team.name(lang) }}</span>
+      <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
+    </div>
+  </div>
+</div>
+
+<form method="post" class="card-pitch space-y-5 max-w-xl">
   <div>
-    <label class="block text-sm font-medium">{{ t('admin.question_ar') }}</label>
-    <textarea name="question_ar" required rows="2" dir="rtl" class="w-full border rounded px-3 py-2 text-right">{{ question.question_ar if question else '' }}</textarea>
+    <label class="label">{{ t('admin.question_ar') }}</label>
+    <textarea name="question_ar" required rows="2" dir="rtl" class="input text-right">{{ question.question_ar if question else '' }}</textarea>
   </div>
 
-  <div id="choices" class="space-y-2" dir="rtl">
-    {% for c in choices %}
-      <div class="flex items-center gap-2">
-        <input type="radio" name="correct_index" value="{{ loop.index0 }}" {{ 'checked' if question and question.correct_index == loop.index0 }}>
-        <input name="choices" value="{{ c }}" required class="flex-1 border rounded px-3 py-2 text-right" placeholder="{{ t('admin.choice') }} {{ loop.index }}">
-      </div>
-    {% endfor %}
+  <div>
+    <label class="label">{{ t('admin.choice') }}s <span class="text-xs text-slate-500 font-normal">— {{ t('admin.correct') }}: select via radio</span></label>
+    <div id="choices" class="space-y-2" dir="rtl">
+      {% for c in choices %}
+        <div class="flex items-center gap-2">
+          <input type="radio" name="correct_index" value="{{ loop.index0 }}" {{ 'checked' if question and question.correct_index == loop.index0 }} class="w-4 h-4 accent-emerald-600">
+          <input name="choices" value="{{ c }}" required class="input text-right" placeholder="{{ t('admin.choice') }} {{ loop.index }}">
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" onclick="addChoice()" class="mt-2 btn btn-soft btn-xs">+ {{ t('admin.add_choice') }} <span class="text-slate-400 ms-1">(max 12)</span></button>
   </div>
-  <button type="button" onclick="addChoice()" class="text-emerald-700 underline text-sm">+ {{ t('admin.add_choice') }} (max 12)</button>
-  <small class="block text-slate-500">{{ t('admin.correct') }}: select via radio</small>
 
-  <div class="flex gap-2 flex-wrap">
-    <button class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">{{ t('admin.save') }}</button>
-    <a href="{{ url_for('admin.matches') }}" class="bg-slate-300 px-4 py-2 rounded">{{ t('admin.cancel') }}</a>
+  <div class="flex gap-2 pt-2 flex-wrap">
+    <button class="btn btn-primary">{{ t('admin.save') }}</button>
+    <a href="{{ url_for('admin.matches') }}" class="btn btn-soft">{{ t('admin.cancel') }}</a>
   </div>
 </form>
 
 {% if question %}
 <form method="post" action="{{ url_for('admin.match_trivia_delete', mid=match.id) }}" class="max-w-xl mt-4"
       onsubmit="return confirm('{{ t('admin.trivia_delete_confirm') }}');">
-  <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">🗑 {{ t('admin.trivia_delete') }}</button>
+  <button class="btn btn-danger btn-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    <span>{{ t('admin.trivia_delete') }}</span>
+  </button>
 </form>
 {% endif %}
 
@@ -47,8 +63,8 @@ function addChoice() {
   if (i >= 12) { alert('Maximum 12 choices.'); return; }
   const row = document.createElement('div');
   row.className = 'flex items-center gap-2';
-  row.innerHTML = `<input type="radio" name="correct_index" value="${i}">
-                   <input name="choices" required class="flex-1 border rounded px-3 py-2 text-right" placeholder="Choice ${i+1}">`;
+  row.innerHTML = `<input type="radio" name="correct_index" value="${i}" class="w-4 h-4 accent-emerald-600">
+                   <input name="choices" required class="input text-right" placeholder="Choice ${i+1}">`;
   box.appendChild(row);
 }
 </script>

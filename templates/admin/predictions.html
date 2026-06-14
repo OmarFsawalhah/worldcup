@@ -1,44 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
 {% set lang = current_lang() %}
-<h1 class="text-3xl font-display tracking-wider text-white mb-2 drop-shadow">{{ t('admin.predictions') }}</h1>
-<div class="flex items-center justify-center gap-3 mb-4 text-white font-display text-xl">
-  <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
-  <span>{{ match.home_team.name(lang) }}</span>
-  <span class="text-yellow-300">vs</span>
-  <span>{{ match.away_team.name(lang) }}</span>
-  <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
+  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.predictions') }}</h1>
+</div>
+
+<div class="card-pitch mb-4 text-center">
+  <div class="flex items-center justify-center gap-3 sm:gap-5 font-display text-lg sm:text-xl">
+    <div class="flex items-center gap-2">
+      <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
+      <span>{{ match.home_team.name(lang) }}</span>
+    </div>
+    <span class="text-slate-300">vs</span>
+    <div class="flex items-center gap-2">
+      <span>{{ match.away_team.name(lang) }}</span>
+      <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
+    </div>
+  </div>
 </div>
 
 {% if predictions %}
-<div class="card-pitch overflow-x-auto">
-  <table class="w-full text-sm">
-    <thead class="bg-slate-100">
+<div class="card-pitch p-0 overflow-x-auto">
+  <table class="table-clean">
+    <thead>
       <tr>
-        <th class="p-2 text-start">User</th>
-        <th class="p-2 text-center">Score</th>
-        <th class="p-2 text-start">First scorer</th>
-        <th class="p-2 text-start">MOTM</th>
-        <th class="p-2 text-end">{{ t('match.points') }}</th>
+        <th>User</th>
+        <th class="text-center">Pick</th>
+        <th>First scorer</th>
+        <th>MOTM</th>
+        <th class="text-end">{{ t('match.points') }}</th>
       </tr>
     </thead>
     <tbody>
       {% for p in predictions %}
-        <tr class="border-t">
-          <td class="p-2 font-medium">{{ p.user.username }}</td>
-          <td class="p-2 text-center font-mono">
-            {% if p.winner_prediction %}<div class="text-xs font-bold text-emerald-700">{{ p.winner_prediction }}</div>{% endif %}
+        <tr>
+          <td class="font-medium">{{ p.user.username }}</td>
+          <td class="text-center font-mono">
+            {% if p.winner_prediction %}<div class="text-xs font-bold text-emerald-700 uppercase tracking-wider">{{ p.winner_prediction }}</div>{% endif %}
             {% if p.home_score is not none %}{{ p.home_score }} - {{ p.away_score }}{% else %}<span class="text-slate-300">—</span>{% endif %}
           </td>
-          <td class="p-2">{{ p.first_scorer.name(lang) if p.first_scorer else '—' }}</td>
-          <td class="p-2">{{ p.motm.name(lang) if p.motm else '—' }}</td>
-          <td class="p-2 text-end font-bold text-emerald-700">{{ p.points_awarded }}</td>
+          <td>{{ p.first_scorer.name(lang) if p.first_scorer else '—' }}</td>
+          <td>{{ p.motm.name(lang) if p.motm else '—' }}</td>
+          <td class="text-end font-display text-lg text-emerald-700">{{ p.points_awarded }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% else %}
-  <p class="text-slate-500">{{ t('admin.no_predictions') }}</p>
+  <div class="card-pitch text-center text-slate-500 py-8">{{ t('admin.no_predictions') }}</div>
 {% endif %}
 {% endblock %}
