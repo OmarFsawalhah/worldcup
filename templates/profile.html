@@ -25,10 +25,10 @@
     <thead class="bg-green-800 text-white">
       <tr>
         <th class="p-2 text-start">{{ t('profile.match') }}</th>
-        <th class="p-2 text-center">{{ t('match.your_prediction') }}</th>
+        <th class="p-2 text-center">{{ t('profile.col_pick') }}</th>
         <th class="p-2 text-center">{{ t('match.result') }}</th>
-        <th class="p-2 text-center" title="{{ t('profile.tip_exact') }}">{{ t('profile.col_exact') }}</th>
         <th class="p-2 text-center" title="{{ t('profile.tip_winner') }}">{{ t('profile.col_winner') }}</th>
+        <th class="p-2 text-center" title="{{ t('profile.tip_exact') }}">{{ t('profile.col_exact') }}</th>
         <th class="p-2 text-center" title="{{ t('profile.tip_first_scorer') }}">{{ t('profile.col_first_scorer') }}</th>
         <th class="p-2 text-center" title="{{ t('profile.tip_motm') }}">{{ t('profile.col_motm') }}</th>
         <th class="p-2 text-end">{{ t('match.points') }}</th>
@@ -49,7 +49,14 @@
               </span>
             </a>
           </td>
-          <td class="p-2 text-center font-mono font-bold">{{ p.home_score }} - {{ p.away_score }}</td>
+          <td class="p-2 text-center text-xs">
+            <div class="font-bold">
+              {% if p.winner_prediction == 'home' %}{{ m.home_team.name(lang) }}
+              {% elif p.winner_prediction == 'away' %}{{ m.away_team.name(lang) }}
+              {% else %}🤝 {{ t('match.draw') }}{% endif %}
+            </div>
+            {% if p.home_score is not none %}<div class="font-mono">{{ p.home_score }} - {{ p.away_score }}</div>{% endif %}
+          </td>
           <td class="p-2 text-center font-mono">
             {% if bd.result_pending %}<span class="text-slate-400">—</span>
             {% else %}{{ m.home_score }} - {{ m.away_score }}{% endif %}
@@ -58,13 +65,13 @@
             <td colspan="4" class="p-2 text-center text-slate-400 italic">{{ t('profile.pending') }}</td>
           {% else %}
             <td class="p-2 text-center">
-              {% if bd.exact_hit %}<span class="text-green-700 font-bold">+3 ✓</span>
-              {% else %}<span class="text-slate-300">—</span>{% endif %}
+              {% if bd.winner_hit %}<span class="text-green-700 font-bold">+3 ✓</span>
+              {% else %}<span class="text-red-400">✗</span>{% endif %}
             </td>
             <td class="p-2 text-center">
-              {% if bd.winner_hit %}<span class="text-amber-700 font-bold">+1 ✓</span>
-              {% elif bd.exact_hit %}<span class="text-slate-300" title="{{ t('profile.tip_winner_skipped') }}">—</span>
-              {% else %}<span class="text-red-400">✗</span>{% endif %}
+              {% if bd.exact_hit %}<span class="text-amber-700 font-bold">+2 ✓</span>
+              {% elif bd.predicted_exact %}<span class="text-red-400">✗</span>
+              {% else %}<span class="text-slate-300">—</span>{% endif %}
             </td>
             <td class="p-2 text-center">
               {% if bd.first_scorer_hit %}<span class="text-green-700 font-bold">+3 ✓</span>
@@ -153,8 +160,8 @@
 <div class="mt-6 card-pitch text-xs text-slate-600">
   <div class="font-bold text-slate-800 mb-2">{{ t('profile.scoring_legend') }}</div>
   <ul class="space-y-1">
-    <li>✅ <b>{{ t('profile.col_exact') }}</b> = +3 — {{ t('profile.tip_exact') }}</li>
-    <li>🥈 <b>{{ t('profile.col_winner') }}</b> = +1 — {{ t('profile.tip_winner') }}</li>
+    <li>🏆 <b>{{ t('profile.col_winner') }}</b> = +3 — {{ t('profile.tip_winner') }}</li>
+    <li>✅ <b>{{ t('profile.col_exact') }}</b> = +2 — {{ t('profile.tip_exact') }}</li>
     <li>⚽ <b>{{ t('profile.col_first_scorer') }}</b> = +3 — {{ t('profile.tip_first_scorer') }}</li>
     <li>⭐ <b>{{ t('profile.col_motm') }}</b> = +3 — {{ t('profile.tip_motm') }}</li>
     <li>❓ <b>{{ t('match.trivia') }}</b> = +3 — {{ t('profile.tip_trivia') }}</li>

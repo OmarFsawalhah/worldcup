@@ -18,9 +18,16 @@
            class="card-pitch block hover:scale-[1.01] transition-transform">
           <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
             <span class="font-mono" data-countdown="{{ ko_iso }}">{{ ko_iso }}</span>
-            {% set badge = m.status %}
-            {% if m.is_locked() and m.status == 'upcoming' %}{% set badge = 'live' %}{% endif %}
-            <span class="badge badge-{{ badge }}">{{ t('status.' + badge) }}</span>
+            <div class="flex items-center gap-2">
+              {% if m.id in predicted_ids %}
+                <span class="bg-emerald-600 text-white text-xs font-bold px-2 py-0.5 rounded-full" title="{{ t('dashboard.predicted_tip') }}">
+                  ✓ {{ t('dashboard.predicted') }}
+                </span>
+              {% endif %}
+              {% set badge = m.status %}
+              {% if m.is_locked() and m.status == 'upcoming' %}{% set badge = 'live' %}{% endif %}
+              <span class="badge badge-{{ badge }}">{{ t('status.' + badge) }}</span>
+            </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">

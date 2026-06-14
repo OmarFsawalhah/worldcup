@@ -107,8 +107,11 @@ class Prediction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     match_id = db.Column(db.Integer, db.ForeignKey("matches.id"), nullable=False)
-    home_score = db.Column(db.Integer, nullable=False)
-    away_score = db.Column(db.Integer, nullable=False)
+    # Primary prediction: 'home' / 'draw' / 'away'
+    winner_prediction = db.Column(db.String(8), nullable=False)
+    # Optional bonus prediction: exact final score
+    home_score = db.Column(db.Integer, nullable=True)
+    away_score = db.Column(db.Integer, nullable=True)
     first_scorer_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
     motm_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
     points_awarded = db.Column(db.Integer, default=0, nullable=False)

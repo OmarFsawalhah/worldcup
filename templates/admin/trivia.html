@@ -27,11 +27,18 @@
   <button type="button" onclick="addChoice()" class="text-emerald-700 underline text-sm">+ {{ t('admin.add_choice') }} (max 12)</button>
   <small class="block text-slate-500">{{ t('admin.correct') }}: select via radio</small>
 
-  <div class="flex gap-2">
+  <div class="flex gap-2 flex-wrap">
     <button class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">{{ t('admin.save') }}</button>
     <a href="{{ url_for('admin.matches') }}" class="bg-slate-300 px-4 py-2 rounded">{{ t('admin.cancel') }}</a>
   </div>
 </form>
+
+{% if question %}
+<form method="post" action="{{ url_for('admin.match_trivia_delete', mid=match.id) }}" class="max-w-xl mt-4"
+      onsubmit="return confirm('{{ t('admin.trivia_delete_confirm') }}');">
+  <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">🗑 {{ t('admin.trivia_delete') }}</button>
+</form>
+{% endif %}
 
 <script>
 function addChoice() {

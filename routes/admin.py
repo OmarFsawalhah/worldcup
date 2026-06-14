@@ -167,6 +167,12 @@ def user_adjust(uid):
 def match_trivia(mid):
     m = db.session.get(Match, mid) or abort(404)
     q = m.trivia
+    # Block creating a NEW question on a match whose kickoff has passed.
+    # Editing existing questions is still allowed (so admins can fix
+    # a wrong correct-answer choice and rescore).
+    if q is None and m.is_locked():
+        flash(t("admin.trivia_locked_new"), "error")
+        return redirect(url_for("admin.matches"))
     if request.method == "POST":
         question_ar = (request.form.get("question_ar") or "").strip()
         choices = [c.strip() for c in request.form.getlist("choices") if c.strip()]
@@ -198,6 +204,18 @@ def match_trivia(mid):
         return redirect(url_for("admin.matches"))
     choices = json.loads(q.choices_json) if q else ["", ""]
     return render_template("admin/trivia.html", match=m, question=q, choices=choices)
+
+
+@bp.route("/matches/<int:mid>/trivia/delete", methods=["POST"])
+@admin_required
+def match_trivia_delete(mid):
+    m = db.session.get(Match, mid) or abort(404)
+    if m.trivia is None:
+        return redirect(url_for("admin.matches"))
+    db.session.delete(m.trivia)
+    db.session.commit()
+    flash(t("admin.trivia_deleted"), "success")
+    return redirect(url_for("admin.matches"))
 
 
 @bp.route("/matches/<int:mid>/predictions")

@@ -5,11 +5,13 @@ import json
 
 from models import db, Match, Prediction, TriviaQuestion, TriviaAnswer
 
-POINTS_EXACT_SCORE = 3
+# Primary prediction: winner / draw
+POINTS_WINNER = 3
+# Bonus on top of winner: also picked the exact score
+POINTS_EXACT_BONUS = 2
 POINTS_FIRST_SCORER = 3
 POINTS_MOTM = 3
 POINTS_TRIVIA = 3
-POINTS_WINNER_BONUS = 1
 
 
 def _winner_side(home, away):
@@ -33,12 +35,14 @@ def score_match(match: Match) -> None:
 
     for p in match.predictions:
         pts = 0
-        if p.home_score == match.home_score and p.away_score == match.away_score:
-            pts += POINTS_EXACT_SCORE
-        else:
-            # winner-only consolation
-            if _winner_side(p.home_score, p.away_score) == actual_winner:
-                pts += POINTS_WINNER_BONUS
+        # Primary: did they pick the right winner / draw?
+        winner_hit = p.winner_prediction == actual_winner
+        if winner_hit:
+            pts += POINTS_WINNER
+            # Bonus: ALSO predicted exact score (only counts when winner is right too)
+            if (p.home_score is not None and p.away_score is not None
+                    and p.home_score == match.home_score and p.away_score == match.away_score):
+                pts += POINTS_EXACT_BONUS
         if actual_first is not None and p.first_scorer_id == actual_first:
             pts += POINTS_FIRST_SCORER
         if actual_motm is not None and p.motm_id == actual_motm:
@@ -79,25 +83,27 @@ def user_exact_score_hits(user_id: int) -> int:
 
 def prediction_breakdown(prediction, match) -> dict:
     """Per-source point breakdown for a prediction on a finished match.
-    Returns a dict the profile page can render as a detail row.
-    All numeric fields are 0 if the match isn't finished yet."""
+    Returns a dict the profile page can render as a detail row."""
     out = {
-        "exact": 0, "winner": 0, "first_scorer": 0, "motm": 0,
-        "exact_hit": False, "winner_hit": False,
+        "winner": 0, "exact": 0, "first_scorer": 0, "motm": 0,
+        "winner_hit": False, "exact_hit": False,
         "first_scorer_hit": False, "motm_hit": False,
+        "predicted_exact": prediction.home_score is not None and prediction.away_score is not None,
         "total": prediction.points_awarded,
         "result_pending": match.home_score is None or match.away_score is None,
     }
     if out["result_pending"]:
         return out
 
-    if prediction.home_score == match.home_score and prediction.away_score == match.away_score:
-        out["exact"] = POINTS_EXACT_SCORE
-        out["exact_hit"] = True
-    else:
-        if _winner_side(prediction.home_score, prediction.away_score) == _winner_side(match.home_score, match.away_score):
-            out["winner"] = POINTS_WINNER_BONUS
-            out["winner_hit"] = True
+    actual_winner = _winner_side(match.home_score, match.away_score)
+    if prediction.winner_prediction == actual_winner:
+        out["winner"] = POINTS_WINNER
+        out["winner_hit"] = True
+        if (out["predicted_exact"]
+                and prediction.home_score == match.home_score
+                and prediction.away_score == match.away_score):
+            out["exact"] = POINTS_EXACT_BONUS
+            out["exact_hit"] = True
     if match.first_scorer_id is not None and prediction.first_scorer_id == match.first_scorer_id:
         out["first_scorer"] = POINTS_FIRST_SCORER
         out["first_scorer_hit"] = True

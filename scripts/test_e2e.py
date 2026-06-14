@@ -110,14 +110,15 @@ def main():
     check("match page loads", r.status_code == 200)
     check("prediction form rendered (not locked)", b'name="home_score"' in r.data)
     r = c.post(f"/match/{future_id}", data={
-        "action": "predict", "home_score": "2", "away_score": "1",
+        "action": "predict", "winner_prediction": "home",
+        "home_score": "2", "away_score": "1",
         "first_scorer_id": "", "motm_id": "",
     }, follow_redirects=False)
     check("prediction POST returns redirect", r.status_code == 302)
     with app.app_context():
         alice = User.query.filter_by(username="alice").first()
         p = Prediction.query.filter_by(user_id=alice.id, match_id=future_id).first()
-    check("prediction saved in DB", p is not None and p.home_score == 2 and p.away_score == 1, f"p={p}")
+    check("prediction saved in DB", p is not None and p.winner_prediction == "home" and p.home_score == 2 and p.away_score == 1, f"p={p}")
 
     print("\n[4] Locked match blocks prediction")
     r = c.get(f"/match/{locked_id}")
@@ -125,7 +126,7 @@ def main():
     check("locked match shows 'locked' message", b"locked" in r.data.lower() or "مغلقة".encode() in r.data)
     check("locked match has NO score input form", b'name="home_score"' not in r.data)
     r = c.post(f"/match/{locked_id}", data={
-        "action": "predict", "home_score": "5", "away_score": "5",
+        "action": "predict", "winner_prediction": "draw", "home_score": "5", "away_score": "5",
     }, follow_redirects=False)
     with app.app_context():
         p = Prediction.query.filter_by(user_id=alice.id, match_id=locked_id).first()
@@ -214,13 +215,14 @@ def main():
     with app.app_context():
         p = Prediction.query.filter_by(user_id=alice.id, match_id=future_id).first()
         ans = TriviaAnswer.query.filter_by(user_id=alice.id).first()
-    check("alice prediction awarded +3 (exact score 2-1)", p.points_awarded == 3, f"got {p.points_awarded}")
+    # Alice predicted home win + 2-1 → +3 winner + +2 exact bonus = 5
+    check("alice prediction awarded 5 pts (winner+exact bonus)", p.points_awarded == 5, f"got {p.points_awarded}")
     check("alice trivia awarded +3 (correct option 1)", ans.points_awarded == 3, f"got {ans.points_awarded}")
 
     print("\n[10] Leaderboard reflects scoring; profile shows breakdown")
     r = c.get("/leaderboard")
     check("leaderboard returns 200", r.status_code == 200)
-    check("alice on leaderboard with 6 points", b"alice" in r.data and b"6" in r.data)
+    check("alice on leaderboard with 8 points", b"alice" in r.data and b"8" in r.data)
     r = c.get("/profile")
     check("profile returns 200", r.status_code == 200)
     check("profile shows 'From predictions' breakdown", b"From predictions" in r.data or "من التوقعات".encode() in r.data)
@@ -249,7 +251,7 @@ def main():
     with app.app_context():
         from scoring import user_total_points
         new_total = user_total_points(alice_id)
-    check("user_total_points includes bonus (was 6, now 16)", new_total == 16, f"got {new_total}")
+    check("user_total_points includes bonus (was 8, now 18)", new_total == 18, f"got {new_total}")
 
     print("\n[13] Nav active highlight")
     r = c.get("/profile")

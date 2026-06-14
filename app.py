@@ -112,6 +112,21 @@ def _auto_migrate():
         if "calculated_by_id" not in cols:
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE matches ADD COLUMN calculated_by_id INTEGER"))
+    if "predictions" in insp.get_table_names():
+        cols = {c["name"] for c in insp.get_columns("predictions")}
+        if "winner_prediction" not in cols:
+            with db.engine.begin() as conn:
+                row_count = conn.execute(text("SELECT COUNT(*) FROM predictions")).scalar() or 0
+                if row_count == 0:
+                    # No data — drop and let create_all rebuild with the new schema
+                    conn.execute(text("DROP TABLE predictions"))
+                else:
+                    # Data present — add column + loosen NOT NULL where supported
+                    conn.execute(text("ALTER TABLE predictions ADD COLUMN winner_prediction VARCHAR(8)"))
+                    if db.engine.dialect.name == "postgresql":
+                        conn.execute(text("ALTER TABLE predictions ALTER COLUMN home_score DROP NOT NULL"))
+                        conn.execute(text("ALTER TABLE predictions ALTER COLUMN away_score DROP NOT NULL"))
+            db.create_all()
 
 
 def request_referrer_or_root():

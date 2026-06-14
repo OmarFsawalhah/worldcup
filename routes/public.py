@@ -18,6 +18,10 @@ def dashboard():
     if not current_user.is_authenticated:
         return redirect(url_for("auth.login"))
     matches = Match.query.order_by(Match.kickoff_utc.asc()).all()
+    # IDs of matches the current user has already predicted, for the badge
+    predicted_ids = {p.match_id for p in
+                     Prediction.query.with_entities(Prediction.match_id)
+                     .filter_by(user_id=current_user.id).all()}
     grouped = {}
     for m in matches:
         if m.stage == "group":
@@ -26,7 +30,6 @@ def dashboard():
             key = (m.stage, None)
         grouped.setdefault(key, []).append(m)
 
-    # sort group keys A..L first, then knockout in order
     def sort_key(k):
         stage, letter = k
         if stage == "group":
@@ -34,7 +37,7 @@ def dashboard():
         return (1 + STAGE_ORDER.index(stage), "")
 
     sections = sorted(grouped.items(), key=lambda kv: sort_key(kv[0]))
-    return render_template("dashboard.html", sections=sections)
+    return render_template("dashboard.html", sections=sections, predicted_ids=predicted_ids)
 
 
 @bp.route("/match/<int:match_id>", methods=["GET", "POST"])
@@ -58,21 +61,31 @@ def match_detail(match_id):
             if match.is_locked():
                 flash(t("match.locked_msg"), "error")
                 return redirect(url_for("public.match_detail", match_id=match.id))
-            try:
-                hs = int(request.form.get("home_score") or 0)
-                as_ = int(request.form.get("away_score") or 0)
-            except ValueError:
-                hs = as_ = 0
+            winner = request.form.get("winner_prediction")
+            if winner not in ("home", "draw", "away"):
+                flash(t("match.winner_required"), "error")
+                return redirect(url_for("public.match_detail", match_id=match.id))
+            # Optional exact-score guess
+            hs_raw = (request.form.get("home_score") or "").strip()
+            as_raw = (request.form.get("away_score") or "").strip()
+            hs = int(hs_raw) if hs_raw else None
+            as_ = int(as_raw) if as_raw else None
+            # Both score fields must be filled together, or both empty
+            if (hs is None) != (as_ is None):
+                flash(t("match.score_pair_required"), "error")
+                return redirect(url_for("public.match_detail", match_id=match.id))
             fs = request.form.get("first_scorer_id") or None
             mm = request.form.get("motm_id") or None
             fs = int(fs) if fs else None
             mm = int(mm) if mm else None
             if prediction is None:
                 prediction = Prediction(user_id=current_user.id, match_id=match.id,
+                                        winner_prediction=winner,
                                         home_score=hs, away_score=as_,
                                         first_scorer_id=fs, motm_id=mm)
                 db.session.add(prediction)
             else:
+                prediction.winner_prediction = winner
                 prediction.home_score = hs
                 prediction.away_score = as_
                 prediction.first_scorer_id = fs
