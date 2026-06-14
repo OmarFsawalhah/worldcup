@@ -1,87 +1,87 @@
 {% extends "base.html" %}
 {% block container_class %}max-w-7xl{% endblock %}
 {% block content %}
-<h1 class="text-2xl sm:text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.users_title') }}</h1>
 
-{# ---------- Desktop: table ---------- #}
-<div class="card-pitch overflow-x-auto hidden md:block">
-  <table class="w-full text-sm">
-    <thead class="bg-green-800 text-white">
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
+  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.users_title') }}</h1>
+</div>
+
+{# Desktop #}
+<div class="card-pitch p-0 overflow-x-auto hidden md:block">
+  <table class="table-clean">
+    <thead>
       <tr>
-        <th class="p-3 text-start">{{ t('leaderboard.user') }}</th>
-        <th class="p-3 text-start">{{ t('admin.role') }}</th>
-        <th class="p-3 text-end">{{ t('admin.predictions_count') }}</th>
-        <th class="p-3 text-end">{{ t('leaderboard.exact_hits') }}</th>
-        <th class="p-3 text-end">{{ t('admin.bonus_label') }}</th>
-        <th class="p-3 text-end">{{ t('leaderboard.points') }}</th>
-        <th class="p-3 text-start">{{ t('admin.joined') }}</th>
+        <th>{{ t('leaderboard.user') }}</th>
+        <th>{{ t('admin.role') }}</th>
+        <th class="text-end">{{ t('admin.predictions_count') }}</th>
+        <th class="text-end">{{ t('leaderboard.exact_hits') }}</th>
+        <th class="text-end">{{ t('admin.bonus_label') }}</th>
+        <th class="text-end">{{ t('leaderboard.points') }}</th>
+        <th>{{ t('admin.joined') }}</th>
       </tr>
     </thead>
     <tbody>
       {% for r in rows %}
-        <tr class="border-t {{ 'bg-amber-50' if r.user.is_admin else '' }}">
-          <td class="p-3 font-medium">{{ r.user.username }}</td>
-          <td class="p-3">
+        <tr class="{{ 'bg-yellow-50/40' if r.user.is_admin else '' }}">
+          <td class="font-medium">{{ r.user.username }}</td>
+          <td>
             {% if r.user.is_admin %}
-              <span class="text-xs font-bold bg-amber-200 text-amber-900 px-2 py-1 rounded">{{ t('admin.role_admin') }}</span>
+              <span class="text-[10px] font-bold bg-yellow-100 text-yellow-800 px-2 py-1 rounded uppercase tracking-wider">{{ t('admin.role_admin') }}</span>
             {% else %}
-              <span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded">{{ t('admin.role_user') }}</span>
+              <span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded uppercase tracking-wider">{{ t('admin.role_user') }}</span>
             {% endif %}
           </td>
-          <td class="p-3 text-end font-mono">{{ r.predictions }}</td>
-          <td class="p-3 text-end font-mono">{{ r.exact }}</td>
-          <td class="p-3 text-end">
+          <td class="text-end font-mono">{{ r.predictions }}</td>
+          <td class="text-end font-mono">{{ r.exact }}</td>
+          <td class="text-end">
             <form method="post" action="{{ url_for('admin.user_adjust', uid=r.user.id) }}" class="inline-flex items-center gap-1">
               <input type="number" name="bonus_points" value="{{ r.bonus }}"
-                     class="border rounded w-20 text-center font-mono py-1"
+                     class="border-2 border-slate-200 rounded-lg w-20 text-center font-mono py-1.5 focus:border-emerald-500 outline-none"
                      title="{{ t('admin.bonus_tip') }}">
-              <button class="bg-emerald-700 text-white px-2 py-1 rounded text-xs hover:bg-emerald-800">
-                {{ t('admin.bonus_save') }}
-              </button>
+              <button class="btn btn-primary btn-xs">{{ t('admin.bonus_save') }}</button>
             </form>
           </td>
-          <td class="p-3 text-end font-display text-xl text-green-800">{{ r.points }}</td>
-          <td class="p-3 text-xs text-slate-500 font-mono">{{ r.user.created_at.strftime('%Y-%m-%d') }}</td>
+          <td class="text-end font-display text-xl text-emerald-700">{{ r.points }}</td>
+          <td class="text-xs text-slate-500 font-mono">{{ r.user.created_at.strftime('%Y-%m-%d') }}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
-{# ---------- Mobile: cards ---------- #}
+{# Mobile cards #}
 <div class="md:hidden space-y-3">
   {% for r in rows %}
-    <div class="card-pitch p-3 {{ 'border-l-4 border-amber-400' if r.user.is_admin else '' }}">
-      <div class="flex items-center justify-between mb-2">
-        <span class="font-bold text-base">{{ r.user.username }}</span>
+    <div class="card-pitch {{ 'border-l-4 border-yellow-400' if r.user.is_admin else '' }}">
+      <div class="flex items-center justify-between mb-3">
+        <span class="font-display text-base">{{ r.user.username }}</span>
         {% if r.user.is_admin %}
-          <span class="text-xs font-bold bg-amber-200 text-amber-900 px-2 py-1 rounded">{{ t('admin.role_admin') }}</span>
+          <span class="text-[10px] font-bold bg-yellow-100 text-yellow-800 px-2 py-1 rounded uppercase tracking-wider">{{ t('admin.role_admin') }}</span>
         {% else %}
-          <span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded">{{ t('admin.role_user') }}</span>
+          <span class="text-[10px] font-bold bg-slate-100 text-slate-700 px-2 py-1 rounded uppercase tracking-wider">{{ t('admin.role_user') }}</span>
         {% endif %}
       </div>
-      <div class="grid grid-cols-3 gap-2 text-center mb-3 text-xs">
-        <div class="bg-slate-50 rounded p-2">
-          <div class="text-slate-500">{{ t('admin.predictions_count') }}</div>
-          <div class="font-mono font-bold text-base">{{ r.predictions }}</div>
+      <div class="grid grid-cols-3 gap-2 mb-3 text-center text-xs">
+        <div class="bg-slate-50 rounded-lg p-2.5">
+          <div class="text-slate-500 text-[10px] uppercase tracking-wider">{{ t('admin.predictions_count') }}</div>
+          <div class="font-display text-lg">{{ r.predictions }}</div>
         </div>
-        <div class="bg-slate-50 rounded p-2">
-          <div class="text-slate-500">{{ t('leaderboard.exact_hits') }}</div>
-          <div class="font-mono font-bold text-base">{{ r.exact }}</div>
+        <div class="bg-slate-50 rounded-lg p-2.5">
+          <div class="text-slate-500 text-[10px] uppercase tracking-wider">{{ t('leaderboard.exact_hits') }}</div>
+          <div class="font-display text-lg">{{ r.exact }}</div>
         </div>
-        <div class="bg-emerald-50 rounded p-2">
-          <div class="text-slate-500">{{ t('leaderboard.points') }}</div>
-          <div class="font-display text-emerald-800 text-xl">{{ r.points }}</div>
+        <div class="bg-emerald-50 rounded-lg p-2.5 ring-1 ring-emerald-200">
+          <div class="text-emerald-600 text-[10px] uppercase tracking-wider">{{ t('leaderboard.points') }}</div>
+          <div class="font-display text-xl text-emerald-700">{{ r.points }}</div>
         </div>
       </div>
       <form method="post" action="{{ url_for('admin.user_adjust', uid=r.user.id) }}" class="flex items-center gap-2">
-        <label class="text-xs text-slate-600 whitespace-nowrap">{{ t('admin.bonus_label') }}:</label>
+        <label class="text-xs text-slate-600 whitespace-nowrap font-medium">{{ t('admin.bonus_label') }}:</label>
         <input type="number" name="bonus_points" value="{{ r.bonus }}"
-               class="border rounded flex-1 text-center font-mono py-1"
+               class="border-2 border-slate-200 rounded-lg flex-1 text-center font-mono py-1.5 focus:border-emerald-500 outline-none"
                title="{{ t('admin.bonus_tip') }}">
-        <button class="bg-emerald-700 text-white px-3 py-1 rounded text-xs hover:bg-emerald-800">
-          {{ t('admin.bonus_save') }}
-        </button>
+        <button class="btn btn-primary btn-xs">{{ t('admin.bonus_save') }}</button>
       </form>
       <div class="text-xs text-slate-400 font-mono mt-2 text-end">{{ r.user.created_at.strftime('%Y-%m-%d') }}</div>
     </div>

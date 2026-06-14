@@ -7,50 +7,76 @@
 {% set trivia_available = match.trivia and match.trivia_open() and not is_author %}
 {% set already_voted = trivia_answer is not none %}
 
-<div class="card-pitch mb-6">
-  <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center">
-    <div class="flex flex-col items-center">
-      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl">
-      <div class="font-display text-base sm:text-xl mt-1">{{ match.home_team.name(lang) }}</div>
+{# ===== Match hero ===== #}
+<div class="card-pitch mb-5 sm:mb-6 overflow-hidden relative">
+  <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-yellow-400 to-emerald-500 opacity-70"></div>
+
+  <div class="text-center text-xs uppercase tracking-[0.2em] text-slate-500 font-bold mb-3">
+    {% if match.stage == 'group' %}
+      Group {{ match.group_letter }}
+    {% else %}
+      {{ t('dashboard.stage.' + match.stage) }}
+    {% endif %}
+  </div>
+
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center">
+    {# Home #}
+    <div class="flex flex-col items-center sm:flex-1">
+      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
+      <div class="font-display text-base sm:text-xl">{{ match.home_team.name(lang) }}</div>
+      <div class="text-xs text-slate-400 mt-1">HOME</div>
     </div>
-    <div class="text-center">
+
+    {# Center: score or vs / countdown #}
+    <div class="text-center shrink-0">
       {% if match.has_finished() %}
-        <div class="score-display">{{ match.home_score }} - {{ match.away_score }}</div>
-        <div class="text-xs text-slate-500 mt-1">{{ t('status.finished') }}</div>
+        <div class="font-score text-4xl sm:text-5xl">{{ match.home_score }} <span class="text-slate-400">-</span> {{ match.away_score }}</div>
+        <div class="badge badge-finished mt-2">{{ t('status.finished') }}</div>
       {% else %}
-        <div class="text-xl sm:text-2xl text-slate-400 font-display">vs</div>
-        <div class="text-xs sm:text-sm text-slate-600 mt-1 font-mono" data-countdown="{{ ko_iso }}">{{ ko_iso }}</div>
+        <div class="text-2xl sm:text-3xl text-slate-300 font-display mb-1">VS</div>
+        <div class="text-xs sm:text-sm text-slate-600 font-mono bg-slate-50 px-3 py-1 rounded-full inline-block" data-countdown="{{ ko_iso }}">{{ ko_iso }}</div>
       {% endif %}
     </div>
-    <div class="flex flex-col items-center">
-      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl">
-      <div class="font-display text-base sm:text-xl mt-1">{{ match.away_team.name(lang) }}</div>
+
+    {# Away #}
+    <div class="flex flex-col items-center sm:flex-1">
+      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
+      <div class="font-display text-base sm:text-xl">{{ match.away_team.name(lang) }}</div>
+      <div class="text-xs text-slate-400 mt-1">AWAY</div>
     </div>
   </div>
-  {% if match.venue %}<div class="text-center text-slate-500 text-xs sm:text-sm mt-3">{{ match.venue }}</div>{% endif %}
+
+  {% if match.venue %}
+    <div class="halfway-line"></div>
+    <div class="text-center text-xs sm:text-sm text-slate-500 flex items-center justify-center gap-1.5">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>{{ match.venue }}</span>
+    </div>
+  {% endif %}
+
   {% if match.has_finished() %}
-    <div class="text-center text-sm text-slate-600 mt-3">
+    <div class="text-center text-sm text-slate-600 mt-3 space-y-1">
       {% if match.first_scorer %}<div>⚽ {{ t('match.first_scorer') }}: <b>{{ match.first_scorer.name(lang) }}</b></div>{% endif %}
-      {% if match.motm %}<div>⭐ {{ match.motm.name(lang) }}: <b>{{ match.motm.name(lang) }}</b></div>{% endif %}
+      {% if match.motm %}<div>⭐ {{ t('match.motm') }}: <b>{{ match.motm.name(lang) }}</b></div>{% endif %}
     </div>
   {% endif %}
 </div>
 
 {% if not locked %}
-  {# ---------- Wizard ---------- #}
-  {# steps: 1 winner, 2 score, 3 first_scorer, 4 motm, [5 trivia if available] #}
+  {# ===================== Wizard ===================== #}
   {% set has_trivia_step = trivia_available %}
   {% set total_steps = 5 if has_trivia_step else 4 %}
 
   <div class="card-pitch mb-6" id="wizard-card">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-lg sm:text-xl font-bold">{{ t('match.wizard_title') }}</h2>
-      <span class="text-xs sm:text-sm font-mono bg-emerald-50 text-emerald-800 px-2 py-1 rounded" id="step-indicator">
-        {{ t('match.step', n=1, total=total_steps) }}
+    <div class="flex items-center justify-between mb-4 gap-2">
+      <h2 class="font-display text-lg sm:text-xl">{{ t('match.wizard_title') }}</h2>
+      <span class="wizard-step-indicator" id="step-indicator">
+        <span id="step-num">1</span>/<span>{{ total_steps }}</span>
       </span>
     </div>
-    <div class="w-full bg-slate-200 rounded-full h-2 mb-5 overflow-hidden">
-      <div id="wizard-progress" class="bg-emerald-600 h-2 transition-all" style="width: {{ (100 / total_steps) | round(0, 'floor') }}%"></div>
+
+    <div class="wizard-progress-track mb-6">
+      <div id="wizard-progress" class="wizard-progress-fill" style="width: {{ (100 / total_steps) | round(0, 'floor') }}%"></div>
     </div>
 
     <form method="post" id="wizard-form" novalidate>
@@ -58,28 +84,27 @@
 
       {# STEP 1 — Winner #}
       <div class="wizard-step" data-step="1">
-        <div class="text-sm font-bold text-slate-700 mb-2 text-center">
-          {{ t('match.step_winner') }} <span class="text-emerald-700">(+3)</span>
+        <div class="text-center mb-4">
+          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold mb-1">+3 pts</div>
+          <h3 class="font-display text-xl">{{ t('match.step_winner') }}</h3>
         </div>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 gap-2 sm:gap-3">
           {% for opt, label in [
               ('home', match.home_team.name(lang)),
               ('draw', t('match.draw')),
               ('away', match.away_team.name(lang))
           ] %}
             {% set picked = prediction and prediction.winner_prediction == opt %}
-            <label class="cursor-pointer border-2 rounded-lg p-2 sm:p-3 text-center transition winner-card
-                   {{ 'border-emerald-600 bg-emerald-50 ring-2 ring-emerald-200' if picked else 'border-slate-200 hover:border-slate-400' }}">
-              <input type="radio" name="winner_prediction" value="{{ opt }}" class="sr-only"
-                     {{ 'checked' if picked }}>
+            <label class="winner-card {{ 'winner-card-active' if picked }}">
+              <input type="radio" name="winner_prediction" value="{{ opt }}" class="sr-only" {{ 'checked' if picked }}>
               {% if opt == 'home' %}
-                <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm sm:flag-img-md mx-auto mb-1">
+                <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md mx-auto mb-2">
               {% elif opt == 'away' %}
-                <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm sm:flag-img-md mx-auto mb-1">
+                <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md mx-auto mb-2">
               {% else %}
-                <div class="text-2xl sm:text-3xl mb-1">🤝</div>
+                <div class="text-3xl mb-2">🤝</div>
               {% endif %}
-              <div class="font-display text-sm sm:text-base">{{ label }}</div>
+              <div class="font-display text-sm sm:text-base truncate">{{ label }}</div>
             </label>
           {% endfor %}
         </div>
@@ -87,39 +112,41 @@
 
       {# STEP 2 — Exact score #}
       <div class="wizard-step hidden" data-step="2">
-        <div class="text-sm font-bold text-slate-700 mb-1 text-center">
-          {{ t('match.step_score') }} <span class="text-amber-700">(+2)</span>
+        <div class="text-center mb-4">
+          <div class="text-xs uppercase tracking-[0.2em] text-amber-600 font-bold mb-1">+2 bonus</div>
+          <h3 class="font-display text-xl mb-1">{{ t('match.step_score') }}</h3>
+          <p class="text-xs text-slate-500">{{ t('match.exact_score_hint') }}</p>
         </div>
-        <div class="text-xs text-slate-500 text-center mb-3">{{ t('match.exact_score_hint') }}</div>
-        <div class="flex items-center justify-center gap-3">
+        <div class="flex items-center justify-center gap-3 sm:gap-4 mt-6">
           <div class="text-center">
-            <div class="flex items-center justify-center gap-2 mb-1">
+            <div class="flex items-center justify-center gap-2 mb-2">
               <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm">
-              <span class="text-xs sm:text-sm font-medium">{{ match.home_team.name(lang) }}</span>
+              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ match.home_team.name(lang) }}</span>
             </div>
             <input type="number" min="0" max="20" name="home_score" inputmode="numeric"
                    value="{{ prediction.home_score if prediction and prediction.home_score is not none else '' }}"
-                   class="border-2 rounded w-16 text-center text-2xl py-1">
+                   class="score-box">
           </div>
-          <span class="text-2xl">-</span>
+          <span class="font-display text-3xl text-slate-300 mt-7">–</span>
           <div class="text-center">
-            <div class="flex items-center justify-center gap-2 mb-1">
-              <span class="text-xs sm:text-sm font-medium">{{ match.away_team.name(lang) }}</span>
+            <div class="flex items-center justify-center gap-2 mb-2">
+              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ match.away_team.name(lang) }}</span>
               <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm">
             </div>
             <input type="number" min="0" max="20" name="away_score" inputmode="numeric"
                    value="{{ prediction.away_score if prediction and prediction.away_score is not none else '' }}"
-                   class="border-2 rounded w-16 text-center text-2xl py-1">
+                   class="score-box">
           </div>
         </div>
       </div>
 
       {# STEP 3 — First scorer #}
       <div class="wizard-step hidden" data-step="3">
-        <div class="text-sm font-bold text-slate-700 mb-2 text-center">
-          {{ t('match.step_first_scorer') }} <span class="text-emerald-700">(+3)</span>
+        <div class="text-center mb-4">
+          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold mb-1">+3 pts</div>
+          <h3 class="font-display text-xl">{{ t('match.step_first_scorer') }}</h3>
         </div>
-        <select name="first_scorer_id" class="w-full border-2 rounded px-3 py-2 text-base">
+        <select name="first_scorer_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
           <optgroup label="{{ match.home_team.name(lang) }}">
             {% for p in home_players %}
@@ -140,10 +167,11 @@
 
       {# STEP 4 — MOTM #}
       <div class="wizard-step hidden" data-step="4">
-        <div class="text-sm font-bold text-slate-700 mb-2 text-center">
-          {{ t('match.step_motm') }} <span class="text-emerald-700">(+3)</span>
+        <div class="text-center mb-4">
+          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold mb-1">+3 pts</div>
+          <h3 class="font-display text-xl">{{ t('match.step_motm') }}</h3>
         </div>
-        <select name="motm_id" class="w-full border-2 rounded px-3 py-2 text-base">
+        <select name="motm_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
           <optgroup label="{{ match.home_team.name(lang) }}">
             {% for p in home_players %}
@@ -162,71 +190,84 @@
         </select>
       </div>
 
-      {# STEP 5 — Trivia (last) #}
+      {# STEP 5 — Trivia #}
       {% if has_trivia_step %}
       <div class="wizard-step hidden" data-step="5">
-        <div class="text-sm font-bold text-slate-700 mb-2 text-center">
-          {{ t('match.step_trivia') }} <span class="text-emerald-700">(+3)</span>
+        <div class="text-center mb-4">
+          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold mb-1">+3 pts</div>
+          <h3 class="font-display text-xl">{{ t('match.step_trivia') }}</h3>
         </div>
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-slate-500">⏱</span>
-          <span id="trivia-timer" class="text-sm font-mono bg-red-50 text-red-700 px-2 py-1 rounded font-bold">{{ t('match.trivia_timer', s=15) }}</span>
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs text-slate-500 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="trivia-timer-label">{{ t('match.trivia_timer', s=15) }}</span>
+          </span>
+          <div class="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+            <div id="trivia-timer-bar" class="h-full bg-gradient-to-r from-emerald-500 to-yellow-400 transition-all" style="width: 100%"></div>
+          </div>
         </div>
-        <div dir="rtl" class="bg-slate-50 rounded p-3 mb-3 text-right">{{ match.trivia.question_ar }}</div>
+        <div dir="rtl" class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-right font-medium">{{ match.trivia.question_ar }}</div>
         <div id="trivia-choices" class="space-y-2" dir="rtl">
           {% for c in trivia_choices %}
-            <label class="flex items-center gap-2 border-2 rounded p-2 cursor-pointer hover:bg-slate-50">
-              <input type="radio" name="trivia_choice_index" value="{{ loop.index0 }}">
-              <span>{{ c }}</span>
+            <label class="choice-card">
+              <input type="radio" name="trivia_choice_index" value="{{ loop.index0 }}" class="accent-emerald-600 w-4 h-4">
+              <span class="flex-1">{{ c }}</span>
             </label>
           {% endfor %}
         </div>
-        <div id="trivia-timeout-msg" class="hidden mt-3 bg-red-50 border border-red-200 text-red-800 rounded p-3 text-center text-sm">
-          {{ t('match.trivia_timeout') }}
+        <div id="trivia-timeout-msg" class="hidden mt-4 flash flash-error">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>{{ t('match.trivia_timeout') }}</span>
         </div>
       </div>
       {% endif %}
 
       {# Nav buttons #}
-      <div class="flex items-center justify-between gap-2 mt-6">
-        <button type="button" id="btn-back"
-                class="bg-slate-200 text-slate-700 px-4 py-2 rounded hover:bg-slate-300 disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled>← {{ t('match.back') }}</button>
-
+      <div class="flex items-center justify-between gap-2 mt-7">
+        <button type="button" id="btn-back" class="btn btn-soft btn-sm" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>{{ t('match.back') }}</span>
+        </button>
         <div class="flex items-center gap-2">
-          <button type="button" id="btn-skip"
-                  class="text-slate-600 px-3 py-2 rounded hover:bg-slate-100 text-sm">{{ t('match.skip') }}</button>
-          <button type="button" id="btn-next"
-                  class="bg-emerald-700 text-white px-5 py-2 rounded hover:bg-emerald-800 font-bold">{{ t('match.next') }} →</button>
-          <button type="submit" id="btn-finish"
-                  class="hidden bg-yellow-400 text-green-900 px-5 py-2 rounded hover:bg-yellow-300 font-bold ring-2 ring-yellow-200">✓ {{ t('match.finish') }}</button>
+          <button type="button" id="btn-skip" class="btn btn-ghost btn-sm text-slate-500 hover:bg-slate-100">{{ t('match.skip') }}</button>
+          <button type="button" id="btn-next" class="btn btn-primary btn-sm">
+            <span>{{ t('match.next') }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rtl:rotate-180"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <button type="submit" id="btn-finish" class="hidden btn btn-gold btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>{{ t('match.finish') }}</span>
+          </button>
         </div>
       </div>
     </form>
   </div>
 
-  {# Thank-you modal (shown via ?done=1 in URL after submit) #}
-  <div id="thanks-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center border-4 border-yellow-400">
-      <div class="text-5xl mb-3">🎉</div>
-      <h3 class="font-display text-2xl text-green-800 mb-2">{{ t('match.thanks') }}</h3>
+  {# Thank-you modal #}
+  <div id="thanks-modal" class="hidden modal-backdrop">
+    <div class="modal-content">
+      <div class="inline-flex w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 items-center justify-center mb-3 shadow-lg shadow-yellow-500/40">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="font-display text-2xl mb-1">{{ t('match.thanks') }}</h3>
       <p class="text-slate-600 text-sm mb-5">{{ t('match.thanks_sub') }}</p>
-      <button type="button" id="thanks-close"
-              class="bg-emerald-700 text-white px-5 py-2 rounded hover:bg-emerald-800 font-bold w-full">OK</button>
+      <button type="button" id="thanks-close" class="btn btn-primary w-full">OK</button>
     </div>
   </div>
 
 {% else %}
-  {# Match is locked — show summary only #}
-  <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded p-4 mb-6 text-center">
-    {{ t('match.locked_msg') }}
+  {# ============= Locked / read-only view ============= #}
+  <div class="flash flash-error mb-5">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <span>{{ t('match.locked_msg') }}</span>
   </div>
+
   {% if prediction %}
   <div class="card-pitch mb-6">
-    <h2 class="text-lg font-bold mb-3">{{ t('match.your_prediction') }}</h2>
+    <h2 class="font-display text-lg mb-4 text-center">{{ t('match.your_prediction') }}</h2>
     <div class="text-center">
-      <div class="text-xs text-slate-500 uppercase tracking-wider">{{ t('match.pick_winner') }}</div>
-      <div class="font-display text-2xl mt-1">
+      <div class="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.pick_winner') }}</div>
+      <div class="font-display text-2xl mt-2">
         {% if prediction.winner_prediction == 'home' %}{{ match.home_team.name(lang) }}
         {% elif prediction.winner_prediction == 'away' %}{{ match.away_team.name(lang) }}
         {% elif prediction.winner_prediction == 'draw' %}🤝 {{ t('match.draw') }}
@@ -234,28 +275,32 @@
       </div>
     </div>
     {% if prediction.home_score is not none %}
-      <div class="text-center mt-2">
-        <div class="text-xs text-slate-500 uppercase tracking-wider">{{ t('match.exact_score_optional') }}</div>
-        <div class="text-2xl font-bold">{{ prediction.home_score }} - {{ prediction.away_score }}</div>
+      <div class="text-center mt-4">
+        <div class="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.exact_score_optional') }}</div>
+        <div class="font-score text-3xl mt-2">{{ prediction.home_score }} <span class="text-slate-400">-</span> {{ prediction.away_score }}</div>
       </div>
     {% endif %}
-    <div class="text-sm text-center text-slate-600 mt-2">
-      {% if prediction.first_scorer %}⚽ {{ prediction.first_scorer.name(lang) }}<br>{% endif %}
-      {% if prediction.motm %}⭐ {{ prediction.motm.name(lang) }}{% endif %}
+    <div class="text-sm text-center text-slate-600 mt-4 space-y-1">
+      {% if prediction.first_scorer %}<div>⚽ {{ prediction.first_scorer.name(lang) }}</div>{% endif %}
+      {% if prediction.motm %}<div>⭐ {{ prediction.motm.name(lang) }}{% endif %}</div>
     </div>
     {% if match.has_finished() %}
-      <div class="text-center mt-3 text-emerald-700 font-bold">{{ t('match.points') }}: {{ prediction.points_awarded }}</div>
+      <div class="text-center mt-5">
+        <div class="inline-block bg-emerald-50 border-2 border-emerald-200 rounded-2xl px-5 py-3">
+          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">{{ t('match.points') }}</div>
+          <div class="font-display text-3xl text-emerald-700 mt-1">{{ prediction.points_awarded }}</div>
+        </div>
+      </div>
     {% endif %}
   </div>
   {% else %}
   <div class="card-pitch mb-6 text-center text-slate-500">{{ t('match.no_pred') }}</div>
   {% endif %}
 
-  {# Trivia (legacy view when locked / not within wizard) #}
   {% if match.trivia %}
   <div class="card-pitch" dir="rtl">
-    <h2 class="text-lg font-bold mb-3 text-right">{{ t('match.trivia') }}</h2>
-    <p class="text-right mb-3">{{ match.trivia.question_ar }}</p>
+    <h2 class="font-display text-lg mb-3 text-right">{{ t('match.trivia') }}</h2>
+    <div class="bg-slate-50 rounded-xl p-3 mb-3 text-right">{{ match.trivia.question_ar }}</div>
     {% if trivia_answer %}
       <div class="text-sm text-slate-600 text-right">
         إجابتك: <b>{{ trivia_choices[trivia_answer.choice_index] }}</b>
@@ -277,16 +322,13 @@
   const hasTrivia = {{ 'true' if has_trivia_step else 'false' }};
   const triviaAlreadyVoted = {{ 'true' if already_voted else 'false' }};
   const labels = {
-    step: {{ t('match.step', n='__N__', total='__T__') | tojson }},
-    next: {{ t('match.next') | tojson }},
-    finish: {{ t('match.finish') | tojson }},
     timerFmt: {{ t('match.trivia_timer', s='__S__') | tojson }},
   };
 
   let current = 1;
   const form = document.getElementById('wizard-form');
   const steps = form.querySelectorAll('.wizard-step');
-  const indicator = document.getElementById('step-indicator');
+  const stepNum = document.getElementById('step-num');
   const progress = document.getElementById('wizard-progress');
   const btnBack = document.getElementById('btn-back');
   const btnNext = document.getElementById('btn-next');
@@ -296,7 +338,7 @@
   function show(n) {
     current = n;
     steps.forEach(s => s.classList.toggle('hidden', Number(s.dataset.step) !== n));
-    indicator.textContent = labels.step.replace('__N__', n).replace('__T__', totalSteps);
+    stepNum.textContent = n;
     progress.style.width = Math.floor((n / totalSteps) * 100) + '%';
     btnBack.disabled = (n === 1);
     if (n === totalSteps) {
@@ -306,73 +348,73 @@
       btnNext.classList.remove('hidden');
       btnFinish.classList.add('hidden');
     }
-    // On last step, if it's trivia, start countdown
     if (hasTrivia && n === totalSteps) startTriviaTimer();
   }
 
   btnNext.addEventListener('click', () => { if (current < totalSteps) show(current + 1); });
   btnBack.addEventListener('click', () => { if (current > 1) show(current - 1); });
   btnSkip.addEventListener('click', () => {
-    // Clear the current step's inputs, then advance (or finish on last)
     const stepEl = form.querySelector('.wizard-step[data-step="' + current + '"]');
     stepEl.querySelectorAll('input[type=number], input[type=text]').forEach(i => i.value = '');
     stepEl.querySelectorAll('input[type=radio]').forEach(i => i.checked = false);
     stepEl.querySelectorAll('select').forEach(s => s.value = '');
-    // Repaint winner-card highlights
-    stepEl.querySelectorAll('.winner-card').forEach(c =>
-      c.classList.remove('border-emerald-600', 'bg-emerald-50', 'ring-2', 'ring-emerald-200'));
+    stepEl.querySelectorAll('.winner-card').forEach(c => c.classList.remove('winner-card-active'));
+    stepEl.querySelectorAll('.choice-card').forEach(c => c.classList.remove('is-selected'));
     if (current < totalSteps) show(current + 1);
     else form.requestSubmit();
   });
 
-  // Highlight winner radio cards on change
+  // Highlight winner cards on change
   form.querySelectorAll('input[name="winner_prediction"]').forEach(r => {
     r.addEventListener('change', () => {
       form.querySelectorAll('.winner-card').forEach(c => {
         const inp = c.querySelector('input[type=radio]');
-        const on = inp && inp.checked;
-        c.classList.toggle('border-emerald-600', on);
-        c.classList.toggle('bg-emerald-50', on);
-        c.classList.toggle('ring-2', on);
-        c.classList.toggle('ring-emerald-200', on);
-        if (!on) {
-          c.classList.add('border-slate-200');
-        } else {
-          c.classList.remove('border-slate-200');
-        }
+        c.classList.toggle('winner-card-active', inp && inp.checked);
       });
     });
   });
 
-  // Trivia countdown (15 seconds, starts when user reaches the trivia step)
+  // Highlight trivia choice on change
+  form.querySelectorAll('input[name="trivia_choice_index"]').forEach(r => {
+    r.addEventListener('change', () => {
+      form.querySelectorAll('.choice-card').forEach(c => {
+        const inp = c.querySelector('input[type=radio]');
+        c.classList.toggle('is-selected', inp && inp.checked);
+      });
+    });
+  });
+
+  // Trivia countdown
   let triviaStarted = false;
   function startTriviaTimer() {
     if (triviaStarted || triviaAlreadyVoted) return;
     triviaStarted = true;
-    const timerEl = document.getElementById('trivia-timer');
+    const labelEl = document.getElementById('trivia-timer-label');
+    const barEl = document.getElementById('trivia-timer-bar');
     const choicesEl = document.getElementById('trivia-choices');
     const timeoutEl = document.getElementById('trivia-timeout-msg');
     let left = 15;
-    timerEl.textContent = labels.timerFmt.replace('__S__', left);
+    labelEl.textContent = labels.timerFmt.replace('__S__', left);
+    barEl.style.width = '100%';
     const intv = setInterval(() => {
       left -= 1;
+      barEl.style.width = (left / 15 * 100) + '%';
       if (left <= 0) {
         clearInterval(intv);
-        timerEl.textContent = labels.timerFmt.replace('__S__', 0);
-        // Disable all choices and clear any selection so it doesn't submit
+        labelEl.textContent = labels.timerFmt.replace('__S__', 0);
         choicesEl.querySelectorAll('input[type=radio]').forEach(i => {
           i.checked = false;
           i.disabled = true;
         });
+        choicesEl.querySelectorAll('.choice-card').forEach(c => c.classList.remove('is-selected'));
         choicesEl.classList.add('opacity-50', 'pointer-events-none');
         timeoutEl.classList.remove('hidden');
       } else {
-        timerEl.textContent = labels.timerFmt.replace('__S__', left);
+        labelEl.textContent = labels.timerFmt.replace('__S__', left);
       }
     }, 1000);
   }
 
-  // Thank-you modal: show if URL has ?done=1
   if (new URLSearchParams(location.search).get('done') === '1') {
     const modal = document.getElementById('thanks-modal');
     modal.classList.remove('hidden');
