@@ -9,36 +9,43 @@
 {% if rows %}
   {# ===== Top-3 Podium ===== #}
   {% set top = rows[:3] %}
-  {% if top|length >= 1 %}
   <div class="podium">
     {# 2nd place #}
-    <div class="podium-slot podium-2 {{ 'opacity-30' if top|length < 2 }}">
+    <div class="podium-slot podium-2">
+      <div class="podium-rank podium-rank-2">2</div>
       {% if top|length >= 2 %}
-        <div class="podium-rank podium-rank-2">2</div>
-        <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[1].username }}</div>
-        <div class="text-2xl font-score text-slate-700 mt-1">{{ top[1].points }}</div>
-        <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+        <div class="podium-name">{{ top[1].username }}</div>
+        <div class="podium-pts text-2xl text-slate-700">{{ top[1].points }}</div>
+        <div class="podium-pts-label">pts</div>
+      {% else %}
+        <div class="podium-empty mt-3">—</div>
       {% endif %}
     </div>
     {# 1st place #}
     <div class="podium-slot podium-1">
       <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl">👑</div>
       <div class="podium-rank podium-rank-1">1</div>
-      <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[0].username }}</div>
-      <div class="text-3xl font-score text-amber-700 mt-1">{{ top[0].points }}</div>
-      <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+      {% if top|length >= 1 %}
+        <div class="podium-name text-lg sm:text-xl">{{ top[0].username }}</div>
+        <div class="podium-pts text-3xl text-amber-700">{{ top[0].points }}</div>
+        <div class="podium-pts-label">pts</div>
+      {% else %}
+        <div class="podium-empty mt-3">—</div>
+      {% endif %}
     </div>
     {# 3rd place #}
-    <div class="podium-slot podium-3 {{ 'opacity-30' if top|length < 3 }}">
+    <div class="podium-slot podium-3">
+      <div class="podium-rank podium-rank-3">3</div>
       {% if top|length >= 3 %}
-        <div class="podium-rank podium-rank-3">3</div>
-        <div class="font-display text-base sm:text-lg mt-2 truncate">{{ top[2].username }}</div>
-        <div class="text-xl font-score text-amber-800 mt-1">{{ top[2].points }}</div>
-        <div class="text-[10px] uppercase tracking-wider text-slate-500">pts</div>
+        <div class="podium-name">{{ top[2].username }}</div>
+        <div class="podium-pts text-xl text-amber-800">{{ top[2].points }}</div>
+        <div class="podium-pts-label">pts</div>
+      {% else %}
+        <div class="podium-empty mt-3">—</div>
       {% endif %}
     </div>
   </div>
-  {% endif %}
+
 
   {# ===== Full ranked list ===== #}
   <div class="card-pitch p-0 overflow-hidden">

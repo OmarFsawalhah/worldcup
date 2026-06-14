@@ -595,6 +595,35 @@ html[dir="rtl"] body {
   text-align: center;
   position: relative;
   border: 1px solid rgba(15, 23, 42, 0.06);
+  color: var(--text-on-light);
+}
+.podium-name {
+  display: block;
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-on-light);
+  margin-top: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.podium-pts {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.25rem;
+}
+.podium-pts-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-on-light-muted);
+}
+.podium-empty {
+  color: var(--text-on-light-muted);
+  font-style: italic;
+  font-size: 0.85rem;
 }
 .podium-1 {
   background: linear-gradient(180deg, #fff7d6 0%, #ffffff 100%);
