@@ -1,0 +1,7592 @@
+{
+  "URY": [
+    [
+      "Fernando Muslera",
+      "Fernando Muslera",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Santiago Mele",
+      "Santiago Mele",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Sergio Rochet",
+      "Sergio Rochet",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Guillermo Varela",
+      "Guillermo Varela",
+      "Defence",
+      0
+    ],
+    [
+      "Ronald Araújo",
+      "Ronald Araújo",
+      "Defence",
+      0
+    ],
+    [
+      "Sebastían Cáceres",
+      "Sebastían Cáceres",
+      "Defence",
+      0
+    ],
+    [
+      "Matías Viña",
+      "Matías Viña",
+      "Defence",
+      0
+    ],
+    [
+      "Joaquín Piquerez",
+      "Joaquín Piquerez",
+      "Defence",
+      0
+    ],
+    [
+      "Maximiliano Araújo",
+      "Maximiliano Araújo",
+      "Defence",
+      0
+    ],
+    [
+      "Mathías Olivera",
+      "Mathías Olivera",
+      "Defence",
+      0
+    ],
+    [
+      "Santiago Bueno",
+      "Santiago Bueno",
+      "Defence",
+      0
+    ],
+    [
+      "José Giménez",
+      "José Giménez",
+      "Defence",
+      0
+    ],
+    [
+      "Federico Valverde",
+      "Federico Valverde",
+      "Midfield",
+      0
+    ],
+    [
+      "Giorgian De Arrascaeta",
+      "Giorgian De Arrascaeta",
+      "Midfield",
+      0
+    ],
+    [
+      "Rodrigo Bentancur",
+      "Rodrigo Bentancur",
+      "Midfield",
+      0
+    ],
+    [
+      "Manuel Ugarte",
+      "Manuel Ugarte",
+      "Midfield",
+      0
+    ],
+    [
+      "Brian Rodríguez",
+      "Brian Rodríguez",
+      "Midfield",
+      0
+    ],
+    [
+      "Rodrigo Zalazar",
+      "Rodrigo Zalazar",
+      "Midfield",
+      0
+    ],
+    [
+      "Facundo Pellistri",
+      "Facundo Pellistri",
+      "Midfield",
+      0
+    ],
+    [
+      "Emiliano Martínez",
+      "Emiliano Martínez",
+      "Midfield",
+      0
+    ],
+    [
+      "Juan Sanabria",
+      "Juan Sanabria",
+      "Midfield",
+      0
+    ],
+    [
+      "Nicolas de la Cruz",
+      "Nicolas de la Cruz",
+      "Midfield",
+      0
+    ],
+    [
+      "Rodrigo Aguirre",
+      "Rodrigo Aguirre",
+      "Offence",
+      0
+    ],
+    [
+      "Darwin Núñez",
+      "Darwin Núñez",
+      "Offence",
+      0
+    ],
+    [
+      "Agustín Canobbio",
+      "Agustín Canobbio",
+      "Offence",
+      0
+    ],
+    [
+      "Federico Viñas",
+      "Federico Viñas",
+      "Offence",
+      0
+    ]
+  ],
+  "GER": [
+    [
+      "Oliver Baumann",
+      "Oliver Baumann",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Manuel Neuer",
+      "Manuel Neuer",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alexander Nübel",
+      "Alexander Nübel",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Jonathan Tah",
+      "Jonathan Tah",
+      "Defence",
+      0
+    ],
+    [
+      "Waldemar Anton",
+      "Waldemar Anton",
+      "Defence",
+      0
+    ],
+    [
+      "Antonio Rüdiger",
+      "Antonio Rüdiger",
+      "Defence",
+      0
+    ],
+    [
+      "David Raum",
+      "David Raum",
+      "Defence",
+      0
+    ],
+    [
+      "Nico Schlotterbeck",
+      "Nico Schlotterbeck",
+      "Defence",
+      0
+    ],
+    [
+      "Malick Thiaw",
+      "Malick Thiaw",
+      "Defence",
+      0
+    ],
+    [
+      "Nathaniel Brown",
+      "Nathaniel Brown",
+      "Defence",
+      0
+    ],
+    [
+      "Nadiem Amiri",
+      "Nadiem Amiri",
+      "Midfield",
+      0
+    ],
+    [
+      "Joshua Kimmich",
+      "Joshua Kimmich",
+      "Midfield",
+      0
+    ],
+    [
+      "Leon Goretzka",
+      "Leon Goretzka",
+      "Midfield",
+      0
+    ],
+    [
+      "Pascal Groß",
+      "Pascal Groß",
+      "Midfield",
+      0
+    ],
+    [
+      "Florian Wirtz",
+      "Florian Wirtz",
+      "Midfield",
+      0
+    ],
+    [
+      "Felix Kalu Nmecha",
+      "Felix Kalu Nmecha",
+      "Midfield",
+      0
+    ],
+    [
+      "Angelo Stiller",
+      "Angelo Stiller",
+      "Midfield",
+      0
+    ],
+    [
+      "Jamal Musiala",
+      "Jamal Musiala",
+      "Midfield",
+      0
+    ],
+    [
+      "Aleksandar Pavlović",
+      "Aleksandar Pavlović",
+      "Midfield",
+      0
+    ],
+    [
+      "Assan Ouédraogo",
+      "Assan Ouédraogo",
+      "Midfield",
+      0
+    ],
+    [
+      "Kai Havertz",
+      "Kai Havertz",
+      "Offence",
+      0
+    ],
+    [
+      "Leroy Sané",
+      "Leroy Sané",
+      "Offence",
+      0
+    ],
+    [
+      "Deniz Undav",
+      "Deniz Undav",
+      "Offence",
+      0
+    ],
+    [
+      "Jamie Leweling",
+      "Jamie Leweling",
+      "Offence",
+      0
+    ],
+    [
+      "Nick Woltemade",
+      "Nick Woltemade",
+      "Offence",
+      0
+    ],
+    [
+      "Maximilian Beier",
+      "Maximilian Beier",
+      "Offence",
+      0
+    ]
+  ],
+  "ESP": [
+    [
+      "David Raya",
+      "David Raya",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Unai Simón",
+      "Unai Simón",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Joan García",
+      "Joan García",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Aymeric Laporte",
+      "Aymeric Laporte",
+      "Defence",
+      0
+    ],
+    [
+      "Cucurella",
+      "Cucurella",
+      "Defence",
+      0
+    ],
+    [
+      "Alejandro Grimaldo",
+      "Alejandro Grimaldo",
+      "Defence",
+      0
+    ],
+    [
+      "Pedro Porro",
+      "Pedro Porro",
+      "Defence",
+      0
+    ],
+    [
+      "Eric García",
+      "Eric García",
+      "Defence",
+      0
+    ],
+    [
+      "Marc Pubill",
+      "Marc Pubill",
+      "Defence",
+      0
+    ],
+    [
+      "Pau Cubarsí",
+      "Pau Cubarsí",
+      "Defence",
+      0
+    ],
+    [
+      "Fabián Ruiz",
+      "Fabián Ruiz",
+      "Midfield",
+      0
+    ],
+    [
+      "Marcos Llorente",
+      "Marcos Llorente",
+      "Midfield",
+      0
+    ],
+    [
+      "Rodri",
+      "Rodri",
+      "Midfield",
+      0
+    ],
+    [
+      "Mikel Merino",
+      "Mikel Merino",
+      "Midfield",
+      0
+    ],
+    [
+      "Dani Olmo",
+      "Dani Olmo",
+      "Midfield",
+      0
+    ],
+    [
+      "Ferrán Torres",
+      "Ferrán Torres",
+      "Midfield",
+      0
+    ],
+    [
+      "Martín Zubimendi",
+      "Martín Zubimendi",
+      "Midfield",
+      0
+    ],
+    [
+      "Pedri",
+      "Pedri",
+      "Midfield",
+      0
+    ],
+    [
+      "Pablo Gavira",
+      "Pablo Gavira",
+      "Midfield",
+      0
+    ],
+    [
+      "Mikel Oyarzabal",
+      "Mikel Oyarzabal",
+      "Midfield",
+      0
+    ],
+    [
+      "Álex Baena",
+      "Álex Baena",
+      "Midfield",
+      0
+    ],
+    [
+      "Borja Iglesias",
+      "Borja Iglesias",
+      "Offence",
+      0
+    ],
+    [
+      "Yeremi Pino",
+      "Yeremi Pino",
+      "Offence",
+      0
+    ],
+    [
+      "Nico Williams",
+      "Nico Williams",
+      "Offence",
+      0
+    ],
+    [
+      "Lamine Yamal",
+      "Lamine Yamal",
+      "Offence",
+      0
+    ],
+    [
+      "Víctor Muñoz",
+      "Víctor Muñoz",
+      "Offence",
+      0
+    ]
+  ],
+  "PAR": [
+    [
+      "Gastón Olveira",
+      "Gastón Olveira",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Roberto Fernández",
+      "Roberto Fernández",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Orlando Gill",
+      "Orlando Gill",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Fabián Balbuena",
+      "Fabián Balbuena",
+      "Defence",
+      0
+    ],
+    [
+      "Gustavo Gómez",
+      "Gustavo Gómez",
+      "Defence",
+      0
+    ],
+    [
+      "Júnior Alonso",
+      "Júnior Alonso",
+      "Defence",
+      0
+    ],
+    [
+      "Omar Alderete",
+      "Omar Alderete",
+      "Defence",
+      0
+    ],
+    [
+      "Juan Cáceres",
+      "Juan Cáceres",
+      "Defence",
+      0
+    ],
+    [
+      "Gustavo Velázquez",
+      "Gustavo Velázquez",
+      "Defence",
+      0
+    ],
+    [
+      "José Canale",
+      "José Canale",
+      "Defence",
+      0
+    ],
+    [
+      "Alexandro Maidana",
+      "Alexandro Maidana",
+      "Defence",
+      0
+    ],
+    [
+      "Andrés Cubas",
+      "Andrés Cubas",
+      "Midfield",
+      0
+    ],
+    [
+      "Kaku",
+      "Kaku",
+      "Midfield",
+      0
+    ],
+    [
+      "Miguel Almirón",
+      "Miguel Almirón",
+      "Midfield",
+      0
+    ],
+    [
+      "Mauricio",
+      "Mauricio",
+      "Midfield",
+      0
+    ],
+    [
+      "Braian Ojeda",
+      "Braian Ojeda",
+      "Midfield",
+      0
+    ],
+    [
+      "Matías Galarza",
+      "Matías Galarza",
+      "Midfield",
+      0
+    ],
+    [
+      "Damian Bobadilla",
+      "Damian Bobadilla",
+      "Midfield",
+      0
+    ],
+    [
+      "Diego Gómez",
+      "Diego Gómez",
+      "Midfield",
+      0
+    ],
+    [
+      "Antonio Sanabria",
+      "Antonio Sanabria",
+      "Offence",
+      0
+    ],
+    [
+      "Gabriel Ávalos",
+      "Gabriel Ávalos",
+      "Offence",
+      0
+    ],
+    [
+      "Isidro Pitta",
+      "Isidro Pitta",
+      "Offence",
+      0
+    ],
+    [
+      "Ramón Sosa",
+      "Ramón Sosa",
+      "Offence",
+      0
+    ],
+    [
+      "Julio Enciso",
+      "Julio Enciso",
+      "Offence",
+      0
+    ],
+    [
+      "Gustavo Caballero",
+      "Gustavo Caballero",
+      "Offence",
+      0
+    ],
+    [
+      "Alex Arce",
+      "Alex Arce",
+      "Offence",
+      0
+    ]
+  ],
+  "ARG": [
+    [
+      "Géronimo Rulli",
+      "Géronimo Rulli",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Emiliano Martínez",
+      "Emiliano Martínez",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Juan Musso",
+      "Juan Musso",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Nicolás Otamendi",
+      "Nicolás Otamendi",
+      "Defence",
+      0
+    ],
+    [
+      "Nicolás Tagliafico",
+      "Nicolás Tagliafico",
+      "Defence",
+      0
+    ],
+    [
+      "Gonzalo Montiel",
+      "Gonzalo Montiel",
+      "Defence",
+      0
+    ],
+    [
+      "Christian Romero",
+      "Christian Romero",
+      "Defence",
+      0
+    ],
+    [
+      "Facundo Medina",
+      "Facundo Medina",
+      "Defence",
+      0
+    ],
+    [
+      "Lisandro Martínez",
+      "Lisandro Martínez",
+      "Defence",
+      0
+    ],
+    [
+      "Nahuel Molina",
+      "Nahuel Molina",
+      "Defence",
+      0
+    ],
+    [
+      "Leonardo Balerdi",
+      "Leonardo Balerdi",
+      "Defence",
+      0
+    ],
+    [
+      "Valentin Barco",
+      "Valentin Barco",
+      "Defence",
+      0
+    ],
+    [
+      "Rodrigo de Paul",
+      "Rodrigo de Paul",
+      "Midfield",
+      0
+    ],
+    [
+      "Leandro Paredes",
+      "Leandro Paredes",
+      "Midfield",
+      0
+    ],
+    [
+      "Giovani Lo Celso",
+      "Giovani Lo Celso",
+      "Midfield",
+      0
+    ],
+    [
+      "Exequiel Palacios",
+      "Exequiel Palacios",
+      "Midfield",
+      0
+    ],
+    [
+      "Alexis Mac Allister",
+      "Alexis Mac Allister",
+      "Midfield",
+      0
+    ],
+    [
+      "Thiago Almada",
+      "Thiago Almada",
+      "Midfield",
+      0
+    ],
+    [
+      "Enzo Fernández",
+      "Enzo Fernández",
+      "Midfield",
+      0
+    ],
+    [
+      "Nico Paz",
+      "Nico Paz",
+      "Midfield",
+      0
+    ],
+    [
+      "Lionel Messi",
+      "Lionel Messi",
+      "Offence",
+      0
+    ],
+    [
+      "Lautaro Martínez",
+      "Lautaro Martínez",
+      "Offence",
+      0
+    ],
+    [
+      "Nicolás González",
+      "Nicolás González",
+      "Offence",
+      0
+    ],
+    [
+      "Julián Álvarez",
+      "Julián Álvarez",
+      "Offence",
+      0
+    ],
+    [
+      "José Manuel López",
+      "José Manuel López",
+      "Offence",
+      0
+    ],
+    [
+      "Giuliano Simeone",
+      "Giuliano Simeone",
+      "Offence",
+      0
+    ]
+  ],
+  "GHA": [
+    [
+      "Lawrence Ati-Zigi",
+      "Lawrence Ati-Zigi",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Joseph Anang",
+      "Joseph Anang",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Benjamin Asare",
+      "Benjamin Asare",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Abdul Rahman Baba",
+      "Abdul Rahman Baba",
+      "Defence",
+      0
+    ],
+    [
+      "Derrick Luckassen",
+      "Derrick Luckassen",
+      "Defence",
+      0
+    ],
+    [
+      "Gideon Mensah",
+      "Gideon Mensah",
+      "Defence",
+      0
+    ],
+    [
+      "Abdul Mumin",
+      "Abdul Mumin",
+      "Defence",
+      0
+    ],
+    [
+      "Jerome Opoku",
+      "Jerome Opoku",
+      "Defence",
+      0
+    ],
+    [
+      "Alidu Seidu",
+      "Alidu Seidu",
+      "Defence",
+      0
+    ],
+    [
+      "Marvin Senaya",
+      "Marvin Senaya",
+      "Defence",
+      0
+    ],
+    [
+      "Jonas Adjei Adjetey",
+      "Jonas Adjei Adjetey",
+      "Defence",
+      0
+    ],
+    [
+      "Kojo Peprah Oppong",
+      "Kojo Peprah Oppong",
+      "Defence",
+      0
+    ],
+    [
+      "Thomas Partey",
+      "Thomas Partey",
+      "Midfield",
+      0
+    ],
+    [
+      "Elisha Owusu",
+      "Elisha Owusu",
+      "Midfield",
+      0
+    ],
+    [
+      "Kwasi Sibo",
+      "Kwasi Sibo",
+      "Midfield",
+      0
+    ],
+    [
+      "Augustine Boakye",
+      "Augustine Boakye",
+      "Midfield",
+      0
+    ],
+    [
+      "Caleb Yirenkyi",
+      "Caleb Yirenkyi",
+      "Midfield",
+      0
+    ],
+    [
+      "Antoine Semenyo",
+      "Antoine Semenyo",
+      "Offence",
+      0
+    ],
+    [
+      "Brandon Thomas-Asante",
+      "Brandon Thomas-Asante",
+      "Offence",
+      0
+    ],
+    [
+      "Jordan Ayew",
+      "Jordan Ayew",
+      "Offence",
+      0
+    ],
+    [
+      "Iñaki Williams",
+      "Iñaki Williams",
+      "Offence",
+      0
+    ],
+    [
+      "Kamal Deen Sulemana",
+      "Kamal Deen Sulemana",
+      "Offence",
+      0
+    ],
+    [
+      "Ernest Nuamah",
+      "Ernest Nuamah",
+      "Offence",
+      0
+    ],
+    [
+      "Abdul Issahaku",
+      "Abdul Issahaku",
+      "Offence",
+      0
+    ],
+    [
+      "Christopher Bonsu Baah",
+      "Christopher Bonsu Baah",
+      "Offence",
+      0
+    ],
+    [
+      "Prince Adu",
+      "Prince Adu",
+      "Offence",
+      0
+    ]
+  ],
+  "BRA": [
+    [
+      "Weverton",
+      "Weverton",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alisson Becker",
+      "Alisson Becker",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ederson",
+      "Ederson",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Roger Ibañez",
+      "Roger Ibañez",
+      "Defence",
+      0
+    ],
+    [
+      "Bremer",
+      "Bremer",
+      "Defence",
+      0
+    ],
+    [
+      "Alex Sandro",
+      "Alex Sandro",
+      "Defence",
+      0
+    ],
+    [
+      "Marquinhos",
+      "Marquinhos",
+      "Defence",
+      0
+    ],
+    [
+      "Douglas Santos",
+      "Douglas Santos",
+      "Defence",
+      0
+    ],
+    [
+      "Danilo Luiz da Silva",
+      "Danilo Luiz da Silva",
+      "Defence",
+      0
+    ],
+    [
+      "Léo Pereira",
+      "Léo Pereira",
+      "Defence",
+      0
+    ],
+    [
+      "Gabriel Magalhães",
+      "Gabriel Magalhães",
+      "Defence",
+      0
+    ],
+    [
+      "Wesley",
+      "Wesley",
+      "Defence",
+      0
+    ],
+    [
+      "Lucas Paquetá",
+      "Lucas Paquetá",
+      "Midfield",
+      0
+    ],
+    [
+      "Bruno Guimarães",
+      "Bruno Guimarães",
+      "Midfield",
+      0
+    ],
+    [
+      "Casemiro",
+      "Casemiro",
+      "Midfield",
+      0
+    ],
+    [
+      "Fabinho",
+      "Fabinho",
+      "Midfield",
+      0
+    ],
+    [
+      "Danilo dos Santos de Oliveira",
+      "Danilo dos Santos de Oliveira",
+      "Midfield",
+      0
+    ],
+    [
+      "Vinicius Junior",
+      "Vinicius Junior",
+      "Offence",
+      0
+    ],
+    [
+      "Neymar",
+      "Neymar",
+      "Offence",
+      0
+    ],
+    [
+      "Matheus Cunha",
+      "Matheus Cunha",
+      "Offence",
+      0
+    ],
+    [
+      "Raphinha",
+      "Raphinha",
+      "Offence",
+      0
+    ],
+    [
+      "Martinelli",
+      "Martinelli",
+      "Offence",
+      0
+    ],
+    [
+      "Thiago",
+      "Thiago",
+      "Offence",
+      0
+    ],
+    [
+      "Luiz Henrique",
+      "Luiz Henrique",
+      "Offence",
+      0
+    ],
+    [
+      "Endrick",
+      "Endrick",
+      "Offence",
+      0
+    ],
+    [
+      "Rayan",
+      "Rayan",
+      "Offence",
+      0
+    ]
+  ],
+  "POR": [
+    [
+      "José Sá",
+      "José Sá",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Rui Silva",
+      "Rui Silva",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Diogo Costa",
+      "Diogo Costa",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "João Cancelo",
+      "João Cancelo",
+      "Defence",
+      0
+    ],
+    [
+      "Rúben Dias",
+      "Rúben Dias",
+      "Defence",
+      0
+    ],
+    [
+      "Nélson Semedo",
+      "Nélson Semedo",
+      "Defence",
+      0
+    ],
+    [
+      "Diogo Dalot",
+      "Diogo Dalot",
+      "Defence",
+      0
+    ],
+    [
+      "Matheus Nunes",
+      "Matheus Nunes",
+      "Defence",
+      0
+    ],
+    [
+      "Nuno Mendes",
+      "Nuno Mendes",
+      "Defence",
+      0
+    ],
+    [
+      "Gonçalo Inácio",
+      "Gonçalo Inácio",
+      "Defence",
+      0
+    ],
+    [
+      "Tomas Araujo",
+      "Tomas Araujo",
+      "Defence",
+      0
+    ],
+    [
+      "Renato Veiga",
+      "Renato Veiga",
+      "Defence",
+      0
+    ],
+    [
+      "Bernardo Silva",
+      "Bernardo Silva",
+      "Midfield",
+      0
+    ],
+    [
+      "Rúben Neves",
+      "Rúben Neves",
+      "Midfield",
+      0
+    ],
+    [
+      "Bruno Fernandes",
+      "Bruno Fernandes",
+      "Midfield",
+      0
+    ],
+    [
+      "Gonçalo Guedes",
+      "Gonçalo Guedes",
+      "Midfield",
+      0
+    ],
+    [
+      "Samuel Almeida Costa",
+      "Samuel Almeida Costa",
+      "Midfield",
+      0
+    ],
+    [
+      "Vitinha",
+      "Vitinha",
+      "Midfield",
+      0
+    ],
+    [
+      "Joao Neves",
+      "Joao Neves",
+      "Midfield",
+      0
+    ],
+    [
+      "Cristiano Ronaldo",
+      "Cristiano Ronaldo",
+      "Offence",
+      0
+    ],
+    [
+      "Pedro Neto",
+      "Pedro Neto",
+      "Offence",
+      0
+    ],
+    [
+      "Rafael Leão",
+      "Rafael Leão",
+      "Offence",
+      0
+    ],
+    [
+      "Trincão",
+      "Trincão",
+      "Offence",
+      0
+    ],
+    [
+      "João Félix",
+      "João Félix",
+      "Offence",
+      0
+    ],
+    [
+      "Gonçalo Ramos",
+      "Gonçalo Ramos",
+      "Offence",
+      0
+    ],
+    [
+      "Francisco Conceição",
+      "Francisco Conceição",
+      "Offence",
+      0
+    ]
+  ],
+  "JPN": [
+    [
+      "Keisuke Ōsako",
+      "Keisuke Ōsako",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Zion Suzuki",
+      "Zion Suzuki",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Tomoki Hayakawa",
+      "Tomoki Hayakawa",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Yūto Nagatomo",
+      "Yūto Nagatomo",
+      "Defence",
+      0
+    ],
+    [
+      "Takehiro Tomiyasu",
+      "Takehiro Tomiyasu",
+      "Defence",
+      0
+    ],
+    [
+      "Hiroki Ito",
+      "Hiroki Ito",
+      "Defence",
+      0
+    ],
+    [
+      "Yukinari Sugawara",
+      "Yukinari Sugawara",
+      "Defence",
+      0
+    ],
+    [
+      "Ko Itakura",
+      "Ko Itakura",
+      "Defence",
+      0
+    ],
+    [
+      "Shogo Taniguchi",
+      "Shogo Taniguchi",
+      "Defence",
+      0
+    ],
+    [
+      "Ayumu Seko",
+      "Ayumu Seko",
+      "Defence",
+      0
+    ],
+    [
+      "Tsuyoshi Watanabe",
+      "Tsuyoshi Watanabe",
+      "Defence",
+      0
+    ],
+    [
+      "Junnosuke Suzuki",
+      "Junnosuke Suzuki",
+      "Defence",
+      0
+    ],
+    [
+      "Wataru Endō",
+      "Wataru Endō",
+      "Midfield",
+      0
+    ],
+    [
+      "Daichi Kamada",
+      "Daichi Kamada",
+      "Midfield",
+      0
+    ],
+    [
+      "Takefusa Kubo",
+      "Takefusa Kubo",
+      "Midfield",
+      0
+    ],
+    [
+      "Keito Nakamura",
+      "Keito Nakamura",
+      "Midfield",
+      0
+    ],
+    [
+      "Ao Tanaka",
+      "Ao Tanaka",
+      "Midfield",
+      0
+    ],
+    [
+      "Kaishu Sano",
+      "Kaishu Sano",
+      "Midfield",
+      0
+    ],
+    [
+      "Yuito Suzuki",
+      "Yuito Suzuki",
+      "Midfield",
+      0
+    ],
+    [
+      "Ritsu Doan",
+      "Ritsu Doan",
+      "Offence",
+      0
+    ],
+    [
+      "Daizen Maeda",
+      "Daizen Maeda",
+      "Offence",
+      0
+    ],
+    [
+      "Koki Ogawa",
+      "Koki Ogawa",
+      "Offence",
+      0
+    ],
+    [
+      "Junya Ito",
+      "Junya Ito",
+      "Offence",
+      0
+    ],
+    [
+      "Ayase Ueda",
+      "Ayase Ueda",
+      "Offence",
+      0
+    ],
+    [
+      "Kento Shiogai",
+      "Kento Shiogai",
+      "Offence",
+      0
+    ],
+    [
+      "Keisuke Goto",
+      "Keisuke Goto",
+      "Offence",
+      0
+    ]
+  ],
+  "MEX": [
+    [
+      "Guillermo Ochoa",
+      "Guillermo Ochoa",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Carlos Acevedo",
+      "Carlos Acevedo",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "José Rangel",
+      "José Rangel",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Jesús Gallardo",
+      "Jesús Gallardo",
+      "Defence",
+      0
+    ],
+    [
+      "César Montes",
+      "César Montes",
+      "Defence",
+      0
+    ],
+    [
+      "Johan Vásquez",
+      "Johan Vásquez",
+      "Defence",
+      0
+    ],
+    [
+      "Jorge Sánchez",
+      "Jorge Sánchez",
+      "Defence",
+      0
+    ],
+    [
+      "Israel Reyes",
+      "Israel Reyes",
+      "Defence",
+      0
+    ],
+    [
+      "Mateo Chávez",
+      "Mateo Chávez",
+      "Defence",
+      0
+    ],
+    [
+      "Edson Álvarez",
+      "Edson Álvarez",
+      "Midfield",
+      0
+    ],
+    [
+      "Orbelín Pineda",
+      "Orbelín Pineda",
+      "Midfield",
+      0
+    ],
+    [
+      "Luis Chávez",
+      "Luis Chávez",
+      "Midfield",
+      0
+    ],
+    [
+      "Luis Romo",
+      "Luis Romo",
+      "Midfield",
+      0
+    ],
+    [
+      "Erik Lira",
+      "Erik Lira",
+      "Midfield",
+      0
+    ],
+    [
+      "Álvaro Fidalgo",
+      "Álvaro Fidalgo",
+      "Midfield",
+      0
+    ],
+    [
+      "Brian Gutiérrez",
+      "Brian Gutiérrez",
+      "Midfield",
+      0
+    ],
+    [
+      "Obed Vargas",
+      "Obed Vargas",
+      "Midfield",
+      0
+    ],
+    [
+      "Gilberto Mora",
+      "Gilberto Mora",
+      "Midfield",
+      0
+    ],
+    [
+      "Raúl Jiménez",
+      "Raúl Jiménez",
+      "Offence",
+      0
+    ],
+    [
+      "Julián Quiñones",
+      "Julián Quiñones",
+      "Offence",
+      0
+    ],
+    [
+      "Roberto Alvarado",
+      "Roberto Alvarado",
+      "Offence",
+      0
+    ],
+    [
+      "Santiago Giménez",
+      "Santiago Giménez",
+      "Offence",
+      0
+    ],
+    [
+      "Alexis Vega",
+      "Alexis Vega",
+      "Offence",
+      0
+    ],
+    [
+      "Guillermo Martínez",
+      "Guillermo Martínez",
+      "Offence",
+      0
+    ],
+    [
+      "César Huerta",
+      "César Huerta",
+      "Offence",
+      0
+    ],
+    [
+      "Armando González",
+      "Armando González",
+      "Offence",
+      0
+    ]
+  ],
+  "ENG": [
+    [
+      "Jordan Pickford",
+      "Jordan Pickford",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Dean Henderson",
+      "Dean Henderson",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "James Trafford",
+      "James Trafford",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "John Stones",
+      "John Stones",
+      "Defence",
+      0
+    ],
+    [
+      "Dan Burn",
+      "Dan Burn",
+      "Defence",
+      0
+    ],
+    [
+      "Ezri Konsa",
+      "Ezri Konsa",
+      "Defence",
+      0
+    ],
+    [
+      "Reece James",
+      "Reece James",
+      "Defence",
+      0
+    ],
+    [
+      "Djed Spence",
+      "Djed Spence",
+      "Defence",
+      0
+    ],
+    [
+      "Marc Guéhi",
+      "Marc Guéhi",
+      "Defence",
+      0
+    ],
+    [
+      "Valentino Livramento",
+      "Valentino Livramento",
+      "Defence",
+      0
+    ],
+    [
+      "Jarell Quansah",
+      "Jarell Quansah",
+      "Defence",
+      0
+    ],
+    [
+      "Nico O'Reilly",
+      "Nico O'Reilly",
+      "Defence",
+      0
+    ],
+    [
+      "Jordan Henderson",
+      "Jordan Henderson",
+      "Midfield",
+      0
+    ],
+    [
+      "Eberechi Eze",
+      "Eberechi Eze",
+      "Midfield",
+      0
+    ],
+    [
+      "Anthony Gordon",
+      "Anthony Gordon",
+      "Midfield",
+      0
+    ],
+    [
+      "Declan Rice",
+      "Declan Rice",
+      "Midfield",
+      0
+    ],
+    [
+      "Morgan Rogers",
+      "Morgan Rogers",
+      "Midfield",
+      0
+    ],
+    [
+      "Elliot Anderson",
+      "Elliot Anderson",
+      "Midfield",
+      0
+    ],
+    [
+      "Jude Bellingham",
+      "Jude Bellingham",
+      "Midfield",
+      0
+    ],
+    [
+      "Kobbie Mainoo",
+      "Kobbie Mainoo",
+      "Midfield",
+      0
+    ],
+    [
+      "Marcus Rashford",
+      "Marcus Rashford",
+      "Offence",
+      0
+    ],
+    [
+      "Ollie Watkins",
+      "Ollie Watkins",
+      "Offence",
+      0
+    ],
+    [
+      "Ivan Toney",
+      "Ivan Toney",
+      "Offence",
+      0
+    ],
+    [
+      "Harry Kane",
+      "Harry Kane",
+      "Offence",
+      0
+    ],
+    [
+      "Bukayo Saka",
+      "Bukayo Saka",
+      "Offence",
+      0
+    ],
+    [
+      "Noni Madueke",
+      "Noni Madueke",
+      "Offence",
+      0
+    ]
+  ],
+  "USA": [
+    [
+      "Matt Turner",
+      "Matt Turner",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Matt Freese",
+      "Matt Freese",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Chris Brady",
+      "Chris Brady",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Antonee Robinson",
+      "Antonee Robinson",
+      "Defence",
+      0
+    ],
+    [
+      "Tim Ream",
+      "Tim Ream",
+      "Defence",
+      0
+    ],
+    [
+      "Miles Robinson",
+      "Miles Robinson",
+      "Defence",
+      0
+    ],
+    [
+      "Auston Trusty",
+      "Auston Trusty",
+      "Defence",
+      0
+    ],
+    [
+      "Mark McKenzie",
+      "Mark McKenzie",
+      "Defence",
+      0
+    ],
+    [
+      "Joseph Scally",
+      "Joseph Scally",
+      "Defence",
+      0
+    ],
+    [
+      "Sergiño Dest",
+      "Sergiño Dest",
+      "Defence",
+      0
+    ],
+    [
+      "Chris Richards",
+      "Chris Richards",
+      "Defence",
+      0
+    ],
+    [
+      "Alex Freeman",
+      "Alex Freeman",
+      "Defence",
+      0
+    ],
+    [
+      "Weston McKennie",
+      "Weston McKennie",
+      "Midfield",
+      0
+    ],
+    [
+      "Alejandro Zendejas",
+      "Alejandro Zendejas",
+      "Midfield",
+      0
+    ],
+    [
+      "Cristian Roldan",
+      "Cristian Roldan",
+      "Midfield",
+      0
+    ],
+    [
+      "Tyler Adams",
+      "Tyler Adams",
+      "Midfield",
+      0
+    ],
+    [
+      "Brenden Aaronson",
+      "Brenden Aaronson",
+      "Midfield",
+      0
+    ],
+    [
+      "Gio Reyna",
+      "Gio Reyna",
+      "Midfield",
+      0
+    ],
+    [
+      "Sebastian Berhalter",
+      "Sebastian Berhalter",
+      "Midfield",
+      0
+    ],
+    [
+      "Malik Tillman",
+      "Malik Tillman",
+      "Midfield",
+      0
+    ],
+    [
+      "Christian Pulisic",
+      "Christian Pulisic",
+      "Offence",
+      0
+    ],
+    [
+      "Tim Weah",
+      "Tim Weah",
+      "Offence",
+      0
+    ],
+    [
+      "Haji Wright",
+      "Haji Wright",
+      "Offence",
+      0
+    ],
+    [
+      "Ricardo Pepi",
+      "Ricardo Pepi",
+      "Offence",
+      0
+    ],
+    [
+      "Folarin Balogun",
+      "Folarin Balogun",
+      "Offence",
+      0
+    ],
+    [
+      "Max Arfsten",
+      "Max Arfsten",
+      "Offence",
+      0
+    ]
+  ],
+  "KOR": [
+    [
+      "Seung-Gyu Kim",
+      "Seung-Gyu Kim",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Bum-keun Song",
+      "Bum-keun Song",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Hyeon-woo Jo",
+      "Hyeon-woo Jo",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Min-Jae Kim",
+      "Min-Jae Kim",
+      "Defence",
+      0
+    ],
+    [
+      "Moon-hwan Kim",
+      "Moon-hwan Kim",
+      "Defence",
+      0
+    ],
+    [
+      "Han-bum Lee",
+      "Han-bum Lee",
+      "Defence",
+      0
+    ],
+    [
+      "Young-woo Seol",
+      "Young-woo Seol",
+      "Defence",
+      0
+    ],
+    [
+      "Jin-seob Park",
+      "Jin-seob Park",
+      "Defence",
+      0
+    ],
+    [
+      "Tae-hyeon Kim",
+      "Tae-hyeon Kim",
+      "Defence",
+      0
+    ],
+    [
+      "Gi-hyuk Lee",
+      "Gi-hyuk Lee",
+      "Defence",
+      0
+    ],
+    [
+      "Tae-seok Lee",
+      "Tae-seok Lee",
+      "Defence",
+      0
+    ],
+    [
+      "Cho Wi-Je",
+      "Cho Wi-Je",
+      "Defence",
+      0
+    ],
+    [
+      "Jens Castrop",
+      "Jens Castrop",
+      "Midfield",
+      0
+    ],
+    [
+      "In-beom Hwang",
+      "In-beom Hwang",
+      "Midfield",
+      0
+    ],
+    [
+      "Dong-gyeong Lee",
+      "Dong-gyeong Lee",
+      "Midfield",
+      0
+    ],
+    [
+      "Jae-sung Lee",
+      "Jae-sung Lee",
+      "Midfield",
+      0
+    ],
+    [
+      "Jin-Gyu Kim",
+      "Jin-Gyu Kim",
+      "Midfield",
+      0
+    ],
+    [
+      "Seung-Ho Paik",
+      "Seung-Ho Paik",
+      "Midfield",
+      0
+    ],
+    [
+      "Kang-in Lee",
+      "Kang-in Lee",
+      "Midfield",
+      0
+    ],
+    [
+      "Joon-ho Bae",
+      "Joon-ho Bae",
+      "Midfield",
+      0
+    ],
+    [
+      "Hwang Heechan",
+      "Hwang Heechan",
+      "Offence",
+      0
+    ],
+    [
+      "Heung-min Son",
+      "Heung-min Son",
+      "Offence",
+      0
+    ],
+    [
+      "Hyun-jun Yang",
+      "Hyun-jun Yang",
+      "Offence",
+      0
+    ],
+    [
+      "Gue-Sung Cho",
+      "Gue-Sung Cho",
+      "Offence",
+      0
+    ],
+    [
+      "Hyun-Gyu Oh",
+      "Hyun-Gyu Oh",
+      "Offence",
+      0
+    ],
+    [
+      "Ji-sung Eom",
+      "Ji-sung Eom",
+      "Offence",
+      0
+    ]
+  ],
+  "FRA": [
+    [
+      "Brice Samba",
+      "Brice Samba",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mike Maignan",
+      "Mike Maignan",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Robin Risser",
+      "Robin Risser",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Theo Hernández",
+      "Theo Hernández",
+      "Defence",
+      0
+    ],
+    [
+      "Lucas Digne",
+      "Lucas Digne",
+      "Defence",
+      0
+    ],
+    [
+      "Lucas Hernández",
+      "Lucas Hernández",
+      "Defence",
+      0
+    ],
+    [
+      "Jules Koundé",
+      "Jules Koundé",
+      "Defence",
+      0
+    ],
+    [
+      "Dayot Upamecano",
+      "Dayot Upamecano",
+      "Defence",
+      0
+    ],
+    [
+      "Ibrahima Konaté",
+      "Ibrahima Konaté",
+      "Defence",
+      0
+    ],
+    [
+      "William Saliba",
+      "William Saliba",
+      "Defence",
+      0
+    ],
+    [
+      "Maxence Lacroix",
+      "Maxence Lacroix",
+      "Defence",
+      0
+    ],
+    [
+      "Malo Gusto",
+      "Malo Gusto",
+      "Defence",
+      0
+    ],
+    [
+      "N'Golo Kanté",
+      "N'Golo Kanté",
+      "Midfield",
+      0
+    ],
+    [
+      "Adrien Rabiot",
+      "Adrien Rabiot",
+      "Midfield",
+      0
+    ],
+    [
+      "Aurélien Tchouameni",
+      "Aurélien Tchouameni",
+      "Midfield",
+      0
+    ],
+    [
+      "Manu Koné",
+      "Manu Koné",
+      "Midfield",
+      0
+    ],
+    [
+      "Rayan Cherki",
+      "Rayan Cherki",
+      "Midfield",
+      0
+    ],
+    [
+      "Maghnes Akliouche",
+      "Maghnes Akliouche",
+      "Midfield",
+      0
+    ],
+    [
+      "Desire Doue",
+      "Desire Doue",
+      "Midfield",
+      0
+    ],
+    [
+      "Warren Zaïre-Emery",
+      "Warren Zaïre-Emery",
+      "Midfield",
+      0
+    ],
+    [
+      "Jean-Philippe Mateta",
+      "Jean-Philippe Mateta",
+      "Offence",
+      0
+    ],
+    [
+      "Ousmane Dembélé",
+      "Ousmane Dembélé",
+      "Offence",
+      0
+    ],
+    [
+      "Kylian Mbappé",
+      "Kylian Mbappé",
+      "Offence",
+      0
+    ],
+    [
+      "Marcus Thuram-Ulien",
+      "Marcus Thuram-Ulien",
+      "Offence",
+      0
+    ],
+    [
+      "Michael Olise",
+      "Michael Olise",
+      "Offence",
+      0
+    ],
+    [
+      "Bradley Barcola",
+      "Bradley Barcola",
+      "Offence",
+      0
+    ]
+  ],
+  "RSA": [
+    [
+      "Ronwen Williams",
+      "Ronwen Williams",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Sipho Chaine",
+      "Sipho Chaine",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ricardo Goss",
+      "Ricardo Goss",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Aubrey Modiba",
+      "Aubrey Modiba",
+      "Defence",
+      0
+    ],
+    [
+      "Nkosinathi Sibisi",
+      "Nkosinathi Sibisi",
+      "Defence",
+      0
+    ],
+    [
+      "Khuliso Mudau",
+      "Khuliso Mudau",
+      "Defence",
+      0
+    ],
+    [
+      "Olwethu Makhanya",
+      "Olwethu Makhanya",
+      "Defence",
+      0
+    ],
+    [
+      "Bradley Cross",
+      "Bradley Cross",
+      "Defence",
+      0
+    ],
+    [
+      "Samukelo Kabini",
+      "Samukelo Kabini",
+      "Defence",
+      0
+    ],
+    [
+      "Ime Okon",
+      "Ime Okon",
+      "Defence",
+      0
+    ],
+    [
+      "Mbekezeli Mbokazi",
+      "Mbekezeli Mbokazi",
+      "Defence",
+      0
+    ],
+    [
+      "Khulumani Ndamane",
+      "Khulumani Ndamane",
+      "Defence",
+      0
+    ],
+    [
+      "Tholo Matuludi",
+      "Tholo Matuludi",
+      "Defence",
+      0
+    ],
+    [
+      "Themba Zwane",
+      "Themba Zwane",
+      "Midfield",
+      0
+    ],
+    [
+      "Teboho Mokoena",
+      "Teboho Mokoena",
+      "Midfield",
+      0
+    ],
+    [
+      "Sphephelo Sithole",
+      "Sphephelo Sithole",
+      "Midfield",
+      0
+    ],
+    [
+      "Jayden Adams",
+      "Jayden Adams",
+      "Midfield",
+      0
+    ],
+    [
+      "Thapelo Maseko",
+      "Thapelo Maseko",
+      "Midfield",
+      0
+    ],
+    [
+      "Thalente Mbatha",
+      "Thalente Mbatha",
+      "Midfield",
+      0
+    ],
+    [
+      "Kamogelo Sebelebele",
+      "Kamogelo Sebelebele",
+      "Midfield",
+      0
+    ],
+    [
+      "Lyle Foster",
+      "Lyle Foster",
+      "Offence",
+      0
+    ],
+    [
+      "Oswin Appollis",
+      "Oswin Appollis",
+      "Offence",
+      0
+    ],
+    [
+      "Iqraam Rayners",
+      "Iqraam Rayners",
+      "Offence",
+      0
+    ],
+    [
+      "Evidence Makgopa",
+      "Evidence Makgopa",
+      "Offence",
+      0
+    ],
+    [
+      "Relebohile Mofokeng",
+      "Relebohile Mofokeng",
+      "Offence",
+      0
+    ],
+    [
+      "Tshepang Moremi",
+      "Tshepang Moremi",
+      "Offence",
+      0
+    ]
+  ],
+  "ALG": [
+    [
+      "Luca Zidane",
+      "Luca Zidane",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Oussama Benbout",
+      "Oussama Benbout",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Melvin Mastil",
+      "Melvin Mastil",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Aïssa Mandi",
+      "Aïssa Mandi",
+      "Defence",
+      0
+    ],
+    [
+      "Rayan Aït Nouri",
+      "Rayan Aït Nouri",
+      "Defence",
+      0
+    ],
+    [
+      "Ramy Bensebaini",
+      "Ramy Bensebaini",
+      "Defence",
+      0
+    ],
+    [
+      "Samir Chergui",
+      "Samir Chergui",
+      "Defence",
+      0
+    ],
+    [
+      "Jaouen Hadjam",
+      "Jaouen Hadjam",
+      "Defence",
+      0
+    ],
+    [
+      "Rafik Belghali",
+      "Rafik Belghali",
+      "Defence",
+      0
+    ],
+    [
+      "Zinédine Belaïd",
+      "Zinédine Belaïd",
+      "Defence",
+      0
+    ],
+    [
+      "Amine Tougai",
+      "Amine Tougai",
+      "Defence",
+      0
+    ],
+    [
+      "Achref Abada",
+      "Achref Abada",
+      "Defence",
+      0
+    ],
+    [
+      "Nabil Bentaleb",
+      "Nabil Bentaleb",
+      "Midfield",
+      0
+    ],
+    [
+      "Houssem Aouar",
+      "Houssem Aouar",
+      "Midfield",
+      0
+    ],
+    [
+      "Hicham Boudaoui",
+      "Hicham Boudaoui",
+      "Midfield",
+      0
+    ],
+    [
+      "Ramiz Zerrouki",
+      "Ramiz Zerrouki",
+      "Midfield",
+      0
+    ],
+    [
+      "Fares Chaïbi",
+      "Fares Chaïbi",
+      "Midfield",
+      0
+    ],
+    [
+      "Ibrahim Maza",
+      "Ibrahim Maza",
+      "Midfield",
+      0
+    ],
+    [
+      "Yacine Titraoui",
+      "Yacine Titraoui",
+      "Midfield",
+      0
+    ],
+    [
+      "Adil Boulbina",
+      "Adil Boulbina",
+      "Midfield",
+      0
+    ],
+    [
+      "Riyad Mahrez",
+      "Riyad Mahrez",
+      "Offence",
+      0
+    ],
+    [
+      "Amine Gouiri",
+      "Amine Gouiri",
+      "Offence",
+      0
+    ],
+    [
+      "Mohammed Amoura",
+      "Mohammed Amoura",
+      "Offence",
+      0
+    ],
+    [
+      "Nadhir Benbouali",
+      "Nadhir Benbouali",
+      "Offence",
+      0
+    ],
+    [
+      "Anis Moussa",
+      "Anis Moussa",
+      "Offence",
+      0
+    ],
+    [
+      "Farés Ghedjemis",
+      "Farés Ghedjemis",
+      "Offence",
+      0
+    ]
+  ],
+  "AUS": [
+    [
+      "Maty Ryan",
+      "Maty Ryan",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Paul Izzo",
+      "Paul Izzo",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Patrick Beach",
+      "Patrick Beach",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Aziz Behich",
+      "Aziz Behich",
+      "Defence",
+      0
+    ],
+    [
+      "Miloš Degenek",
+      "Miloš Degenek",
+      "Defence",
+      0
+    ],
+    [
+      "Kai Trewin",
+      "Kai Trewin",
+      "Defence",
+      0
+    ],
+    [
+      "Jacob Italiano",
+      "Jacob Italiano",
+      "Defence",
+      0
+    ],
+    [
+      "Cameron Burgess",
+      "Cameron Burgess",
+      "Defence",
+      0
+    ],
+    [
+      "Harry Souttar",
+      "Harry Souttar",
+      "Defence",
+      0
+    ],
+    [
+      "Jason Geria",
+      "Jason Geria",
+      "Defence",
+      0
+    ],
+    [
+      "Jordan Bos",
+      "Jordan Bos",
+      "Defence",
+      0
+    ],
+    [
+      "Alessandro Circati",
+      "Alessandro Circati",
+      "Defence",
+      0
+    ],
+    [
+      "Lucas Herrington",
+      "Lucas Herrington",
+      "Defence",
+      0
+    ],
+    [
+      "Mathew Leckie",
+      "Mathew Leckie",
+      "Midfield",
+      0
+    ],
+    [
+      "Jackson Irvine",
+      "Jackson Irvine",
+      "Midfield",
+      0
+    ],
+    [
+      "Connor Metcalfe",
+      "Connor Metcalfe",
+      "Midfield",
+      0
+    ],
+    [
+      "Ajdin Hrustic",
+      "Ajdin Hrustic",
+      "Midfield",
+      0
+    ],
+    [
+      "Aiden O'Neill",
+      "Aiden O'Neill",
+      "Midfield",
+      0
+    ],
+    [
+      "Awer Mabil",
+      "Awer Mabil",
+      "Midfield",
+      0
+    ],
+    [
+      "Cameron Devlin",
+      "Cameron Devlin",
+      "Midfield",
+      0
+    ],
+    [
+      "Paul Okon-Engstler",
+      "Paul Okon-Engstler",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohamed Toure",
+      "Mohamed Toure",
+      "Offence",
+      0
+    ],
+    [
+      "Nishan Velupillay",
+      "Nishan Velupillay",
+      "Offence",
+      0
+    ],
+    [
+      "Cristian Volpato",
+      "Cristian Volpato",
+      "Offence",
+      0
+    ],
+    [
+      "Nestor Irankunda",
+      "Nestor Irankunda",
+      "Offence",
+      0
+    ],
+    [
+      "Tete Yengi",
+      "Tete Yengi",
+      "Offence",
+      0
+    ]
+  ],
+  "NZL": [
+    [
+      "Max Crocombe",
+      "Max Crocombe",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Michael Woud",
+      "Michael Woud",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alex Paulsen",
+      "Alex Paulsen",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Liberato Cacace",
+      "Liberato Cacace",
+      "Defence",
+      0
+    ],
+    [
+      "Tommy Smith",
+      "Tommy Smith",
+      "Defence",
+      0
+    ],
+    [
+      "Michael Boxall",
+      "Michael Boxall",
+      "Defence",
+      0
+    ],
+    [
+      "Francis De Vries",
+      "Francis De Vries",
+      "Defence",
+      0
+    ],
+    [
+      "Callan Elliot",
+      "Callan Elliot",
+      "Defence",
+      0
+    ],
+    [
+      "Tim Payne",
+      "Tim Payne",
+      "Defence",
+      0
+    ],
+    [
+      "Nando Pijnaker",
+      "Nando Pijnaker",
+      "Defence",
+      0
+    ],
+    [
+      "Finn Surman",
+      "Finn Surman",
+      "Defence",
+      0
+    ],
+    [
+      "Tyler Bindon",
+      "Tyler Bindon",
+      "Defence",
+      0
+    ],
+    [
+      "Alex Rufer",
+      "Alex Rufer",
+      "Midfield",
+      0
+    ],
+    [
+      "Sarpreet Singh",
+      "Sarpreet Singh",
+      "Midfield",
+      0
+    ],
+    [
+      "Ryan Thomas",
+      "Ryan Thomas",
+      "Midfield",
+      0
+    ],
+    [
+      "Callum McCowatt",
+      "Callum McCowatt",
+      "Midfield",
+      0
+    ],
+    [
+      "Joe Bell",
+      "Joe Bell",
+      "Midfield",
+      0
+    ],
+    [
+      "Marko Stamenic",
+      "Marko Stamenic",
+      "Midfield",
+      0
+    ],
+    [
+      "Ben Old",
+      "Ben Old",
+      "Midfield",
+      0
+    ],
+    [
+      "Kosta Barbarouses",
+      "Kosta Barbarouses",
+      "Offence",
+      0
+    ],
+    [
+      "Chris Wood",
+      "Chris Wood",
+      "Offence",
+      0
+    ],
+    [
+      "Ben Waine",
+      "Ben Waine",
+      "Offence",
+      0
+    ],
+    [
+      "Elijah Just",
+      "Elijah Just",
+      "Offence",
+      0
+    ],
+    [
+      "Matthew Garbett",
+      "Matthew Garbett",
+      "Offence",
+      0
+    ],
+    [
+      "Lachlan Bayliss",
+      "Lachlan Bayliss",
+      "Offence",
+      0
+    ],
+    [
+      "Jesse Randall",
+      "Jesse Randall",
+      "Offence",
+      0
+    ]
+  ],
+  "SUI": [
+    [
+      "Gregor Kobel",
+      "Gregor Kobel",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Yvon Mvogo",
+      "Yvon Mvogo",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Marvin Keller",
+      "Marvin Keller",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Manuel Akanji",
+      "Manuel Akanji",
+      "Defence",
+      0
+    ],
+    [
+      "Ricardo Rodriguez",
+      "Ricardo Rodriguez",
+      "Defence",
+      0
+    ],
+    [
+      "Silvan Widmer",
+      "Silvan Widmer",
+      "Defence",
+      0
+    ],
+    [
+      "Nico Elvedi",
+      "Nico Elvedi",
+      "Defence",
+      0
+    ],
+    [
+      "Eray Cömert",
+      "Eray Cömert",
+      "Defence",
+      0
+    ],
+    [
+      "Miro Muheim",
+      "Miro Muheim",
+      "Defence",
+      0
+    ],
+    [
+      "Aurele Amenda",
+      "Aurele Amenda",
+      "Defence",
+      0
+    ],
+    [
+      "Luca Jaquez",
+      "Luca Jaquez",
+      "Defence",
+      0
+    ],
+    [
+      "Remo Freuler",
+      "Remo Freuler",
+      "Midfield",
+      0
+    ],
+    [
+      "Granit Xhaka",
+      "Granit Xhaka",
+      "Midfield",
+      0
+    ],
+    [
+      "Denis Zakaria",
+      "Denis Zakaria",
+      "Midfield",
+      0
+    ],
+    [
+      "Michel Aebischer",
+      "Michel Aebischer",
+      "Midfield",
+      0
+    ],
+    [
+      "Djibril Sow",
+      "Djibril Sow",
+      "Midfield",
+      0
+    ],
+    [
+      "Christian Fassnacht",
+      "Christian Fassnacht",
+      "Midfield",
+      0
+    ],
+    [
+      "Ruben Vargas",
+      "Ruben Vargas",
+      "Midfield",
+      0
+    ],
+    [
+      "Ardon Jasari",
+      "Ardon Jasari",
+      "Midfield",
+      0
+    ],
+    [
+      "Fabian Rieder",
+      "Fabian Rieder",
+      "Midfield",
+      0
+    ],
+    [
+      "Johan Manzambi",
+      "Johan Manzambi",
+      "Midfield",
+      0
+    ],
+    [
+      "Breel Embolo",
+      "Breel Embolo",
+      "Offence",
+      0
+    ],
+    [
+      "Noah Okafor",
+      "Noah Okafor",
+      "Offence",
+      0
+    ],
+    [
+      "Cédric Itten",
+      "Cédric Itten",
+      "Offence",
+      0
+    ],
+    [
+      "Dan Ndoye",
+      "Dan Ndoye",
+      "Offence",
+      0
+    ],
+    [
+      "Zeki Amdouni",
+      "Zeki Amdouni",
+      "Offence",
+      0
+    ]
+  ],
+  "ECU": [
+    [
+      "Hernán Galíndez",
+      "Hernán Galíndez",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Gonzalo Valle",
+      "Gonzalo Valle",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Moisés Ramírez",
+      "Moisés Ramírez",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ángelo Preciado",
+      "Ángelo Preciado",
+      "Defence",
+      0
+    ],
+    [
+      "Félix Torres",
+      "Félix Torres",
+      "Defence",
+      0
+    ],
+    [
+      "Pervis Estupiñán",
+      "Pervis Estupiñán",
+      "Defence",
+      0
+    ],
+    [
+      "William Pacho",
+      "William Pacho",
+      "Defence",
+      0
+    ],
+    [
+      "Jackson Porozo",
+      "Jackson Porozo",
+      "Defence",
+      0
+    ],
+    [
+      "Piero Hincapié",
+      "Piero Hincapié",
+      "Defence",
+      0
+    ],
+    [
+      "Joel Ordoñez",
+      "Joel Ordoñez",
+      "Defence",
+      0
+    ],
+    [
+      "Yaimar Medina",
+      "Yaimar Medina",
+      "Defence",
+      0
+    ],
+    [
+      "Alan Franco",
+      "Alan Franco",
+      "Midfield",
+      0
+    ],
+    [
+      "Jordy Alcívar",
+      "Jordy Alcívar",
+      "Midfield",
+      0
+    ],
+    [
+      "Gonzalo Plata",
+      "Gonzalo Plata",
+      "Midfield",
+      0
+    ],
+    [
+      "Moisés Caicedo",
+      "Moisés Caicedo",
+      "Midfield",
+      0
+    ],
+    [
+      "Pedro Vite",
+      "Pedro Vite",
+      "Midfield",
+      0
+    ],
+    [
+      "Alan Minda",
+      "Alan Minda",
+      "Midfield",
+      0
+    ],
+    [
+      "Ray Paez",
+      "Ray Paez",
+      "Midfield",
+      0
+    ],
+    [
+      "Denil Castillo",
+      "Denil Castillo",
+      "Midfield",
+      0
+    ],
+    [
+      "Jordy Caicedo",
+      "Jordy Caicedo",
+      "Offence",
+      0
+    ],
+    [
+      "Enner Valencia",
+      "Enner Valencia",
+      "Offence",
+      0
+    ],
+    [
+      "John Yeboah",
+      "John Yeboah",
+      "Offence",
+      0
+    ],
+    [
+      "Anthony Valencia",
+      "Anthony Valencia",
+      "Offence",
+      0
+    ],
+    [
+      "Nilson Angulo",
+      "Nilson Angulo",
+      "Offence",
+      0
+    ],
+    [
+      "Kevin Rodríguez",
+      "Kevin Rodríguez",
+      "Offence",
+      0
+    ],
+    [
+      "Jeremy",
+      "Jeremy",
+      "Offence",
+      0
+    ]
+  ],
+  "SWE": [
+    [
+      "Kristoffer Nordfeldt",
+      "Kristoffer Nordfeldt",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Viktor Johansson",
+      "Viktor Johansson",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Jacob Widell Zetterström",
+      "Jacob Widell Zetterström",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Victor Nilsson-Lindelöf",
+      "Victor Nilsson-Lindelöf",
+      "Defence",
+      0
+    ],
+    [
+      "Carl Starfelt",
+      "Carl Starfelt",
+      "Defence",
+      0
+    ],
+    [
+      "Gabriel Gudmundsson",
+      "Gabriel Gudmundsson",
+      "Defence",
+      0
+    ],
+    [
+      "Hjalmar Ekdal",
+      "Hjalmar Ekdal",
+      "Defence",
+      0
+    ],
+    [
+      "Eric Smith",
+      "Eric Smith",
+      "Defence",
+      0
+    ],
+    [
+      "Daniel Svensson",
+      "Daniel Svensson",
+      "Defence",
+      0
+    ],
+    [
+      "Gustaf Lagerbielke",
+      "Gustaf Lagerbielke",
+      "Defence",
+      0
+    ],
+    [
+      "Isak Hien",
+      "Isak Hien",
+      "Defence",
+      0
+    ],
+    [
+      "Herman Johansson",
+      "Herman Johansson",
+      "Defence",
+      0
+    ],
+    [
+      "Elliot Stroud",
+      "Elliot Stroud",
+      "Defence",
+      0
+    ],
+    [
+      "Ken Sema",
+      "Ken Sema",
+      "Midfield",
+      0
+    ],
+    [
+      "Mattias Svanberg",
+      "Mattias Svanberg",
+      "Midfield",
+      0
+    ],
+    [
+      "Jesper Karlström",
+      "Jesper Karlström",
+      "Midfield",
+      0
+    ],
+    [
+      "Yasin Ayari",
+      "Yasin Ayari",
+      "Midfield",
+      0
+    ],
+    [
+      "Besfort Zeneli",
+      "Besfort Zeneli",
+      "Midfield",
+      0
+    ],
+    [
+      "Taha Ali",
+      "Taha Ali",
+      "Midfield",
+      0
+    ],
+    [
+      "Lucas Bergvall",
+      "Lucas Bergvall",
+      "Midfield",
+      0
+    ],
+    [
+      "Alexander Isak",
+      "Alexander Isak",
+      "Offence",
+      0
+    ],
+    [
+      "Viktor Gyökeres",
+      "Viktor Gyökeres",
+      "Offence",
+      0
+    ],
+    [
+      "Gustaf Nilsson",
+      "Gustaf Nilsson",
+      "Offence",
+      0
+    ],
+    [
+      "Benjamin Nygren",
+      "Benjamin Nygren",
+      "Offence",
+      0
+    ],
+    [
+      "Alexander Bernhardsson",
+      "Alexander Bernhardsson",
+      "Offence",
+      0
+    ],
+    [
+      "Anthony Elanga",
+      "Anthony Elanga",
+      "Offence",
+      0
+    ]
+  ],
+  "CZE": [
+    [
+      "Jindřich Staněk",
+      "Jindřich Staněk",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Matej Kovar",
+      "Matej Kovar",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Lukáš Horníček",
+      "Lukáš Horníček",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Jaroslav Zelený",
+      "Jaroslav Zelený",
+      "Defence",
+      0
+    ],
+    [
+      "Vladimir Coufal",
+      "Vladimir Coufal",
+      "Defence",
+      0
+    ],
+    [
+      "Tomáš Holeš",
+      "Tomáš Holeš",
+      "Defence",
+      0
+    ],
+    [
+      "David Zima",
+      "David Zima",
+      "Defence",
+      0
+    ],
+    [
+      "David Jurásek",
+      "David Jurásek",
+      "Defence",
+      0
+    ],
+    [
+      "Robin Hranac",
+      "Robin Hranac",
+      "Defence",
+      0
+    ],
+    [
+      "Štěpán Chaloupek",
+      "Štěpán Chaloupek",
+      "Defence",
+      0
+    ],
+    [
+      "Ladislav Krejčí",
+      "Ladislav Krejčí",
+      "Midfield",
+      0
+    ],
+    [
+      "Vladimír Darida",
+      "Vladimír Darida",
+      "Midfield",
+      0
+    ],
+    [
+      "Tomáš Souček",
+      "Tomáš Souček",
+      "Midfield",
+      0
+    ],
+    [
+      "David Douděra",
+      "David Douděra",
+      "Midfield",
+      0
+    ],
+    [
+      "Michal Sadílek",
+      "Michal Sadílek",
+      "Midfield",
+      0
+    ],
+    [
+      "Lukáš Provod",
+      "Lukáš Provod",
+      "Midfield",
+      0
+    ],
+    [
+      "Pavel Šulc",
+      "Pavel Šulc",
+      "Midfield",
+      0
+    ],
+    [
+      "Lukáš Červ",
+      "Lukáš Červ",
+      "Midfield",
+      0
+    ],
+    [
+      "Denis Višinský",
+      "Denis Višinský",
+      "Midfield",
+      0
+    ],
+    [
+      "Alexandr Sojka",
+      "Alexandr Sojka",
+      "Midfield",
+      0
+    ],
+    [
+      "Hugo Sochůrek",
+      "Hugo Sochůrek",
+      "Midfield",
+      0
+    ],
+    [
+      "Patrik Schick",
+      "Patrik Schick",
+      "Offence",
+      0
+    ],
+    [
+      "Tomáš Chorý",
+      "Tomáš Chorý",
+      "Offence",
+      0
+    ],
+    [
+      "Jan Kuchta",
+      "Jan Kuchta",
+      "Offence",
+      0
+    ],
+    [
+      "Adam Hložek",
+      "Adam Hložek",
+      "Offence",
+      0
+    ],
+    [
+      "Mojmír Chytil",
+      "Mojmír Chytil",
+      "Offence",
+      0
+    ]
+  ],
+  "CRO": [
+    [
+      "Dominik Livaković",
+      "Dominik Livaković",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ivor Pandur",
+      "Ivor Pandur",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Dominik Kotarski",
+      "Dominik Kotarski",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Duje Ćaleta-Car",
+      "Duje Ćaleta-Car",
+      "Defence",
+      0
+    ],
+    [
+      "Marin Pongračić",
+      "Marin Pongračić",
+      "Defence",
+      0
+    ],
+    [
+      "Martin Erlic",
+      "Martin Erlic",
+      "Defence",
+      0
+    ],
+    [
+      "Josip Stanišić",
+      "Josip Stanišić",
+      "Defence",
+      0
+    ],
+    [
+      "Joško Gvardiol",
+      "Joško Gvardiol",
+      "Defence",
+      0
+    ],
+    [
+      "Josip Šutalo",
+      "Josip Šutalo",
+      "Defence",
+      0
+    ],
+    [
+      "Luka Vušković",
+      "Luka Vušković",
+      "Defence",
+      0
+    ],
+    [
+      "Luka Modrić",
+      "Luka Modrić",
+      "Midfield",
+      0
+    ],
+    [
+      "Mateo Kovačić",
+      "Mateo Kovačić",
+      "Midfield",
+      0
+    ],
+    [
+      "Mario Pašalić",
+      "Mario Pašalić",
+      "Midfield",
+      0
+    ],
+    [
+      "Nikola Vlašić",
+      "Nikola Vlašić",
+      "Midfield",
+      0
+    ],
+    [
+      "Nikola Moro",
+      "Nikola Moro",
+      "Midfield",
+      0
+    ],
+    [
+      "Kristijan Jakić",
+      "Kristijan Jakić",
+      "Midfield",
+      0
+    ],
+    [
+      "Luka Sučić",
+      "Luka Sučić",
+      "Midfield",
+      0
+    ],
+    [
+      "Petar Sucic",
+      "Petar Sucic",
+      "Midfield",
+      0
+    ],
+    [
+      "Martin Baturina",
+      "Martin Baturina",
+      "Midfield",
+      0
+    ],
+    [
+      "Toni Fruk",
+      "Toni Fruk",
+      "Midfield",
+      0
+    ],
+    [
+      "Andrej Kramarić",
+      "Andrej Kramarić",
+      "Offence",
+      0
+    ],
+    [
+      "Ivan Perišić",
+      "Ivan Perišić",
+      "Offence",
+      0
+    ],
+    [
+      "Ante Budimir",
+      "Ante Budimir",
+      "Offence",
+      0
+    ],
+    [
+      "Petar Musa",
+      "Petar Musa",
+      "Offence",
+      0
+    ],
+    [
+      "Marco Pašalić",
+      "Marco Pašalić",
+      "Offence",
+      0
+    ],
+    [
+      "Igor Matanovic",
+      "Igor Matanovic",
+      "Offence",
+      0
+    ]
+  ],
+  "KSA": [
+    [
+      "Mohammed Al Owais",
+      "Mohammed Al Owais",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Nawaf Al Aqidi",
+      "Nawaf Al Aqidi",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ahmed Al Kassar",
+      "Ahmed Al Kassar",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Abdulelah Al Amri",
+      "Abdulelah Al Amri",
+      "Defence",
+      0
+    ],
+    [
+      "Saud Abdulhamid",
+      "Saud Abdulhamid",
+      "Defence",
+      0
+    ],
+    [
+      "Ali Lajami",
+      "Ali Lajami",
+      "Defence",
+      0
+    ],
+    [
+      "Hassan Al Tambakti",
+      "Hassan Al Tambakti",
+      "Defence",
+      0
+    ],
+    [
+      "Hassan Kadesh",
+      "Hassan Kadesh",
+      "Defence",
+      0
+    ],
+    [
+      "Moteb Al Harbi",
+      "Moteb Al Harbi",
+      "Defence",
+      0
+    ],
+    [
+      "Ali Majrashi",
+      "Ali Majrashi",
+      "Defence",
+      0
+    ],
+    [
+      "Jehad Thakri",
+      "Jehad Thakri",
+      "Defence",
+      0
+    ],
+    [
+      "Nawaf Boushal",
+      "Nawaf Boushal",
+      "Defence",
+      0
+    ],
+    [
+      "Salem Al Dawsari",
+      "Salem Al Dawsari",
+      "Midfield",
+      0
+    ],
+    [
+      "Abdullah Al Khaibari",
+      "Abdullah Al Khaibari",
+      "Midfield",
+      0
+    ],
+    [
+      "Nasser Al Dawsari",
+      "Nasser Al Dawsari",
+      "Midfield",
+      0
+    ],
+    [
+      "Ayman Yahya",
+      "Ayman Yahya",
+      "Midfield",
+      0
+    ],
+    [
+      "Musab Al Juwayr",
+      "Musab Al Juwayr",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohammed Kanno",
+      "Mohammed Kanno",
+      "Midfield",
+      0
+    ],
+    [
+      "Ziyad Al-Johani",
+      "Ziyad Al-Johani",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohammed Abu Al Shamat",
+      "Mohammed Abu Al Shamat",
+      "Midfield",
+      0
+    ],
+    [
+      "Alaa Al Hejji",
+      "Alaa Al Hejji",
+      "Midfield",
+      0
+    ],
+    [
+      "Sultan Mandash",
+      "Sultan Mandash",
+      "Offence",
+      0
+    ],
+    [
+      "Saleh Al Shehri",
+      "Saleh Al Shehri",
+      "Offence",
+      0
+    ],
+    [
+      "Abdullah Al-Hamdan",
+      "Abdullah Al-Hamdan",
+      "Offence",
+      0
+    ],
+    [
+      "Khalid Al Ghannam",
+      "Khalid Al Ghannam",
+      "Offence",
+      0
+    ],
+    [
+      "Firas Al Brikan",
+      "Firas Al Brikan",
+      "Offence",
+      0
+    ]
+  ],
+  "TUN": [
+    [
+      "Aymen Dahmen",
+      "Aymen Dahmen",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Sabri Ben Hessen",
+      "Sabri Ben Hessen",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Abdelmouhib Chamakh",
+      "Abdelmouhib Chamakh",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Dylan Bronn",
+      "Dylan Bronn",
+      "Defence",
+      0
+    ],
+    [
+      "Ali El Abdi",
+      "Ali El Abdi",
+      "Defence",
+      0
+    ],
+    [
+      "Yan Valery",
+      "Yan Valery",
+      "Defence",
+      0
+    ],
+    [
+      "Mortadha Ben Ouanes",
+      "Mortadha Ben Ouanes",
+      "Defence",
+      0
+    ],
+    [
+      "Omar Rekik",
+      "Omar Rekik",
+      "Defence",
+      0
+    ],
+    [
+      "Yassine Chikhaoui",
+      "Yassine Chikhaoui",
+      "Defence",
+      0
+    ],
+    [
+      "Montassar Talbi",
+      "Montassar Talbi",
+      "Defence",
+      0
+    ],
+    [
+      "Moutaz Neffati",
+      "Moutaz Neffati",
+      "Defence",
+      0
+    ],
+    [
+      "Mohamed Amine Ben Hamida",
+      "Mohamed Amine Ben Hamida",
+      "Defence",
+      0
+    ],
+    [
+      "Adem Arous",
+      "Adem Arous",
+      "Defence",
+      0
+    ],
+    [
+      "Ellyes Skhiri",
+      "Ellyes Skhiri",
+      "Midfield",
+      0
+    ],
+    [
+      "Rani Khedira",
+      "Rani Khedira",
+      "Midfield",
+      0
+    ],
+    [
+      "Anis Ben Slimane",
+      "Anis Ben Slimane",
+      "Midfield",
+      0
+    ],
+    [
+      "Ismaël Gharbi",
+      "Ismaël Gharbi",
+      "Midfield",
+      0
+    ],
+    [
+      "Hannibal Mejbri",
+      "Hannibal Mejbri",
+      "Midfield",
+      0
+    ],
+    [
+      "Elias Achouri",
+      "Elias Achouri",
+      "Midfield",
+      0
+    ],
+    [
+      "Hadj Mahmoud",
+      "Hadj Mahmoud",
+      "Midfield",
+      0
+    ],
+    [
+      "Sebastian Tounekti",
+      "Sebastian Tounekti",
+      "Offence",
+      0
+    ],
+    [
+      "Firas Chaouat",
+      "Firas Chaouat",
+      "Offence",
+      0
+    ],
+    [
+      "Elias Saad",
+      "Elias Saad",
+      "Offence",
+      0
+    ],
+    [
+      "Hazem Mastouri",
+      "Hazem Mastouri",
+      "Offence",
+      0
+    ],
+    [
+      "Rayan Elloumi",
+      "Rayan Elloumi",
+      "Offence",
+      0
+    ],
+    [
+      "Khalil Ayari",
+      "Khalil Ayari",
+      "Offence",
+      0
+    ]
+  ],
+  "TUR": [
+    [
+      "Mert Günok",
+      "Mert Günok",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Altay Bayındır",
+      "Altay Bayındır",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Uğurcan Çakır",
+      "Uğurcan Çakır",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Çağlar Söyüncü",
+      "Çağlar Söyüncü",
+      "Defence",
+      0
+    ],
+    [
+      "Kaan Ayhan",
+      "Kaan Ayhan",
+      "Defence",
+      0
+    ],
+    [
+      "Ferdi Kadıoğlu",
+      "Ferdi Kadıoğlu",
+      "Defence",
+      0
+    ],
+    [
+      "Mert Müldür",
+      "Mert Müldür",
+      "Defence",
+      0
+    ],
+    [
+      "Zeki Çelik",
+      "Zeki Çelik",
+      "Defence",
+      0
+    ],
+    [
+      "Abdülkerim Bardakcı",
+      "Abdülkerim Bardakcı",
+      "Defence",
+      0
+    ],
+    [
+      "Ozan Kabak",
+      "Ozan Kabak",
+      "Defence",
+      0
+    ],
+    [
+      "Merih Demiral",
+      "Merih Demiral",
+      "Defence",
+      0
+    ],
+    [
+      "Samet Akaydın",
+      "Samet Akaydın",
+      "Defence",
+      0
+    ],
+    [
+      "Evren Eren Elmalı",
+      "Evren Eren Elmalı",
+      "Defence",
+      0
+    ],
+    [
+      "Salih Özcan",
+      "Salih Özcan",
+      "Midfield",
+      0
+    ],
+    [
+      "Hakan Çalhanoğlu",
+      "Hakan Çalhanoğlu",
+      "Midfield",
+      0
+    ],
+    [
+      "Orkun Kökçü",
+      "Orkun Kökçü",
+      "Midfield",
+      0
+    ],
+    [
+      "İsmail Yüksek",
+      "İsmail Yüksek",
+      "Midfield",
+      0
+    ],
+    [
+      "Arda Guler",
+      "Arda Guler",
+      "Midfield",
+      0
+    ],
+    [
+      "Oguz Aydin",
+      "Oguz Aydin",
+      "Midfield",
+      0
+    ],
+    [
+      "Baris Yilmaz",
+      "Baris Yilmaz",
+      "Midfield",
+      0
+    ],
+    [
+      "İrfan Kahveci",
+      "İrfan Kahveci",
+      "Midfield",
+      0
+    ],
+    [
+      "Yunus Akgün",
+      "Yunus Akgün",
+      "Offence",
+      0
+    ],
+    [
+      "Muhammed Kerem Aktürkoğlu",
+      "Muhammed Kerem Aktürkoğlu",
+      "Offence",
+      0
+    ],
+    [
+      "Deniz Gul",
+      "Deniz Gul",
+      "Offence",
+      0
+    ],
+    [
+      "Kenan Yıldız",
+      "Kenan Yıldız",
+      "Offence",
+      0
+    ],
+    [
+      "Can Uzun",
+      "Can Uzun",
+      "Offence",
+      0
+    ]
+  ],
+  "SEN": [
+    [
+      "Edouard Mendy",
+      "Edouard Mendy",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Yehvann Diouf",
+      "Yehvann Diouf",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mory Diaw",
+      "Mory Diaw",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ismail Jakobs",
+      "Ismail Jakobs",
+      "Defence",
+      0
+    ],
+    [
+      "Kalidou Koulibaly",
+      "Kalidou Koulibaly",
+      "Defence",
+      0
+    ],
+    [
+      "Moussa Niakhaté",
+      "Moussa Niakhaté",
+      "Defence",
+      0
+    ],
+    [
+      "Abdoulaye Seck",
+      "Abdoulaye Seck",
+      "Defence",
+      0
+    ],
+    [
+      "Antoine Mendy",
+      "Antoine Mendy",
+      "Defence",
+      0
+    ],
+    [
+      "Mamadou Sarr",
+      "Mamadou Sarr",
+      "Defence",
+      0
+    ],
+    [
+      "El Hadji Diouf",
+      "El Hadji Diouf",
+      "Defence",
+      0
+    ],
+    [
+      "Pape Gueye",
+      "Pape Gueye",
+      "Midfield",
+      0
+    ],
+    [
+      "Idrissa Gana Guèye",
+      "Idrissa Gana Guèye",
+      "Midfield",
+      0
+    ],
+    [
+      "Ismaïla Sarr",
+      "Ismaïla Sarr",
+      "Midfield",
+      0
+    ],
+    [
+      "Krépin Diatta",
+      "Krépin Diatta",
+      "Midfield",
+      0
+    ],
+    [
+      "Pathé Ciss",
+      "Pathé Ciss",
+      "Midfield",
+      0
+    ],
+    [
+      "Iliman Ndiaye",
+      "Iliman Ndiaye",
+      "Midfield",
+      0
+    ],
+    [
+      "Pape Sarr",
+      "Pape Sarr",
+      "Midfield",
+      0
+    ],
+    [
+      "Habib Diarra",
+      "Habib Diarra",
+      "Midfield",
+      0
+    ],
+    [
+      "Lamine Camara",
+      "Lamine Camara",
+      "Midfield",
+      0
+    ],
+    [
+      "Bara Ndiaye",
+      "Bara Ndiaye",
+      "Midfield",
+      0
+    ],
+    [
+      "Sadio Mané",
+      "Sadio Mané",
+      "Offence",
+      0
+    ],
+    [
+      "Cherif Ndiaye",
+      "Cherif Ndiaye",
+      "Offence",
+      0
+    ],
+    [
+      "Nicolas Jackson",
+      "Nicolas Jackson",
+      "Offence",
+      0
+    ],
+    [
+      "Ahmadou Bamba Dieng",
+      "Ahmadou Bamba Dieng",
+      "Offence",
+      0
+    ],
+    [
+      "Assane Diao",
+      "Assane Diao",
+      "Offence",
+      0
+    ],
+    [
+      "Ibrahim M'Baye",
+      "Ibrahim M'Baye",
+      "Offence",
+      0
+    ],
+    [
+      "Pape Thiaw",
+      "Pape Thiaw",
+      "Coach",
+      0
+    ]
+  ],
+  "BEL": [
+    [
+      "Thibaut Courtois",
+      "Thibaut Courtois",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Senne Lammens",
+      "Senne Lammens",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mike Penders",
+      "Mike Penders",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Timothy Castagne",
+      "Timothy Castagne",
+      "Defence",
+      0
+    ],
+    [
+      "Thomas Meunier",
+      "Thomas Meunier",
+      "Defence",
+      0
+    ],
+    [
+      "Brandon Mechele",
+      "Brandon Mechele",
+      "Defence",
+      0
+    ],
+    [
+      "Maxim De Cuyper",
+      "Maxim De Cuyper",
+      "Defence",
+      0
+    ],
+    [
+      "Arthur Theate",
+      "Arthur Theate",
+      "Defence",
+      0
+    ],
+    [
+      "Koni De Winter",
+      "Koni De Winter",
+      "Defence",
+      0
+    ],
+    [
+      "Zeno Debast",
+      "Zeno Debast",
+      "Defence",
+      0
+    ],
+    [
+      "Nathan Ngoy",
+      "Nathan Ngoy",
+      "Defence",
+      0
+    ],
+    [
+      "Joaquin Seys",
+      "Joaquin Seys",
+      "Defence",
+      0
+    ],
+    [
+      "Kevin De Bruyne",
+      "Kevin De Bruyne",
+      "Midfield",
+      0
+    ],
+    [
+      "Axel Witsel",
+      "Axel Witsel",
+      "Midfield",
+      0
+    ],
+    [
+      "Youri Tielemans",
+      "Youri Tielemans",
+      "Midfield",
+      0
+    ],
+    [
+      "Dodi Lukebakio",
+      "Dodi Lukebakio",
+      "Midfield",
+      0
+    ],
+    [
+      "Alexis Saelemaekers",
+      "Alexis Saelemaekers",
+      "Midfield",
+      0
+    ],
+    [
+      "Hans Vanaken",
+      "Hans Vanaken",
+      "Midfield",
+      0
+    ],
+    [
+      "Nicolas Raskin",
+      "Nicolas Raskin",
+      "Midfield",
+      0
+    ],
+    [
+      "Jeremy Doku",
+      "Jeremy Doku",
+      "Midfield",
+      0
+    ],
+    [
+      "Amadou Onana",
+      "Amadou Onana",
+      "Midfield",
+      0
+    ],
+    [
+      "Diego Moreira",
+      "Diego Moreira",
+      "Midfield",
+      0
+    ],
+    [
+      "Romelu Lukaku",
+      "Romelu Lukaku",
+      "Offence",
+      0
+    ],
+    [
+      "Leandro Trossard",
+      "Leandro Trossard",
+      "Offence",
+      0
+    ],
+    [
+      "Charles De Ketelaere",
+      "Charles De Ketelaere",
+      "Offence",
+      0
+    ],
+    [
+      "Matias Fernandez-Pardo",
+      "Matias Fernandez-Pardo",
+      "Offence",
+      0
+    ]
+  ],
+  "MAR": [
+    [
+      "Munir Mohamedi",
+      "Munir Mohamedi",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Yassine Bounou",
+      "Yassine Bounou",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ahmed Reda Tagnaouti",
+      "Ahmed Reda Tagnaouti",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Achraf Hakimi",
+      "Achraf Hakimi",
+      "Defence",
+      0
+    ],
+    [
+      "Noussair Mazraoui",
+      "Noussair Mazraoui",
+      "Defence",
+      0
+    ],
+    [
+      "Issa Diop",
+      "Issa Diop",
+      "Defence",
+      0
+    ],
+    [
+      "Nayef Aguerd",
+      "Nayef Aguerd",
+      "Defence",
+      0
+    ],
+    [
+      "Anass Salah-Eddine",
+      "Anass Salah-Eddine",
+      "Defence",
+      0
+    ],
+    [
+      "Chadi Riad",
+      "Chadi Riad",
+      "Defence",
+      0
+    ],
+    [
+      "Redouane Halhal",
+      "Redouane Halhal",
+      "Defence",
+      0
+    ],
+    [
+      "Zakaria El Ouahdi",
+      "Zakaria El Ouahdi",
+      "Defence",
+      0
+    ],
+    [
+      "Youssef Belammari",
+      "Youssef Belammari",
+      "Defence",
+      0
+    ],
+    [
+      "Sofyan Amrabat",
+      "Sofyan Amrabat",
+      "Midfield",
+      0
+    ],
+    [
+      "Brahim Diaz",
+      "Brahim Diaz",
+      "Midfield",
+      0
+    ],
+    [
+      "Azzedine Ounahi",
+      "Azzedine Ounahi",
+      "Midfield",
+      0
+    ],
+    [
+      "Ismael Saibari",
+      "Ismael Saibari",
+      "Midfield",
+      0
+    ],
+    [
+      "Neil El Aynaoui",
+      "Neil El Aynaoui",
+      "Midfield",
+      0
+    ],
+    [
+      "Bilal El Khannouss",
+      "Bilal El Khannouss",
+      "Midfield",
+      0
+    ],
+    [
+      "Chemsdine Talbi",
+      "Chemsdine Talbi",
+      "Midfield",
+      0
+    ],
+    [
+      "Ayyoub Bouaddi",
+      "Ayyoub Bouaddi",
+      "Midfield",
+      0
+    ],
+    [
+      "Samir El Mourabet",
+      "Samir El Mourabet",
+      "Midfield",
+      0
+    ],
+    [
+      "Soufiane Rahimi",
+      "Soufiane Rahimi",
+      "Offence",
+      0
+    ],
+    [
+      "Ayoub El Kaabi",
+      "Ayoub El Kaabi",
+      "Offence",
+      0
+    ],
+    [
+      "Abdessamad Ezzalzouli",
+      "Abdessamad Ezzalzouli",
+      "Offence",
+      0
+    ],
+    [
+      "Gessime Yassine",
+      "Gessime Yassine",
+      "Offence",
+      0
+    ],
+    [
+      "Ayoube Amaimouni-Echghouyab",
+      "Ayoube Amaimouni-Echghouyab",
+      "Offence",
+      0
+    ]
+  ],
+  "AUT": [
+    [
+      "Alexander Schlager",
+      "Alexander Schlager",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Patrick Pentz",
+      "Patrick Pentz",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Florian Wiegele",
+      "Florian Wiegele",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "David Alaba",
+      "David Alaba",
+      "Defence",
+      0
+    ],
+    [
+      "Stefan Posch",
+      "Stefan Posch",
+      "Defence",
+      0
+    ],
+    [
+      "Philipp Mwene",
+      "Philipp Mwene",
+      "Defence",
+      0
+    ],
+    [
+      "Kevin Danso",
+      "Kevin Danso",
+      "Defence",
+      0
+    ],
+    [
+      "Marco Friedl",
+      "Marco Friedl",
+      "Defence",
+      0
+    ],
+    [
+      "Philipp Lienhart",
+      "Philipp Lienhart",
+      "Defence",
+      0
+    ],
+    [
+      "Michael Svoboda",
+      "Michael Svoboda",
+      "Defence",
+      0
+    ],
+    [
+      "Alexander Prass",
+      "Alexander Prass",
+      "Defence",
+      0
+    ],
+    [
+      "David Affengruber",
+      "David Affengruber",
+      "Defence",
+      0
+    ],
+    [
+      "Florian Grillitsch",
+      "Florian Grillitsch",
+      "Midfield",
+      0
+    ],
+    [
+      "Alessandro Schöpf",
+      "Alessandro Schöpf",
+      "Midfield",
+      0
+    ],
+    [
+      "Konrad Laimer",
+      "Konrad Laimer",
+      "Midfield",
+      0
+    ],
+    [
+      "Marcel Sabitzer",
+      "Marcel Sabitzer",
+      "Midfield",
+      0
+    ],
+    [
+      "Xaver Schlager",
+      "Xaver Schlager",
+      "Midfield",
+      0
+    ],
+    [
+      "Romano Schmid",
+      "Romano Schmid",
+      "Midfield",
+      0
+    ],
+    [
+      "Christoph Baumgartner",
+      "Christoph Baumgartner",
+      "Midfield",
+      0
+    ],
+    [
+      "Nicolas  Seiwald",
+      "Nicolas  Seiwald",
+      "Midfield",
+      0
+    ],
+    [
+      "Patrick Wimmer",
+      "Patrick Wimmer",
+      "Midfield",
+      0
+    ],
+    [
+      "Carney Chukwuemeka",
+      "Carney Chukwuemeka",
+      "Midfield",
+      0
+    ],
+    [
+      "Paul Wanner",
+      "Paul Wanner",
+      "Midfield",
+      0
+    ],
+    [
+      "Michael Gregoritsch",
+      "Michael Gregoritsch",
+      "Offence",
+      0
+    ],
+    [
+      "Marko Arnautovic",
+      "Marko Arnautovic",
+      "Offence",
+      0
+    ],
+    [
+      "Saša Kalajdžić",
+      "Saša Kalajdžić",
+      "Offence",
+      0
+    ]
+  ],
+  "COL": [
+    [
+      "Camilo Vargas",
+      "Camilo Vargas",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "David Ospina",
+      "David Ospina",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Álvaro Montero",
+      "Álvaro Montero",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Santiago Arias",
+      "Santiago Arias",
+      "Defence",
+      0
+    ],
+    [
+      "Johan Mojica",
+      "Johan Mojica",
+      "Defence",
+      0
+    ],
+    [
+      "Yerry Mina",
+      "Yerry Mina",
+      "Defence",
+      0
+    ],
+    [
+      "Davinson Sánchez",
+      "Davinson Sánchez",
+      "Defence",
+      0
+    ],
+    [
+      "Deiver Machado",
+      "Deiver Machado",
+      "Defence",
+      0
+    ],
+    [
+      "Daniel Muñoz",
+      "Daniel Muñoz",
+      "Defence",
+      0
+    ],
+    [
+      "Jhon Lucumí",
+      "Jhon Lucumí",
+      "Defence",
+      0
+    ],
+    [
+      "Willer Ditta",
+      "Willer Ditta",
+      "Defence",
+      0
+    ],
+    [
+      "James Rodríguez",
+      "James Rodríguez",
+      "Midfield",
+      0
+    ],
+    [
+      "Jefferson Lerma",
+      "Jefferson Lerma",
+      "Midfield",
+      0
+    ],
+    [
+      "Jhon Arias",
+      "Jhon Arias",
+      "Midfield",
+      0
+    ],
+    [
+      "Jorge Carrascal",
+      "Jorge Carrascal",
+      "Midfield",
+      0
+    ],
+    [
+      "Kevin Castaño",
+      "Kevin Castaño",
+      "Midfield",
+      0
+    ],
+    [
+      "Juan Quintero",
+      "Juan Quintero",
+      "Midfield",
+      0
+    ],
+    [
+      "Jaminton Campaz",
+      "Jaminton Campaz",
+      "Midfield",
+      0
+    ],
+    [
+      "Richard Rios",
+      "Richard Rios",
+      "Midfield",
+      0
+    ],
+    [
+      "Juan Portilla",
+      "Juan Portilla",
+      "Midfield",
+      0
+    ],
+    [
+      "Gustavo Puerta",
+      "Gustavo Puerta",
+      "Midfield",
+      0
+    ],
+    [
+      "Jhon Córdoba",
+      "Jhon Córdoba",
+      "Offence",
+      0
+    ],
+    [
+      "Luis Díaz",
+      "Luis Díaz",
+      "Offence",
+      0
+    ],
+    [
+      "Luis Suárez",
+      "Luis Suárez",
+      "Offence",
+      0
+    ],
+    [
+      "Cucho Hernández",
+      "Cucho Hernández",
+      "Offence",
+      0
+    ],
+    [
+      "Carlos Gómez",
+      "Carlos Gómez",
+      "Offence",
+      0
+    ]
+  ],
+  "EGY": [
+    [
+      "Mohamed El Shenawy",
+      "Mohamed El Shenawy",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mohamed Alaa",
+      "Mohamed Alaa",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Oufa Shobeir",
+      "Oufa Shobeir",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "El Mahdi Soliman",
+      "El Mahdi Soliman",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Karim Hafez",
+      "Karim Hafez",
+      "Defence",
+      0
+    ],
+    [
+      "Mohamed Hany",
+      "Mohamed Hany",
+      "Defence",
+      0
+    ],
+    [
+      "Yasser Ibrahim",
+      "Yasser Ibrahim",
+      "Defence",
+      0
+    ],
+    [
+      "Ahmed El Fotouh",
+      "Ahmed El Fotouh",
+      "Defence",
+      0
+    ],
+    [
+      "Mohamed Abdelmonem",
+      "Mohamed Abdelmonem",
+      "Defence",
+      0
+    ],
+    [
+      "Rami Rabia",
+      "Rami Rabia",
+      "Defence",
+      0
+    ],
+    [
+      "Hossam Abdelmaguid",
+      "Hossam Abdelmaguid",
+      "Defence",
+      0
+    ],
+    [
+      "Tarek Alaa",
+      "Tarek Alaa",
+      "Defence",
+      0
+    ],
+    [
+      "Zizo",
+      "Zizo",
+      "Midfield",
+      0
+    ],
+    [
+      "Nabil Dunga",
+      "Nabil Dunga",
+      "Midfield",
+      0
+    ],
+    [
+      "Hamdy Fathy",
+      "Hamdy Fathy",
+      "Midfield",
+      0
+    ],
+    [
+      "Trezeguet",
+      "Trezeguet",
+      "Midfield",
+      0
+    ],
+    [
+      "Emam Ashour",
+      "Emam Ashour",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohanad Lashin",
+      "Mohanad Lashin",
+      "Midfield",
+      0
+    ],
+    [
+      "Marwan Attia",
+      "Marwan Attia",
+      "Midfield",
+      0
+    ],
+    [
+      "Mahmoud Saber",
+      "Mahmoud Saber",
+      "Midfield",
+      0
+    ],
+    [
+      "Mostafa Ziko",
+      "Mostafa Ziko",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohamed Salah",
+      "Mohamed Salah",
+      "Offence",
+      0
+    ],
+    [
+      "Omar Marmoush",
+      "Omar Marmoush",
+      "Offence",
+      0
+    ],
+    [
+      "Haissem Hassan",
+      "Haissem Hassan",
+      "Offence",
+      0
+    ],
+    [
+      "Ibrahim Adel",
+      "Ibrahim Adel",
+      "Offence",
+      0
+    ],
+    [
+      "Hamza Abdelkarim",
+      "Hamza Abdelkarim",
+      "Offence",
+      0
+    ]
+  ],
+  "CAN": [
+    [
+      "Maxime Crépeau",
+      "Maxime Crépeau",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Dayne St. Clair",
+      "Dayne St. Clair",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Owen Goodman",
+      "Owen Goodman",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alphonso Davies",
+      "Alphonso Davies",
+      "Defence",
+      0
+    ],
+    [
+      "Richie Laryea",
+      "Richie Laryea",
+      "Defence",
+      0
+    ],
+    [
+      "Alfie Jones",
+      "Alfie Jones",
+      "Defence",
+      0
+    ],
+    [
+      "Joel Waterman",
+      "Joel Waterman",
+      "Defence",
+      0
+    ],
+    [
+      "Derek Cornelius",
+      "Derek Cornelius",
+      "Defence",
+      0
+    ],
+    [
+      "Alistair Johnston",
+      "Alistair Johnston",
+      "Defence",
+      0
+    ],
+    [
+      "Moise Bombito",
+      "Moise Bombito",
+      "Defence",
+      0
+    ],
+    [
+      "Luc De Fougerolles",
+      "Luc De Fougerolles",
+      "Defence",
+      0
+    ],
+    [
+      "Jonathan Osorio",
+      "Jonathan Osorio",
+      "Midfield",
+      0
+    ],
+    [
+      "Stephen Eustáquio",
+      "Stephen Eustáquio",
+      "Midfield",
+      0
+    ],
+    [
+      "Mathieu Choinière",
+      "Mathieu Choinière",
+      "Midfield",
+      0
+    ],
+    [
+      "Tajon Buchanan",
+      "Tajon Buchanan",
+      "Midfield",
+      0
+    ],
+    [
+      "Marcelo Flores",
+      "Marcelo Flores",
+      "Midfield",
+      0
+    ],
+    [
+      "Nathan-Dylan Saliba",
+      "Nathan-Dylan Saliba",
+      "Midfield",
+      0
+    ],
+    [
+      "Ismael Kone",
+      "Ismael Kone",
+      "Midfield",
+      0
+    ],
+    [
+      "Ali Ahmed",
+      "Ali Ahmed",
+      "Midfield",
+      0
+    ],
+    [
+      "Niko Sigur",
+      "Niko Sigur",
+      "Midfield",
+      0
+    ],
+    [
+      "Jonathan David",
+      "Jonathan David",
+      "Offence",
+      0
+    ],
+    [
+      "Cyle Larin",
+      "Cyle Larin",
+      "Offence",
+      0
+    ],
+    [
+      "Liam Millar",
+      "Liam Millar",
+      "Offence",
+      0
+    ],
+    [
+      "Jacob Shaffelburg",
+      "Jacob Shaffelburg",
+      "Offence",
+      0
+    ],
+    [
+      "Tani Oluwaseyi",
+      "Tani Oluwaseyi",
+      "Offence",
+      0
+    ],
+    [
+      "Promise Akinpelu",
+      "Promise Akinpelu",
+      "Offence",
+      0
+    ]
+  ],
+  "HAI": [
+    [
+      "Alexandre Pierre",
+      "Alexandre Pierre",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Johny Placide",
+      "Johny Placide",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Josué Duverger",
+      "Josué Duverger",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Carlens Arcus",
+      "Carlens Arcus",
+      "Defence",
+      0
+    ],
+    [
+      "Jean-Kevin Duverne",
+      "Jean-Kevin Duverne",
+      "Defence",
+      0
+    ],
+    [
+      "Hannes Delcroix",
+      "Hannes Delcroix",
+      "Defence",
+      0
+    ],
+    [
+      "Martin Expérience",
+      "Martin Expérience",
+      "Defence",
+      0
+    ],
+    [
+      "Ricardo Adé",
+      "Ricardo Adé",
+      "Defence",
+      0
+    ],
+    [
+      "Duke LaCroix",
+      "Duke LaCroix",
+      "Defence",
+      0
+    ],
+    [
+      "Keeto Thermoncy",
+      "Keeto Thermoncy",
+      "Defence",
+      0
+    ],
+    [
+      "Wilguens Paugain",
+      "Wilguens Paugain",
+      "Defence",
+      0
+    ],
+    [
+      "Leverton Pierre",
+      "Leverton Pierre",
+      "Midfield",
+      0
+    ],
+    [
+      "Jean-Ricner Bellegarde",
+      "Jean-Ricner Bellegarde",
+      "Midfield",
+      0
+    ],
+    [
+      "Derrick Etienne",
+      "Derrick Etienne",
+      "Midfield",
+      0
+    ],
+    [
+      "Danley Jean Jacques",
+      "Danley Jean Jacques",
+      "Midfield",
+      0
+    ],
+    [
+      "Dominique Simon",
+      "Dominique Simon",
+      "Midfield",
+      0
+    ],
+    [
+      "Carl Sainté",
+      "Carl Sainté",
+      "Midfield",
+      0
+    ],
+    [
+      "Woodensky Pierre",
+      "Woodensky Pierre",
+      "Midfield",
+      0
+    ],
+    [
+      "Duckens Nazon",
+      "Duckens Nazon",
+      "Offence",
+      0
+    ],
+    [
+      "Frantzdy Pierrot",
+      "Frantzdy Pierrot",
+      "Offence",
+      0
+    ],
+    [
+      "Yassin Fortune",
+      "Yassin Fortune",
+      "Offence",
+      0
+    ],
+    [
+      "Wilson Isidor",
+      "Wilson Isidor",
+      "Offence",
+      0
+    ],
+    [
+      "Lenny Joseph",
+      "Lenny Joseph",
+      "Offence",
+      0
+    ],
+    [
+      "Louicius Don Deedson",
+      "Louicius Don Deedson",
+      "Offence",
+      0
+    ],
+    [
+      "Josué Casimir",
+      "Josué Casimir",
+      "Offence",
+      0
+    ],
+    [
+      "Ruben Providence",
+      "Ruben Providence",
+      "Offence",
+      0
+    ]
+  ],
+  "IRN": [
+    [
+      "Hossein Hosseini",
+      "Hossein Hosseini",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Payam Niazmand",
+      "Payam Niazmand",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alireza Beiranvand",
+      "Alireza Beiranvand",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ehsan Hajsafi",
+      "Ehsan Hajsafi",
+      "Defence",
+      0
+    ],
+    [
+      "Ramin Rezaeian",
+      "Ramin Rezaeian",
+      "Defence",
+      0
+    ],
+    [
+      "Milad Mohammadi",
+      "Milad Mohammadi",
+      "Defence",
+      0
+    ],
+    [
+      "Hossein Kanaanizadegan",
+      "Hossein Kanaanizadegan",
+      "Defence",
+      0
+    ],
+    [
+      "Shojae Khalilzadeh",
+      "Shojae Khalilzadeh",
+      "Defence",
+      0
+    ],
+    [
+      "Rouzbeh Cheshmi",
+      "Rouzbeh Cheshmi",
+      "Defence",
+      0
+    ],
+    [
+      "Saleh Hardani",
+      "Saleh Hardani",
+      "Defence",
+      0
+    ],
+    [
+      "Ali Nemati",
+      "Ali Nemati",
+      "Defence",
+      0
+    ],
+    [
+      "Danial Eiri",
+      "Danial Eiri",
+      "Defence",
+      0
+    ],
+    [
+      "Saeid Ezatolahi",
+      "Saeid Ezatolahi",
+      "Midfield",
+      0
+    ],
+    [
+      "Mehdi Torabi",
+      "Mehdi Torabi",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohammad Ghorbani",
+      "Mohammad Ghorbani",
+      "Midfield",
+      0
+    ],
+    [
+      "Ariya Yousefi",
+      "Ariya Yousefi",
+      "Midfield",
+      0
+    ],
+    [
+      "Medhi Ghayedi",
+      "Medhi Ghayedi",
+      "Midfield",
+      0
+    ],
+    [
+      "Amir Razzaghinia",
+      "Amir Razzaghinia",
+      "Midfield",
+      0
+    ],
+    [
+      "Alireza Jahanbakhsh",
+      "Alireza Jahanbakhsh",
+      "Offence",
+      0
+    ],
+    [
+      "Mehdi Taremi",
+      "Mehdi Taremi",
+      "Offence",
+      0
+    ],
+    [
+      "Dennis Eckert",
+      "Dennis Eckert",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Alipour",
+      "Ali Alipour",
+      "Offence",
+      0
+    ],
+    [
+      "Shahriar Moghanlou",
+      "Shahriar Moghanlou",
+      "Offence",
+      0
+    ],
+    [
+      "Mohammad Mohebi",
+      "Mohammad Mohebi",
+      "Offence",
+      0
+    ],
+    [
+      "Saman Ghoddos",
+      "Saman Ghoddos",
+      "Offence",
+      0
+    ],
+    [
+      "Amir Hosseinzadeh",
+      "Amir Hosseinzadeh",
+      "Offence",
+      0
+    ]
+  ],
+  "BIH": [
+    [
+      "Martin Zlomislić",
+      "Martin Zlomislić",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Nikola Vasilj",
+      "Nikola Vasilj",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mladen Jurkas",
+      "Mladen Jurkas",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Sead Kolašinac",
+      "Sead Kolašinac",
+      "Defence",
+      0
+    ],
+    [
+      "Dennis Hadžikadunić",
+      "Dennis Hadžikadunić",
+      "Defence",
+      0
+    ],
+    [
+      "Nihad Mujakić",
+      "Nihad Mujakić",
+      "Defence",
+      0
+    ],
+    [
+      "Nikola Katić",
+      "Nikola Katić",
+      "Defence",
+      0
+    ],
+    [
+      "Stjepan Radeljić",
+      "Stjepan Radeljić",
+      "Defence",
+      0
+    ],
+    [
+      "Amar Dedić",
+      "Amar Dedić",
+      "Defence",
+      0
+    ],
+    [
+      "Tarik Muharemović",
+      "Tarik Muharemović",
+      "Defence",
+      0
+    ],
+    [
+      "Nidal Čelik",
+      "Nidal Čelik",
+      "Defence",
+      0
+    ],
+    [
+      "Dženis Burnić",
+      "Dženis Burnić",
+      "Midfield",
+      0
+    ],
+    [
+      "Ivan Šunjić",
+      "Ivan Šunjić",
+      "Midfield",
+      0
+    ],
+    [
+      "Amir Hadžiahmetović",
+      "Amir Hadžiahmetović",
+      "Midfield",
+      0
+    ],
+    [
+      "Armin Gigovic",
+      "Armin Gigovic",
+      "Midfield",
+      0
+    ],
+    [
+      "Ivan Bašić",
+      "Ivan Bašić",
+      "Midfield",
+      0
+    ],
+    [
+      "Benjamin Tahirovic",
+      "Benjamin Tahirovic",
+      "Midfield",
+      0
+    ],
+    [
+      "Ermin Mahmic",
+      "Ermin Mahmic",
+      "Midfield",
+      0
+    ],
+    [
+      "Amar Memić",
+      "Amar Memić",
+      "Midfield",
+      0
+    ],
+    [
+      "Edin Džeko",
+      "Edin Džeko",
+      "Offence",
+      0
+    ],
+    [
+      "Jovo Lukić",
+      "Jovo Lukić",
+      "Offence",
+      0
+    ],
+    [
+      "Ermedin Demirovic",
+      "Ermedin Demirovic",
+      "Offence",
+      0
+    ],
+    [
+      "Haris Tabaković",
+      "Haris Tabaković",
+      "Offence",
+      0
+    ],
+    [
+      "Samed Bazdar",
+      "Samed Bazdar",
+      "Offence",
+      0
+    ],
+    [
+      "Esmir Bajraktarevic",
+      "Esmir Bajraktarevic",
+      "Offence",
+      0
+    ],
+    [
+      "Kerim Alajbegović",
+      "Kerim Alajbegović",
+      "Offence",
+      0
+    ]
+  ],
+  "PAN": [
+    [
+      "Luis Mejía",
+      "Luis Mejía",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Orlando Mosquera",
+      "Orlando Mosquera",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Cesar Samudio",
+      "Cesar Samudio",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Roderick Miller",
+      "Roderick Miller",
+      "Defence",
+      0
+    ],
+    [
+      "Fidel Escobar",
+      "Fidel Escobar",
+      "Defence",
+      0
+    ],
+    [
+      "Éric Davis",
+      "Éric Davis",
+      "Defence",
+      0
+    ],
+    [
+      "Andrés Andrade",
+      "Andrés Andrade",
+      "Defence",
+      0
+    ],
+    [
+      "César Blackman",
+      "César Blackman",
+      "Defence",
+      0
+    ],
+    [
+      "Jiovany Ramos",
+      "Jiovany Ramos",
+      "Defence",
+      0
+    ],
+    [
+      "José Cordoba",
+      "José Cordoba",
+      "Defence",
+      0
+    ],
+    [
+      "Michael Murillo",
+      "Michael Murillo",
+      "Defence",
+      0
+    ],
+    [
+      "Edgardo Fariña",
+      "Edgardo Fariña",
+      "Defence",
+      0
+    ],
+    [
+      "Jorge Gutiérrez",
+      "Jorge Gutiérrez",
+      "Defence",
+      0
+    ],
+    [
+      "Adalberto Carrasquilla",
+      "Adalberto Carrasquilla",
+      "Midfield",
+      0
+    ],
+    [
+      "José Luis Rodríguez",
+      "José Luis Rodríguez",
+      "Midfield",
+      0
+    ],
+    [
+      "Cecilio Waterman",
+      "Cecilio Waterman",
+      "Midfield",
+      0
+    ],
+    [
+      "Édgar Bárcenas",
+      "Édgar Bárcenas",
+      "Midfield",
+      0
+    ],
+    [
+      "Aníbal Godoy",
+      "Aníbal Godoy",
+      "Midfield",
+      0
+    ],
+    [
+      "Alberto Quintero",
+      "Alberto Quintero",
+      "Midfield",
+      0
+    ],
+    [
+      "Carlos Harvey",
+      "Carlos Harvey",
+      "Midfield",
+      0
+    ],
+    [
+      "César Yanis",
+      "César Yanis",
+      "Midfield",
+      0
+    ],
+    [
+      "Christian Martinez",
+      "Christian Martinez",
+      "Midfield",
+      0
+    ],
+    [
+      "José Fajardo",
+      "José Fajardo",
+      "Offence",
+      0
+    ],
+    [
+      "Ismael Díaz",
+      "Ismael Díaz",
+      "Offence",
+      0
+    ],
+    [
+      "Tomas Rodriguez",
+      "Tomas Rodriguez",
+      "Offence",
+      0
+    ],
+    [
+      "Azarias Londoño",
+      "Azarias Londoño",
+      "Offence",
+      0
+    ]
+  ],
+  "CPV": [
+    [
+      "Márcio Rosa",
+      "Márcio Rosa",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Vózinha",
+      "Vózinha",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "C.J. dos Santos",
+      "C.J. dos Santos",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Steven Moreira",
+      "Steven Moreira",
+      "Defence",
+      0
+    ],
+    [
+      "Logan Costa",
+      "Logan Costa",
+      "Defence",
+      0
+    ],
+    [
+      "Roberto Lopes",
+      "Roberto Lopes",
+      "Defence",
+      0
+    ],
+    [
+      "Diney Borges",
+      "Diney Borges",
+      "Defence",
+      0
+    ],
+    [
+      "Stopira",
+      "Stopira",
+      "Defence",
+      0
+    ],
+    [
+      "Sidny Lopes Cabral",
+      "Sidny Lopes Cabral",
+      "Defence",
+      0
+    ],
+    [
+      "Wagner Pina",
+      "Wagner Pina",
+      "Defence",
+      0
+    ],
+    [
+      "Kelvin Pires",
+      "Kelvin Pires",
+      "Defence",
+      0
+    ],
+    [
+      "Deroy Duarte",
+      "Deroy Duarte",
+      "Midfield",
+      0
+    ],
+    [
+      "Garry Rodrigues",
+      "Garry Rodrigues",
+      "Midfield",
+      0
+    ],
+    [
+      "Kevin Pina",
+      "Kevin Pina",
+      "Midfield",
+      0
+    ],
+    [
+      "Laros Duarte",
+      "Laros Duarte",
+      "Midfield",
+      0
+    ],
+    [
+      "Yannick Semedo",
+      "Yannick Semedo",
+      "Midfield",
+      0
+    ],
+    [
+      "Telmo Arcanjo",
+      "Telmo Arcanjo",
+      "Midfield",
+      0
+    ],
+    [
+      "Jamiro Monteiro",
+      "Jamiro Monteiro",
+      "Midfield",
+      0
+    ],
+    [
+      "João Paulo",
+      "João Paulo",
+      "Midfield",
+      0
+    ],
+    [
+      "Willy Semedo",
+      "Willy Semedo",
+      "Offence",
+      0
+    ],
+    [
+      "Ryan Mendes",
+      "Ryan Mendes",
+      "Offence",
+      0
+    ],
+    [
+      "Jovane Cabral",
+      "Jovane Cabral",
+      "Offence",
+      0
+    ],
+    [
+      "Gilson Tavares",
+      "Gilson Tavares",
+      "Offence",
+      0
+    ],
+    [
+      "Nuno Da Costa",
+      "Nuno Da Costa",
+      "Offence",
+      0
+    ],
+    [
+      "Dailon Rocha Livramento",
+      "Dailon Rocha Livramento",
+      "Offence",
+      0
+    ],
+    [
+      "Hélio Varela",
+      "Hélio Varela",
+      "Offence",
+      0
+    ]
+  ],
+  "COD": [
+    [
+      "Timothy Fayulu",
+      "Timothy Fayulu",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Lionel Mpasi",
+      "Lionel Mpasi",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Matthieu Epolo",
+      "Matthieu Epolo",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Axel Tuanzebe",
+      "Axel Tuanzebe",
+      "Defence",
+      0
+    ],
+    [
+      "Chancel Mbemba",
+      "Chancel Mbemba",
+      "Defence",
+      0
+    ],
+    [
+      "Aaron Wan-Bissaka",
+      "Aaron Wan-Bissaka",
+      "Defence",
+      0
+    ],
+    [
+      "Arthur Masuaku",
+      "Arthur Masuaku",
+      "Defence",
+      0
+    ],
+    [
+      "Joris Kayembe",
+      "Joris Kayembe",
+      "Defence",
+      0
+    ],
+    [
+      "Dylan Batubinsika",
+      "Dylan Batubinsika",
+      "Defence",
+      0
+    ],
+    [
+      "Gédéon Kalulu",
+      "Gédéon Kalulu",
+      "Defence",
+      0
+    ],
+    [
+      "Steve Kapuadi",
+      "Steve Kapuadi",
+      "Defence",
+      0
+    ],
+    [
+      "Gaël Kakuta",
+      "Gaël Kakuta",
+      "Midfield",
+      0
+    ],
+    [
+      "Samuel Moutoussamy",
+      "Samuel Moutoussamy",
+      "Midfield",
+      0
+    ],
+    [
+      "Edo Kayembe",
+      "Edo Kayembe",
+      "Midfield",
+      0
+    ],
+    [
+      "Aaron Tshibola",
+      "Aaron Tshibola",
+      "Midfield",
+      0
+    ],
+    [
+      "Charles Pickel",
+      "Charles Pickel",
+      "Midfield",
+      0
+    ],
+    [
+      "Noah Sadiki",
+      "Noah Sadiki",
+      "Midfield",
+      0
+    ],
+    [
+      "Ngal'ayel Mukau",
+      "Ngal'ayel Mukau",
+      "Midfield",
+      0
+    ],
+    [
+      "Yoane Wissa",
+      "Yoane Wissa",
+      "Offence",
+      0
+    ],
+    [
+      "Theo Bongonda",
+      "Theo Bongonda",
+      "Offence",
+      0
+    ],
+    [
+      "Cédric Bakambu",
+      "Cédric Bakambu",
+      "Offence",
+      0
+    ],
+    [
+      "Simon Banza",
+      "Simon Banza",
+      "Offence",
+      0
+    ],
+    [
+      "Nathanael Mbuku",
+      "Nathanael Mbuku",
+      "Offence",
+      0
+    ],
+    [
+      "Meschack Elia",
+      "Meschack Elia",
+      "Offence",
+      0
+    ],
+    [
+      "Brian Cipenga",
+      "Brian Cipenga",
+      "Offence",
+      0
+    ],
+    [
+      "Fiston Mayele",
+      "Fiston Mayele",
+      "Offence",
+      0
+    ]
+  ],
+  "CIV": [
+    [
+      "Yahia Fofana",
+      "Yahia Fofana",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Alban Lafont",
+      "Alban Lafont",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mohamed Kone",
+      "Mohamed Kone",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Evan N'Dicka",
+      "Evan N'Dicka",
+      "Defence",
+      0
+    ],
+    [
+      "Christopher Operi",
+      "Christopher Operi",
+      "Defence",
+      0
+    ],
+    [
+      "Ghislain Konan",
+      "Ghislain Konan",
+      "Defence",
+      0
+    ],
+    [
+      "Wilfried Singo",
+      "Wilfried Singo",
+      "Defence",
+      0
+    ],
+    [
+      "Guela Doué",
+      "Guela Doué",
+      "Defence",
+      0
+    ],
+    [
+      "Emmanuel Agbadou",
+      "Emmanuel Agbadou",
+      "Defence",
+      0
+    ],
+    [
+      "Odilon Kossounou",
+      "Odilon Kossounou",
+      "Defence",
+      0
+    ],
+    [
+      "Ousmane Diomande",
+      "Ousmane Diomande",
+      "Defence",
+      0
+    ],
+    [
+      "Franck Kessié",
+      "Franck Kessié",
+      "Midfield",
+      0
+    ],
+    [
+      "Seko Fofana",
+      "Seko Fofana",
+      "Midfield",
+      0
+    ],
+    [
+      "Ibrahim Sangaré",
+      "Ibrahim Sangaré",
+      "Midfield",
+      0
+    ],
+    [
+      "Jean Michaël Seri",
+      "Jean Michaël Seri",
+      "Midfield",
+      0
+    ],
+    [
+      "Amad Diallo",
+      "Amad Diallo",
+      "Midfield",
+      0
+    ],
+    [
+      "Parfait Guiagon",
+      "Parfait Guiagon",
+      "Midfield",
+      0
+    ],
+    [
+      "Christ Ravynel Inao Oulaï",
+      "Christ Ravynel Inao Oulaï",
+      "Midfield",
+      0
+    ],
+    [
+      "Nicolas Pépé",
+      "Nicolas Pépé",
+      "Offence",
+      0
+    ],
+    [
+      "Evann Guessand",
+      "Evann Guessand",
+      "Offence",
+      0
+    ],
+    [
+      "Ange-Yoan Bonny",
+      "Ange-Yoan Bonny",
+      "Offence",
+      0
+    ],
+    [
+      "Sepe Elye Wahi",
+      "Sepe Elye Wahi",
+      "Offence",
+      0
+    ],
+    [
+      "Simon Adingra",
+      "Simon Adingra",
+      "Offence",
+      0
+    ],
+    [
+      "Oumar Diakite",
+      "Oumar Diakite",
+      "Offence",
+      0
+    ],
+    [
+      "Bazoumana Touré",
+      "Bazoumana Touré",
+      "Offence",
+      0
+    ],
+    [
+      "Yan Diomandé",
+      "Yan Diomandé",
+      "Offence",
+      0
+    ]
+  ],
+  "QAT": [
+    [
+      "Salah Zakaria",
+      "Salah Zakaria",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Meshaal Barsham",
+      "Meshaal Barsham",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Mahmoud Abunada",
+      "Mahmoud Abunada",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Boualem Khoukhi",
+      "Boualem Khoukhi",
+      "Defence",
+      0
+    ],
+    [
+      "Jassem Gaber Abdulsallam",
+      "Jassem Gaber Abdulsallam",
+      "Defence",
+      0
+    ],
+    [
+      "Homam Ahmed",
+      "Homam Ahmed",
+      "Defence",
+      0
+    ],
+    [
+      "Ró-Ró",
+      "Ró-Ró",
+      "Defence",
+      0
+    ],
+    [
+      "Lucas Mendes",
+      "Lucas Mendes",
+      "Defence",
+      0
+    ],
+    [
+      "Sultan Al Brake",
+      "Sultan Al Brake",
+      "Defence",
+      0
+    ],
+    [
+      "Hashemi Al Hussain",
+      "Hashemi Al Hussain",
+      "Defence",
+      0
+    ],
+    [
+      "Issa Laye",
+      "Issa Laye",
+      "Defence",
+      0
+    ],
+    [
+      "Ayoub Al-Oui",
+      "Ayoub Al-Oui",
+      "Defence",
+      0
+    ],
+    [
+      "Assim Madibo",
+      "Assim Madibo",
+      "Midfield",
+      0
+    ],
+    [
+      "Abdulaziz Hatem",
+      "Abdulaziz Hatem",
+      "Midfield",
+      0
+    ],
+    [
+      "Karim Boudiaf",
+      "Karim Boudiaf",
+      "Midfield",
+      0
+    ],
+    [
+      "Ahmed Fathy",
+      "Ahmed Fathy",
+      "Midfield",
+      0
+    ],
+    [
+      "Yusuf Abdurisag",
+      "Yusuf Abdurisag",
+      "Midfield",
+      0
+    ],
+    [
+      "Ahmed Al Ganehi",
+      "Ahmed Al Ganehi",
+      "Midfield",
+      0
+    ],
+    [
+      "Tahsin Jamshid",
+      "Tahsin Jamshid",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohamed Al-Mannai",
+      "Mohamed Al-Mannai",
+      "Midfield",
+      0
+    ],
+    [
+      "Akram Afif",
+      "Akram Afif",
+      "Offence",
+      0
+    ],
+    [
+      "Almoez Ali",
+      "Almoez Ali",
+      "Offence",
+      0
+    ],
+    [
+      "Mohammed Muntari",
+      "Mohammed Muntari",
+      "Offence",
+      0
+    ],
+    [
+      "Hassan Al Haydos",
+      "Hassan Al Haydos",
+      "Offence",
+      0
+    ],
+    [
+      "Ahmed Alaa Eldin",
+      "Ahmed Alaa Eldin",
+      "Offence",
+      0
+    ],
+    [
+      "Edmílson",
+      "Edmílson",
+      "Offence",
+      0
+    ]
+  ],
+  "JOR": [
+    [
+      "Yazeed Abu Layla",
+      "Yazeed Abu Layla",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Abdallah Al Fakhouri",
+      "Abdallah Al Fakhouri",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Noureddin Bani Ateyah",
+      "Noureddin Bani Ateyah",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ehsan Haddad",
+      "Ehsan Haddad",
+      "Defence",
+      0
+    ],
+    [
+      "Saleem Obaid",
+      "Saleem Obaid",
+      "Defence",
+      0
+    ],
+    [
+      "Yazan Al Arab",
+      "Yazan Al Arab",
+      "Defence",
+      0
+    ],
+    [
+      "Mohammad Abualnadi",
+      "Mohammad Abualnadi",
+      "Defence",
+      0
+    ],
+    [
+      "Abdallah Naseeb",
+      "Abdallah Naseeb",
+      "Defence",
+      0
+    ],
+    [
+      "Saed Al Rosan",
+      "Saed Al Rosan",
+      "Defence",
+      0
+    ],
+    [
+      "Husam Abu Dahab",
+      "Husam Abu Dahab",
+      "Defence",
+      0
+    ],
+    [
+      "Anas Badawi",
+      "Anas Badawi",
+      "Defence",
+      0
+    ],
+    [
+      "Nizar Al Rashdan",
+      "Nizar Al Rashdan",
+      "Midfield",
+      0
+    ],
+    [
+      "Rajaei Ayed",
+      "Rajaei Ayed",
+      "Midfield",
+      0
+    ],
+    [
+      "Noor Al Rawabdeh",
+      "Noor Al Rawabdeh",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohammad Abu Hasheesh",
+      "Mohammad Abu Hasheesh",
+      "Midfield",
+      0
+    ],
+    [
+      "Ibrahim Saadeh",
+      "Ibrahim Saadeh",
+      "Midfield",
+      0
+    ],
+    [
+      "Mohammad Al-Dawoud",
+      "Mohammad Al-Dawoud",
+      "Midfield",
+      0
+    ],
+    [
+      "Amer Jamous",
+      "Amer Jamous",
+      "Midfield",
+      0
+    ],
+    [
+      "Musa Al Taamari",
+      "Musa Al Taamari",
+      "Offence",
+      0
+    ],
+    [
+      "Mahmoud Al Mardi",
+      "Mahmoud Al Mardi",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Olwan",
+      "Ali Olwan",
+      "Offence",
+      0
+    ],
+    [
+      "Mohannad Abu Taha",
+      "Mohannad Abu Taha",
+      "Offence",
+      0
+    ],
+    [
+      "Mohammad Abu Zrayq",
+      "Mohammad Abu Zrayq",
+      "Offence",
+      0
+    ],
+    [
+      "Ibrahim Sabra",
+      "Ibrahim Sabra",
+      "Offence",
+      0
+    ],
+    [
+      "Odeh Fakhoury",
+      "Odeh Fakhoury",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Azaizeh",
+      "Ali Azaizeh",
+      "Offence",
+      0
+    ]
+  ],
+  "IRQ": [
+    [
+      "Jalal Hassan",
+      "Jalal Hassan",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Fahad Talib",
+      "Fahad Talib",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Ahmed Basil",
+      "Ahmed Basil",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Hussein Ali",
+      "Hussein Ali",
+      "Defence",
+      0
+    ],
+    [
+      "Merchas Doski",
+      "Merchas Doski",
+      "Defence",
+      0
+    ],
+    [
+      "Rebin Sulaka",
+      "Rebin Sulaka",
+      "Defence",
+      0
+    ],
+    [
+      "Mustafa Saadoun",
+      "Mustafa Saadoun",
+      "Defence",
+      0
+    ],
+    [
+      "Ahmed Yahya",
+      "Ahmed Yahya",
+      "Defence",
+      0
+    ],
+    [
+      "Frans Putros",
+      "Frans Putros",
+      "Defence",
+      0
+    ],
+    [
+      "Zaid Tahseen",
+      "Zaid Tahseen",
+      "Defence",
+      0
+    ],
+    [
+      "Manaf Younis",
+      "Manaf Younis",
+      "Defence",
+      0
+    ],
+    [
+      "Akam Hashem",
+      "Akam Hashem",
+      "Defence",
+      0
+    ],
+    [
+      "Amir Al Ammari",
+      "Amir Al Ammari",
+      "Midfield",
+      0
+    ],
+    [
+      "Kevin Yakob",
+      "Kevin Yakob",
+      "Midfield",
+      0
+    ],
+    [
+      "Aimar Sher",
+      "Aimar Sher",
+      "Midfield",
+      0
+    ],
+    [
+      "Ibrahim Bayesh",
+      "Ibrahim Bayesh",
+      "Midfield",
+      0
+    ],
+    [
+      "Youssef Amyn",
+      "Youssef Amyn",
+      "Midfield",
+      0
+    ],
+    [
+      "Ahmed Qasem",
+      "Ahmed Qasem",
+      "Midfield",
+      0
+    ],
+    [
+      "Zidane Iqbal",
+      "Zidane Iqbal",
+      "Midfield",
+      0
+    ],
+    [
+      "Zaid Ismail",
+      "Zaid Ismail",
+      "Midfield",
+      0
+    ],
+    [
+      "Aymen Hussein",
+      "Aymen Hussein",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Al-Hamadi",
+      "Ali Al-Hamadi",
+      "Offence",
+      0
+    ],
+    [
+      "Marko Farji",
+      "Marko Farji",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Jassim El-Aibi",
+      "Ali Jassim El-Aibi",
+      "Offence",
+      0
+    ],
+    [
+      "Mohanad Ali",
+      "Mohanad Ali",
+      "Offence",
+      0
+    ],
+    [
+      "Ali Yousif",
+      "Ali Yousif",
+      "Offence",
+      0
+    ]
+  ],
+  "UZB": [
+    [
+      "Abduvakhid Nematov",
+      "Abduvakhid Nematov",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Botir Ergashev",
+      "Botir Ergashev",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Utkir Yusupov",
+      "Utkir Yusupov",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Rustam Ashurmatov",
+      "Rustam Ashurmatov",
+      "Defence",
+      0
+    ],
+    [
+      "Umar Eshmurodov",
+      "Umar Eshmurodov",
+      "Defence",
+      0
+    ],
+    [
+      "Abdukodir Khusanov",
+      "Abdukodir Khusanov",
+      "Defence",
+      0
+    ],
+    [
+      "Jakhongir O'rozov",
+      "Jakhongir O'rozov",
+      "Defence",
+      0
+    ],
+    [
+      "Farrukh Sayfiyev",
+      "Farrukh Sayfiyev",
+      "Defence",
+      0
+    ],
+    [
+      "Khodjiakbar Alijonov",
+      "Khodjiakbar Alijonov",
+      "Defence",
+      0
+    ],
+    [
+      "Sherzod Nasrullayev",
+      "Sherzod Nasrullayev",
+      "Defence",
+      0
+    ],
+    [
+      "Abdulla Abdullayev",
+      "Abdulla Abdullayev",
+      "Defence",
+      0
+    ],
+    [
+      "Bekhruz Karimov",
+      "Bekhruz Karimov",
+      "Defence",
+      0
+    ],
+    [
+      "Avazbek Ulmasaliev",
+      "Avazbek Ulmasaliev",
+      "Defence",
+      0
+    ],
+    [
+      "Dostonbek Xamdamov",
+      "Dostonbek Xamdamov",
+      "Midfield",
+      0
+    ],
+    [
+      "Otabek Shukurov",
+      "Otabek Shukurov",
+      "Midfield",
+      0
+    ],
+    [
+      "Oston Urunov",
+      "Oston Urunov",
+      "Midfield",
+      0
+    ],
+    [
+      "Jamshid Iskanderov",
+      "Jamshid Iskanderov",
+      "Midfield",
+      0
+    ],
+    [
+      "Akmal Mozgovoy",
+      "Akmal Mozgovoy",
+      "Midfield",
+      0
+    ],
+    [
+      "Abbosbek Fayzullaev",
+      "Abbosbek Fayzullaev",
+      "Midfield",
+      0
+    ],
+    [
+      "Azizjon Ganiev",
+      "Azizjon Ganiev",
+      "Midfield",
+      0
+    ],
+    [
+      "Odiljon Hamrobekov",
+      "Odiljon Hamrobekov",
+      "Midfield",
+      0
+    ],
+    [
+      "Sherzod Esanov",
+      "Sherzod Esanov",
+      "Midfield",
+      0
+    ],
+    [
+      "Eldor Shomurodov",
+      "Eldor Shomurodov",
+      "Offence",
+      0
+    ],
+    [
+      "Jaloliddin Masharipov",
+      "Jaloliddin Masharipov",
+      "Offence",
+      0
+    ],
+    [
+      "Igor Sergeev",
+      "Igor Sergeev",
+      "Offence",
+      0
+    ],
+    [
+      "Azizbek Amonov",
+      "Azizbek Amonov",
+      "Offence",
+      0
+    ]
+  ],
+  "NED": [
+    [
+      "Mark Flekken",
+      "Mark Flekken",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Bart Verbruggen",
+      "Bart Verbruggen",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Robin Roefs",
+      "Robin Roefs",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Denzel Dumfries",
+      "Denzel Dumfries",
+      "Defence",
+      0
+    ],
+    [
+      "Virgil van Dijk",
+      "Virgil van Dijk",
+      "Defence",
+      0
+    ],
+    [
+      "Nathan Aké",
+      "Nathan Aké",
+      "Defence",
+      0
+    ],
+    [
+      "Jan Paul van Hecke",
+      "Jan Paul van Hecke",
+      "Defence",
+      0
+    ],
+    [
+      "Jurrien Timber",
+      "Jurrien Timber",
+      "Defence",
+      0
+    ],
+    [
+      "Mickey van de Ven",
+      "Mickey van de Ven",
+      "Defence",
+      0
+    ],
+    [
+      "Jorrel Hato",
+      "Jorrel Hato",
+      "Defence",
+      0
+    ],
+    [
+      "Marten de Roon",
+      "Marten de Roon",
+      "Midfield",
+      0
+    ],
+    [
+      "Donyell Malen",
+      "Donyell Malen",
+      "Midfield",
+      0
+    ],
+    [
+      "Frenkie de Jong",
+      "Frenkie de Jong",
+      "Midfield",
+      0
+    ],
+    [
+      "Noa Lang",
+      "Noa Lang",
+      "Midfield",
+      0
+    ],
+    [
+      "Guus Til",
+      "Guus Til",
+      "Midfield",
+      0
+    ],
+    [
+      "Teun Koopmeiners",
+      "Teun Koopmeiners",
+      "Midfield",
+      0
+    ],
+    [
+      "Tijjani Reijnders",
+      "Tijjani Reijnders",
+      "Midfield",
+      0
+    ],
+    [
+      "Ryan Gravenberch",
+      "Ryan Gravenberch",
+      "Midfield",
+      0
+    ],
+    [
+      "Mats Wieffer",
+      "Mats Wieffer",
+      "Midfield",
+      0
+    ],
+    [
+      "Quinten Timber",
+      "Quinten Timber",
+      "Midfield",
+      0
+    ],
+    [
+      "Crysencio Summerville",
+      "Crysencio Summerville",
+      "Midfield",
+      0
+    ],
+    [
+      "Cody Gakpo",
+      "Cody Gakpo",
+      "Offence",
+      0
+    ],
+    [
+      "Justin Kluivert",
+      "Justin Kluivert",
+      "Offence",
+      0
+    ],
+    [
+      "Wout Weghorst",
+      "Wout Weghorst",
+      "Offence",
+      0
+    ],
+    [
+      "Memphis Depay",
+      "Memphis Depay",
+      "Offence",
+      0
+    ],
+    [
+      "Brian Brobbey",
+      "Brian Brobbey",
+      "Offence",
+      0
+    ]
+  ],
+  "NOR": [
+    [
+      "Ørjan Nyland",
+      "Ørjan Nyland",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Egil Selvik",
+      "Egil Selvik",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Sander Tangvik",
+      "Sander Tangvik",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Kristoffer Ajer",
+      "Kristoffer Ajer",
+      "Defence",
+      0
+    ],
+    [
+      "Torbjørn Heggem",
+      "Torbjørn Heggem",
+      "Defence",
+      0
+    ],
+    [
+      "Fredrik Bjørkan",
+      "Fredrik Bjørkan",
+      "Defence",
+      0
+    ],
+    [
+      "Marcus Pedersen",
+      "Marcus Pedersen",
+      "Defence",
+      0
+    ],
+    [
+      "Julian Ryerson",
+      "Julian Ryerson",
+      "Defence",
+      0
+    ],
+    [
+      "Leo Østigård",
+      "Leo Østigård",
+      "Defence",
+      0
+    ],
+    [
+      "Henrik Falchener",
+      "Henrik Falchener",
+      "Defence",
+      0
+    ],
+    [
+      "Sondre Langås",
+      "Sondre Langås",
+      "Defence",
+      0
+    ],
+    [
+      "David Wolfe",
+      "David Wolfe",
+      "Defence",
+      0
+    ],
+    [
+      "Morten Thorsby",
+      "Morten Thorsby",
+      "Midfield",
+      0
+    ],
+    [
+      "Martin Ødegaard",
+      "Martin Ødegaard",
+      "Midfield",
+      0
+    ],
+    [
+      "Sander Berge",
+      "Sander Berge",
+      "Midfield",
+      0
+    ],
+    [
+      "Patrick Berg",
+      "Patrick Berg",
+      "Midfield",
+      0
+    ],
+    [
+      "Fredrik Aursnes",
+      "Fredrik Aursnes",
+      "Midfield",
+      0
+    ],
+    [
+      "Kristian Thorstvedt",
+      "Kristian Thorstvedt",
+      "Midfield",
+      0
+    ],
+    [
+      "Thelo Aasgaard",
+      "Thelo Aasgaard",
+      "Midfield",
+      0
+    ],
+    [
+      "Antonio Nusa",
+      "Antonio Nusa",
+      "Midfield",
+      0
+    ],
+    [
+      "Oscar Bobb",
+      "Oscar Bobb",
+      "Midfield",
+      0
+    ],
+    [
+      "Alexander Sørloth",
+      "Alexander Sørloth",
+      "Offence",
+      0
+    ],
+    [
+      "Jens Hauge",
+      "Jens Hauge",
+      "Offence",
+      0
+    ],
+    [
+      "Erling Haaland",
+      "Erling Haaland",
+      "Offence",
+      0
+    ],
+    [
+      "Andreas Schjelderup",
+      "Andreas Schjelderup",
+      "Offence",
+      0
+    ],
+    [
+      "Jørgen Strand Larsen",
+      "Jørgen Strand Larsen",
+      "Offence",
+      0
+    ]
+  ],
+  "SCO": [
+    [
+      "Angus Gunn",
+      "Angus Gunn",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Craig Gordon",
+      "Craig Gordon",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Liam Kelly",
+      "Liam Kelly",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Grant Hanley",
+      "Grant Hanley",
+      "Defence",
+      0
+    ],
+    [
+      "Dominic Hyam",
+      "Dominic Hyam",
+      "Defence",
+      0
+    ],
+    [
+      "Andrew Robertson",
+      "Andrew Robertson",
+      "Defence",
+      0
+    ],
+    [
+      "Kieran Tierney",
+      "Kieran Tierney",
+      "Defence",
+      0
+    ],
+    [
+      "Jack Hendry",
+      "Jack Hendry",
+      "Defence",
+      0
+    ],
+    [
+      "Anthony Ralston",
+      "Anthony Ralston",
+      "Defence",
+      0
+    ],
+    [
+      "John Souttar",
+      "John Souttar",
+      "Defence",
+      0
+    ],
+    [
+      "Scott McKenna",
+      "Scott McKenna",
+      "Defence",
+      0
+    ],
+    [
+      "Aaron Hickey",
+      "Aaron Hickey",
+      "Defence",
+      0
+    ],
+    [
+      "Nathan Patterson",
+      "Nathan Patterson",
+      "Defence",
+      0
+    ],
+    [
+      "Scott McTominay",
+      "Scott McTominay",
+      "Midfield",
+      0
+    ],
+    [
+      "Kenny McLean",
+      "Kenny McLean",
+      "Midfield",
+      0
+    ],
+    [
+      "Ryan Christie",
+      "Ryan Christie",
+      "Midfield",
+      0
+    ],
+    [
+      "Lewis Ferguson",
+      "Lewis Ferguson",
+      "Midfield",
+      0
+    ],
+    [
+      "John McGinn",
+      "John McGinn",
+      "Midfield",
+      0
+    ],
+    [
+      "Ben Doak",
+      "Ben Doak",
+      "Midfield",
+      0
+    ],
+    [
+      "Findlay Curtis",
+      "Findlay Curtis",
+      "Midfield",
+      0
+    ],
+    [
+      "Tyler Fletcher",
+      "Tyler Fletcher",
+      "Midfield",
+      0
+    ],
+    [
+      "Che Adams",
+      "Che Adams",
+      "Offence",
+      0
+    ],
+    [
+      "George Hirst",
+      "George Hirst",
+      "Offence",
+      0
+    ],
+    [
+      "Ross Stewart",
+      "Ross Stewart",
+      "Offence",
+      0
+    ],
+    [
+      "Lyndon Dykes",
+      "Lyndon Dykes",
+      "Offence",
+      0
+    ],
+    [
+      "Lawrence Shankland",
+      "Lawrence Shankland",
+      "Offence",
+      0
+    ]
+  ],
+  "CUW": [
+    [
+      "Trevor Doornbusch",
+      "Trevor Doornbusch",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Eloy Room",
+      "Eloy Room",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Tyrick Bodak",
+      "Tyrick Bodak",
+      "Goalkeeper",
+      0
+    ],
+    [
+      "Roshon van Eijma",
+      "Roshon van Eijma",
+      "Defence",
+      0
+    ],
+    [
+      "Joshua Brenet",
+      "Joshua Brenet",
+      "Defence",
+      0
+    ],
+    [
+      "Armando Obispo",
+      "Armando Obispo",
+      "Defence",
+      0
+    ],
+    [
+      "Sheral Floranus",
+      "Sheral Floranus",
+      "Defence",
+      0
+    ],
+    [
+      "Riechedly Bazoer",
+      "Riechedly Bazoer",
+      "Defence",
+      0
+    ],
+    [
+      "Juriën Gaari",
+      "Juriën Gaari",
+      "Defence",
+      0
+    ],
+    [
+      "Shurandy Sambo",
+      "Shurandy Sambo",
+      "Defence",
+      0
+    ],
+    [
+      "Ar'jany Martha",
+      "Ar'jany Martha",
+      "Defence",
+      0
+    ],
+    [
+      "Livano Comenencia",
+      "Livano Comenencia",
+      "Defence",
+      0
+    ],
+    [
+      "Deveron Fonville",
+      "Deveron Fonville",
+      "Defence",
+      0
+    ],
+    [
+      "Tyrese Noslin",
+      "Tyrese Noslin",
+      "Defence",
+      0
+    ],
+    [
+      "Leandro Bacuna",
+      "Leandro Bacuna",
+      "Midfield",
+      0
+    ],
+    [
+      "Godfried Roemeratoe",
+      "Godfried Roemeratoe",
+      "Midfield",
+      0
+    ],
+    [
+      "Juninho Bacuna",
+      "Juninho Bacuna",
+      "Midfield",
+      0
+    ],
+    [
+      "Kevin Felida",
+      "Kevin Felida",
+      "Midfield",
+      0
+    ],
+    [
+      "Gervane Kastaneer",
+      "Gervane Kastaneer",
+      "Offence",
+      0
+    ],
+    [
+      "Kenji Gorré",
+      "Kenji Gorré",
+      "Offence",
+      0
+    ],
+    [
+      "Jürgen Locadia",
+      "Jürgen Locadia",
+      "Offence",
+      0
+    ],
+    [
+      "Tahith Chong",
+      "Tahith Chong",
+      "Offence",
+      0
+    ],
+    [
+      "Sontje Hansen",
+      "Sontje Hansen",
+      "Offence",
+      0
+    ],
+    [
+      "Jearl Margaritha",
+      "Jearl Margaritha",
+      "Offence",
+      0
+    ],
+    [
+      "Jeremy Antonisse",
+      "Jeremy Antonisse",
+      "Offence",
+      0
+    ],
+    [
+      "Brandley Kuwas",
+      "Brandley Kuwas",
+      "Offence",
+      0
+    ]
+  ]
+}

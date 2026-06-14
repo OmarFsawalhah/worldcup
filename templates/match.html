@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block content %}
+{% set lang = current_lang() %}
+{% set locked = match.is_locked() %}
+{% set ko_iso = match.kickoff_aware().isoformat() %}
+
+<div class="card-pitch mb-6">
+  <div class="flex items-center justify-center gap-6 text-center">
+    <div>
+      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-xl">
+      <div class="font-display text-xl mt-1">{{ match.home_team.name(lang) }}</div>
+    </div>
+    <div class="text-center">
+      {% if match.has_finished() %}
+        <div class="score-display">{{ match.home_score }} - {{ match.away_score }}</div>
+        <div class="text-xs text-slate-500 mt-1">{{ t('status.finished') }}</div>
+      {% else %}
+        <div class="text-2xl text-slate-400 font-display">vs</div>
+        <div class="text-sm text-slate-600 mt-1 font-mono" data-countdown="{{ ko_iso }}">{{ ko_iso }}</div>
+      {% endif %}
+    </div>
+    <div>
+      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-xl">
+      <div class="font-display text-xl mt-1">{{ match.away_team.name(lang) }}</div>
+    </div>
+  </div>
+  {% if match.venue %}<div class="text-center text-slate-500 text-sm mt-3">{{ match.venue }}</div>{% endif %}
+  {% if match.has_finished() %}
+    <div class="text-center text-sm text-slate-600 mt-3">
+      {% if match.first_scorer %}<div>⚽ {{ t('match.first_scorer') }}: <b>{{ match.first_scorer.name(lang) }}</b></div>{% endif %}
+      {% if match.motm %}<div>⭐ {{ t('match.motm') }}: <b>{{ match.motm.name(lang) }}</b></div>{% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% if not locked %}
+<div class="card-pitch mb-6">
+  <h2 class="text-lg font-bold mb-4">{{ t('match.your_prediction') }}</h2>
+  <form method="post" class="space-y-4">
+    <input type="hidden" name="action" value="predict">
+    <div class="flex items-center justify-center gap-3">
+      <div class="text-center">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm">
+          <span class="text-sm font-medium">{{ match.home_team.name(lang) }}</span>
+        </div>
+        <input type="number" min="0" max="20" name="home_score" required
+               value="{{ prediction.home_score if prediction else '' }}"
+               class="border rounded w-16 text-center text-2xl py-1">
+      </div>
+      <span class="text-2xl">-</span>
+      <div class="text-center">
+        <div class="flex items-center justify-center gap-2 mb-1">
+          <span class="text-sm font-medium">{{ match.away_team.name(lang) }}</span>
+          <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm">
+        </div>
+        <input type="number" min="0" max="20" name="away_score" required
+               value="{{ prediction.away_score if prediction else '' }}"
+               class="border rounded w-16 text-center text-2xl py-1">
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">{{ t('match.first_scorer') }}</label>
+      <select name="first_scorer_id" class="w-full border rounded px-3 py-2">
+        <option value="">—</option>
+        <optgroup label="{{ match.home_team.name(lang) }}">
+          {% for p in home_players %}
+            <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.first_scorer_id == p.id }}>
+              {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+            </option>
+          {% endfor %}
+        </optgroup>
+        <optgroup label="{{ match.away_team.name(lang) }}">
+          {% for p in away_players %}
+            <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.first_scorer_id == p.id }}>
+              {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+            </option>
+          {% endfor %}
+        </optgroup>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">{{ t('match.motm') }}</label>
+      <select name="motm_id" class="w-full border rounded px-3 py-2">
+        <option value="">—</option>
+        <optgroup label="{{ match.home_team.name(lang) }}">
+          {% for p in home_players %}
+            <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.motm_id == p.id }}>
+              {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+            </option>
+          {% endfor %}
+        </optgroup>
+        <optgroup label="{{ match.away_team.name(lang) }}">
+          {% for p in away_players %}
+            <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.motm_id == p.id }}>
+              {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+            </option>
+          {% endfor %}
+        </optgroup>
+      </select>
+    </div>
+    <button class="w-full bg-emerald-700 text-white py-2 rounded hover:bg-emerald-800">{{ t('match.submit') }}</button>
+  </form>
+</div>
+{% else %}
+<div class="bg-amber-50 border border-amber-200 text-amber-900 rounded p-4 mb-6 text-center">
+  {{ t('match.locked_msg') }}
+</div>
+{% if prediction %}
+<div class="card-pitch mb-6">
+  <h2 class="text-lg font-bold mb-3">{{ t('match.your_prediction') }}</h2>
+  <div class="text-2xl font-bold text-center">{{ prediction.home_score }} - {{ prediction.away_score }}</div>
+  <div class="text-sm text-center text-slate-600 mt-2">
+    {% if prediction.first_scorer %}⚽ {{ prediction.first_scorer.name(lang) }}<br>{% endif %}
+    {% if prediction.motm %}⭐ {{ prediction.motm.name(lang) }}{% endif %}
+  </div>
+  {% if match.has_finished() %}
+    <div class="text-center mt-3 text-emerald-700 font-bold">{{ t('match.points') }}: {{ prediction.points_awarded }}</div>
+  {% endif %}
+</div>
+{% else %}
+<div class="card-pitch mb-6 text-center text-slate-500">{{ t('match.no_pred') }}</div>
+{% endif %}
+{% endif %}
+
+{% if match.trivia %}
+{% set is_author = current_user.is_authenticated and match.trivia.author_id == current_user.id %}
+<div class="card-pitch" dir="rtl">
+  <h2 class="text-lg font-bold mb-3 text-right">{{ t('match.trivia') }}</h2>
+  <p class="text-right mb-3">{{ match.trivia.question_ar }}</p>
+  {% if is_author %}
+    <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded p-3 text-right">
+      {{ t('match.trivia_author_block') }}
+    </div>
+  {% elif match.trivia_open() %}
+    <form method="post" class="space-y-2">
+      <input type="hidden" name="action" value="trivia">
+      {% for c in trivia_choices %}
+        <label class="flex items-center gap-2 border rounded p-2 cursor-pointer hover:bg-slate-50">
+          <input type="radio" name="choice_index" value="{{ loop.index0 }}" required
+                 {{ 'checked' if trivia_answer and trivia_answer.choice_index == loop.index0 }}>
+          <span>{{ c }}</span>
+        </label>
+      {% endfor %}
+      <button class="w-full bg-emerald-700 text-white py-2 rounded hover:bg-emerald-800 mt-3">{{ t('match.trivia_submit') }}</button>
+    </form>
+  {% else %}
+    {% if trivia_answer %}
+      <div class="text-sm text-slate-600 text-right">
+        إجابتك: <b>{{ trivia_choices[trivia_answer.choice_index] }}</b>
+        {% if match.has_finished() %}
+          <span class="text-emerald-700 font-bold">— {{ trivia_answer.points_awarded }} {{ t('match.points') }}</span>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="text-slate-500 text-right">{{ t('match.trivia_locked') }}</p>
+    {% endif %}
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

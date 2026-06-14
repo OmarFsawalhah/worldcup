@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+<div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+  <h1 class="text-2xl font-display tracking-wide">{{ t('admin.matches') }}</h1>
+  <div class="flex gap-2">
+    <a href="{{ url_for('admin.users') }}" class="bg-slate-700 text-white px-4 py-2 rounded hover:bg-slate-800">👥 {{ t('admin.users') }}</a>
+    <a href="{{ url_for('admin.match_new') }}" class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">+ {{ t('admin.add_match') }}</a>
+  </div>
+</div>
+
+<div class="card-pitch overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="p-2 text-start">Stage</th>
+        <th class="p-2 text-start">Match</th>
+        <th class="p-2 text-start">Kickoff (UTC)</th>
+        <th class="p-2 text-start">Status</th>
+        <th class="p-2 text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in matches %}
+      <tr class="border-t">
+        <td class="p-2">
+          {% if m.stage == 'group' %}{{ t('dashboard.group', letter=m.group_letter) }}
+          {% else %}{{ t('dashboard.stage.' + m.stage) }}{% endif %}
+        </td>
+        <td class="p-2">
+          <div class="flex items-center gap-2 whitespace-nowrap">
+            <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm">
+            <span>{{ m.home_team.name(lang) }}</span>
+            <span class="text-slate-400">vs</span>
+            <span>{{ m.away_team.name(lang) }}</span>
+            <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm">
+          </div>
+        </td>
+        <td class="p-2 font-mono text-xs">{{ m.kickoff_utc.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td class="p-2">{{ m.status }}</td>
+        <td class="p-2 text-end whitespace-nowrap"><div class="inline-flex flex-wrap gap-1 justify-end">
+          <a href="{{ url_for('admin.match_result', mid=m.id) }}" class="bg-emerald-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.result') }}</a>
+          {% if m.home_score is not none %}
+            {% if not m.calculated_by_id or m.calculated_by_id == current_user.id %}
+              <form method="post" action="{{ url_for('admin.match_calc_points', mid=m.id) }}" class="inline">
+                <button class="bg-green-700 text-white px-2 py-1 rounded text-xs font-bold hover:bg-green-800">
+                  ⚡ {{ t('admin.calc_points') }}{% if m.calculated_by_id == current_user.id %} ↻{% endif %}
+                </button>
+              </form>
+            {% else %}
+              <span class="bg-slate-300 text-slate-500 px-2 py-1 rounded text-xs font-bold cursor-not-allowed"
+                    title="{{ t('admin.already_calculated_by', who=m.calculated_by.username) }}">
+                ⚡ {{ t('admin.calc_points') }} 🔒
+              </span>
+            {% endif %}
+          {% endif %}
+          <a href="{{ url_for('admin.match_trivia', mid=m.id) }}" class="bg-indigo-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.trivia') }}</a>
+          <a href="{{ url_for('admin.match_predictions', mid=m.id) }}" class="bg-slate-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.predictions') }}</a>
+          <a href="{{ url_for('admin.match_edit', mid=m.id) }}" class="bg-amber-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.edit_match') }}</a>
+          <form method="post" action="{{ url_for('admin.match_delete', mid=m.id) }}" class="inline" onsubmit="return confirm('Delete?')">
+            <button class="bg-red-600 text-white px-2 py-1 rounded text-xs">{{ t('admin.delete') }}</button>
+          </form>
+        </div></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

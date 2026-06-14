@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.edit_match') if match else t('admin.add_match') }}</h1>
+<form method="post" class="card-pitch space-y-4 max-w-xl">
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm font-medium">{{ t('admin.stage') }}</label>
+      <select name="stage" required class="w-full border rounded px-3 py-2">
+        {% for s in stages %}
+          <option value="{{ s }}" {{ 'selected' if match and match.stage == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium">{{ t('admin.group') }}</label>
+      <input name="group_letter" maxlength="1" value="{{ match.group_letter if match else '' }}" class="w-full border rounded px-3 py-2 uppercase">
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm font-medium">{{ t('admin.home_team') }}</label>
+      <select name="home_team_id" required class="w-full border rounded px-3 py-2">
+        {% for tm in teams %}
+          <option value="{{ tm.id }}" {{ 'selected' if match and match.home_team_id == tm.id }}>{{ tm.flag_emoji }} {{ tm.name_en }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium">{{ t('admin.away_team') }}</label>
+      <select name="away_team_id" required class="w-full border rounded px-3 py-2">
+        {% for tm in teams %}
+          <option value="{{ tm.id }}" {{ 'selected' if match and match.away_team_id == tm.id }}>{{ tm.flag_emoji }} {{ tm.name_en }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div>
+    <label class="block text-sm font-medium">{{ t('admin.kickoff') }}</label>
+    <input type="datetime-local" name="kickoff_utc" required
+           value="{{ match.kickoff_utc.strftime('%Y-%m-%dT%H:%M') if match else '' }}"
+           class="w-full border rounded px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium">{{ t('admin.venue') }}</label>
+    <input name="venue" value="{{ match.venue if match else '' }}" class="w-full border rounded px-3 py-2">
+  </div>
+  <div class="flex gap-2">
+    <button class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">{{ t('admin.save') }}</button>
+    <a href="{{ url_for('admin.matches') }}" class="bg-slate-300 px-4 py-2 rounded">{{ t('admin.cancel') }}</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">🏆 {{ t('leaderboard.title') }}</h1>
+<div class="card-pitch overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-green-800 text-white">
+      <tr>
+        <th class="p-3 text-start">{{ t('leaderboard.rank') }}</th>
+        <th class="p-3 text-start">{{ t('leaderboard.user') }}</th>
+        <th class="p-3 text-end">{{ t('leaderboard.points') }}</th>
+        <th class="p-3 text-end">{{ t('leaderboard.exact_hits') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr class="border-t">
+          <td class="p-3 font-display text-lg">{{ loop.index }}</td>
+          <td class="p-3 font-medium">
+            {{ r.username }}
+            {% if r.is_admin %}<span class="text-xs bg-amber-200 text-amber-900 px-2 py-0.5 rounded ml-1 rtl:ml-0 rtl:mr-1">{{ t('admin.role_admin') }}</span>{% endif %}
+          </td>
+          <td class="p-3 text-end font-display text-xl text-green-800">{{ r.points }}</td>
+          <td class="p-3 text-end font-mono">{{ r.exact }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

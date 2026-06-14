@@ -1,0 +1,338 @@
+[
+  {
+    "code": "URY",
+    "name_en": "Uruguay",
+    "name_ar": "الأوروغواي",
+    "flag": "🇺🇾",
+    "group": "H"
+  },
+  {
+    "code": "GER",
+    "name_en": "Germany",
+    "name_ar": "ألمانيا",
+    "flag": "🇩🇪",
+    "group": "E"
+  },
+  {
+    "code": "ESP",
+    "name_en": "Spain",
+    "name_ar": "إسبانيا",
+    "flag": "🇪🇸",
+    "group": "H"
+  },
+  {
+    "code": "PAR",
+    "name_en": "Paraguay",
+    "name_ar": "الباراغواي",
+    "flag": "🇵🇾",
+    "group": "D"
+  },
+  {
+    "code": "ARG",
+    "name_en": "Argentina",
+    "name_ar": "الأرجنتين",
+    "flag": "🇦🇷",
+    "group": "J"
+  },
+  {
+    "code": "GHA",
+    "name_en": "Ghana",
+    "name_ar": "غانا",
+    "flag": "🇬🇭",
+    "group": "L"
+  },
+  {
+    "code": "BRA",
+    "name_en": "Brazil",
+    "name_ar": "البرازيل",
+    "flag": "🇧🇷",
+    "group": "C"
+  },
+  {
+    "code": "POR",
+    "name_en": "Portugal",
+    "name_ar": "البرتغال",
+    "flag": "🇵🇹",
+    "group": "K"
+  },
+  {
+    "code": "JPN",
+    "name_en": "Japan",
+    "name_ar": "اليابان",
+    "flag": "🇯🇵",
+    "group": "F"
+  },
+  {
+    "code": "MEX",
+    "name_en": "Mexico",
+    "name_ar": "المكسيك",
+    "flag": "🇲🇽",
+    "group": "A"
+  },
+  {
+    "code": "ENG",
+    "name_en": "England",
+    "name_ar": "إنجلترا",
+    "flag": "🇬🇧",
+    "group": "L"
+  },
+  {
+    "code": "USA",
+    "name_en": "United States",
+    "name_ar": "الولايات المتحدة",
+    "flag": "🇺🇸",
+    "group": "D"
+  },
+  {
+    "code": "KOR",
+    "name_en": "South Korea",
+    "name_ar": "كوريا الجنوبية",
+    "flag": "🇰🇷",
+    "group": "A"
+  },
+  {
+    "code": "FRA",
+    "name_en": "France",
+    "name_ar": "فرنسا",
+    "flag": "🇫🇷",
+    "group": "I"
+  },
+  {
+    "code": "RSA",
+    "name_en": "South Africa",
+    "name_ar": "جنوب أفريقيا",
+    "flag": "🇿🇦",
+    "group": "A"
+  },
+  {
+    "code": "ALG",
+    "name_en": "Algeria",
+    "name_ar": "الجزائر",
+    "flag": "🇩🇿",
+    "group": "J"
+  },
+  {
+    "code": "AUS",
+    "name_en": "Australia",
+    "name_ar": "أستراليا",
+    "flag": "🇦🇺",
+    "group": "D"
+  },
+  {
+    "code": "NZL",
+    "name_en": "New Zealand",
+    "name_ar": "نيوزيلندا",
+    "flag": "🇳🇿",
+    "group": "G"
+  },
+  {
+    "code": "SUI",
+    "name_en": "Switzerland",
+    "name_ar": "سويسرا",
+    "flag": "🇨🇭",
+    "group": "B"
+  },
+  {
+    "code": "ECU",
+    "name_en": "Ecuador",
+    "name_ar": "الإكوادور",
+    "flag": "🇪🇨",
+    "group": "E"
+  },
+  {
+    "code": "SWE",
+    "name_en": "Sweden",
+    "name_ar": "السويد",
+    "flag": "🇸🇪",
+    "group": "F"
+  },
+  {
+    "code": "CZE",
+    "name_en": "Czechia",
+    "name_ar": "التشيك",
+    "flag": "🇨🇿",
+    "group": "A"
+  },
+  {
+    "code": "CRO",
+    "name_en": "Croatia",
+    "name_ar": "كرواتيا",
+    "flag": "🇭🇷",
+    "group": "L"
+  },
+  {
+    "code": "KSA",
+    "name_en": "Saudi Arabia",
+    "name_ar": "السعودية",
+    "flag": "🇸🇦",
+    "group": "H"
+  },
+  {
+    "code": "TUN",
+    "name_en": "Tunisia",
+    "name_ar": "تونس",
+    "flag": "🇹🇳",
+    "group": "F"
+  },
+  {
+    "code": "TUR",
+    "name_en": "Turkey",
+    "name_ar": "تركيا",
+    "flag": "🇹🇷",
+    "group": "D"
+  },
+  {
+    "code": "SEN",
+    "name_en": "Senegal",
+    "name_ar": "السنغال",
+    "flag": "🇸🇳",
+    "group": "I"
+  },
+  {
+    "code": "BEL",
+    "name_en": "Belgium",
+    "name_ar": "بلجيكا",
+    "flag": "🇧🇪",
+    "group": "G"
+  },
+  {
+    "code": "MAR",
+    "name_en": "Morocco",
+    "name_ar": "المغرب",
+    "flag": "🇲🇦",
+    "group": "C"
+  },
+  {
+    "code": "AUT",
+    "name_en": "Austria",
+    "name_ar": "النمسا",
+    "flag": "🇦🇹",
+    "group": "J"
+  },
+  {
+    "code": "COL",
+    "name_en": "Colombia",
+    "name_ar": "كولومبيا",
+    "flag": "🇨🇴",
+    "group": "K"
+  },
+  {
+    "code": "EGY",
+    "name_en": "Egypt",
+    "name_ar": "مصر",
+    "flag": "🇪🇬",
+    "group": "G"
+  },
+  {
+    "code": "CAN",
+    "name_en": "Canada",
+    "name_ar": "كندا",
+    "flag": "🇨🇦",
+    "group": "B"
+  },
+  {
+    "code": "HAI",
+    "name_en": "Haiti",
+    "name_ar": "هايتي",
+    "flag": "🇭🇹",
+    "group": "C"
+  },
+  {
+    "code": "IRN",
+    "name_en": "Iran",
+    "name_ar": "إيران",
+    "flag": "🇮🇷",
+    "group": "G"
+  },
+  {
+    "code": "BIH",
+    "name_en": "Bosnia-Herzegovina",
+    "name_ar": "البوسنة والهرسك",
+    "flag": "🇧🇦",
+    "group": "B"
+  },
+  {
+    "code": "PAN",
+    "name_en": "Panama",
+    "name_ar": "بنما",
+    "flag": "🇵🇦",
+    "group": "L"
+  },
+  {
+    "code": "CPV",
+    "name_en": "Cape Verde Islands",
+    "name_ar": "الرأس الأخضر",
+    "flag": "🇨🇻",
+    "group": "H"
+  },
+  {
+    "code": "COD",
+    "name_en": "Congo DR",
+    "name_ar": "جمهورية الكونغو الديمقراطية",
+    "flag": "🇨🇩",
+    "group": "K"
+  },
+  {
+    "code": "CIV",
+    "name_en": "Ivory Coast",
+    "name_ar": "ساحل العاج",
+    "flag": "🇨🇮",
+    "group": "E"
+  },
+  {
+    "code": "QAT",
+    "name_en": "Qatar",
+    "name_ar": "قطر",
+    "flag": "🇶🇦",
+    "group": "B"
+  },
+  {
+    "code": "JOR",
+    "name_en": "Jordan",
+    "name_ar": "الأردن",
+    "flag": "🇯🇴",
+    "group": "J"
+  },
+  {
+    "code": "IRQ",
+    "name_en": "Iraq",
+    "name_ar": "العراق",
+    "flag": "🇮🇶",
+    "group": "I"
+  },
+  {
+    "code": "UZB",
+    "name_en": "Uzbekistan",
+    "name_ar": "أوزبكستان",
+    "flag": "🇺🇿",
+    "group": "K"
+  },
+  {
+    "code": "NED",
+    "name_en": "Netherlands",
+    "name_ar": "هولندا",
+    "flag": "🇳🇱",
+    "group": "F"
+  },
+  {
+    "code": "NOR",
+    "name_en": "Norway",
+    "name_ar": "النرويج",
+    "flag": "🇳🇴",
+    "group": "I"
+  },
+  {
+    "code": "SCO",
+    "name_en": "Scotland",
+    "name_ar": "اسكتلندا",
+    "flag": "🇬🇧",
+    "group": "C"
+  },
+  {
+    "code": "CUW",
+    "name_en": "Curaçao",
+    "name_ar": "كوراساو",
+    "flag": "🇨🇼",
+    "group": "E"
+  }
+]

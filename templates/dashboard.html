@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-display tracking-wider text-white mb-6 drop-shadow">{{ t('dashboard.title') }}</h1>
+
+{% for (stage, letter), matches in sections %}
+  <section class="mb-8">
+    <h2 class="group-header text-2xl mb-3 pb-1 border-b-2 border-white/40">
+      {% if stage == 'group' %}
+        {{ t('dashboard.group', letter=letter) }}
+      {% else %}
+        {{ t('dashboard.stage.' + stage) }}
+      {% endif %}
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {% for m in matches %}
+        {% set ko_iso = m.kickoff_aware().isoformat() %}
+        <a href="{{ url_for('public.match_detail', match_id=m.id) }}"
+           class="card-pitch block hover:scale-[1.01] transition-transform">
+          <div class="flex items-center justify-between text-sm text-slate-500 mb-2">
+            <span class="font-mono" data-countdown="{{ ko_iso }}">{{ ko_iso }}</span>
+            {% set badge = m.status %}
+            {% if m.is_locked() and m.status == 'upcoming' %}{% set badge = 'live' %}{% endif %}
+            <span class="badge badge-{{ badge }}">{{ t('status.' + badge) }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src="{{ flag_url(m.home_team) }}" alt="{{ m.home_team.name_en }}" class="flag-img flag-img-lg">
+              <span class="font-display text-lg">{{ m.home_team.name(current_lang()) }}</span>
+            </div>
+            {% if m.has_finished() %}
+              <span class="score-display">{{ m.home_score }} - {{ m.away_score }}</span>
+            {% else %}
+              <span class="text-slate-400 font-display text-2xl">vs</span>
+            {% endif %}
+            <div class="flex items-center gap-3">
+              <span class="font-display text-lg">{{ m.away_team.name(current_lang()) }}</span>
+              <img src="{{ flag_url(m.away_team) }}" alt="{{ m.away_team.name_en }}" class="flag-img flag-img-lg">
+            </div>
+          </div>
+          {% if m.venue %}
+            <div class="halfway-line"></div>
+            <div class="text-xs text-slate-500 text-center">{{ m.venue }}</div>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+{% else %}
+  <div class="card-pitch text-center text-slate-500">No matches yet.</div>
+{% endfor %}
+{% endblock %}

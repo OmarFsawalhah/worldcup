@@ -1,0 +1,143 @@
+/* ========== Classic Pitch theme ========== */
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html[dir="rtl"] body {
+  font-family: "Segoe UI", Tahoma, "Inter", Arial, sans-serif;
+}
+
+/* Scoreboard / display font for Latin text */
+.font-display {
+  font-family: "Oswald", "Inter", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Football pitch background — alternating mowed-grass stripes */
+.pitch-bg {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 0 60px,
+      rgba(0, 0, 0, 0.05) 60px 120px
+    ),
+    linear-gradient(180deg, #2f9e4f 0%, #237a3c 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+/* Chalk-white card with double border (evokes pitch lines) */
+.card-pitch {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),       /* outer chalk ring */
+    0 0 0 4px rgba(0, 0, 0, 0.08),            /* darker frame */
+    0 4px 12px rgba(0, 0, 0, 0.15);           /* depth */
+  padding: 1.25rem;
+}
+
+.card-pitch-flat {  /* for nested tables / sub-cards */
+  background: #ffffff;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Section headers — group bullet like a center spot */
+.group-header {
+  position: relative;
+  padding-inline-start: 1.5rem;
+  font-family: "Oswald", "Inter", sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.group-header::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Status badges */
+.badge {
+  font-family: "Oswald", "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.25rem;
+  font-size: 0.7rem;
+}
+.badge-live {
+  background: #dc2626;
+  color: #ffffff;
+  position: relative;
+}
+.badge-live::before {
+  content: "";
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: #ffffff;
+  border-radius: 999px;
+  margin-inline-end: 0.4rem;
+  animation: live-pulse 1.4s ease-in-out infinite;
+  vertical-align: middle;
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(1.3); }
+}
+.badge-upcoming {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+.badge-finished {
+  background: #475569;
+  color: #ffffff;
+}
+
+/* Score numbers — big scoreboard */
+.score-display {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: 0.05em;
+  color: #0f172a;
+}
+
+/* Halfway-line divider */
+.halfway-line {
+  border-top: 1px dashed rgba(0, 0, 0, 0.15);
+  margin: 0.75rem 0;
+}
+
+/* RTL space-x reverse helper */
+html[dir="rtl"] .rtl\:space-x-reverse > * + * { --tw-space-x-reverse: 1; }
+
+/* Flags (text fallback, mostly unused now) */
+.flag-xl { font-size: 3rem; line-height: 1; }
+.flag-2xl { font-size: 4rem; line-height: 1; }
+
+/* Image flags from flagcdn.com — render everywhere including Windows */
+.flag-img {
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  border-radius: 3px;
+  object-fit: cover;
+}
+.flag-img-sm  { width: 28px;  height: 20px; }
+.flag-img-md  { width: 48px;  height: 32px; }
+.flag-img-lg  { width: 72px;  height: 48px; }
+.flag-img-xl  { width: 96px;  height: 64px; }

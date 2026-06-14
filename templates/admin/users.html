@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.users_title') }}</h1>
+
+<div class="card-pitch overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-green-800 text-white">
+      <tr>
+        <th class="p-3 text-start">{{ t('leaderboard.user') }}</th>
+        <th class="p-3 text-start">{{ t('admin.role') }}</th>
+        <th class="p-3 text-end">{{ t('admin.predictions_count') }}</th>
+        <th class="p-3 text-end">{{ t('leaderboard.exact_hits') }}</th>
+        <th class="p-3 text-end">{{ t('admin.bonus_label') }}</th>
+        <th class="p-3 text-end">{{ t('leaderboard.points') }}</th>
+        <th class="p-3 text-start">{{ t('admin.joined') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr class="border-t {{ 'bg-amber-50' if r.user.is_admin else '' }}">
+          <td class="p-3 font-medium">{{ r.user.username }}</td>
+          <td class="p-3">
+            {% if r.user.is_admin %}
+              <span class="text-xs font-bold bg-amber-200 text-amber-900 px-2 py-1 rounded">{{ t('admin.role_admin') }}</span>
+            {% else %}
+              <span class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded">{{ t('admin.role_user') }}</span>
+            {% endif %}
+          </td>
+          <td class="p-3 text-end font-mono">{{ r.predictions }}</td>
+          <td class="p-3 text-end font-mono">{{ r.exact }}</td>
+          <td class="p-3 text-end">
+            <form method="post" action="{{ url_for('admin.user_adjust', uid=r.user.id) }}" class="inline-flex items-center gap-1">
+              <input type="number" name="bonus_points" value="{{ r.bonus }}"
+                     class="border rounded w-20 text-center font-mono py-1"
+                     title="{{ t('admin.bonus_tip') }}">
+              <button class="bg-emerald-700 text-white px-2 py-1 rounded text-xs hover:bg-emerald-800">
+                {{ t('admin.bonus_save') }}
+              </button>
+            </form>
+          </td>
+          <td class="p-3 text-end font-display text-xl text-green-800">{{ r.points }}</td>
+          <td class="p-3 text-xs text-slate-500 font-mono">{{ r.user.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-4 card-pitch text-sm text-slate-600">
+  <b>{{ t('admin.bonus_label') }}:</b> {{ t('admin.bonus_help') }}
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+{% set lang = current_lang() %}
+<h1 class="text-3xl font-display tracking-wider text-white mb-4 drop-shadow">{{ t('admin.trivia') }}</h1>
+<div class="flex items-center justify-center gap-3 mb-4 text-white font-display text-xl">
+  <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
+  <span>{{ match.home_team.name(lang) }}</span>
+  <span class="text-yellow-300">vs</span>
+  <span>{{ match.away_team.name(lang) }}</span>
+  <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
+</div>
+
+<form method="post" class="card-pitch space-y-4 max-w-xl">
+  <div>
+    <label class="block text-sm font-medium">{{ t('admin.question_ar') }}</label>
+    <textarea name="question_ar" required rows="2" dir="rtl" class="w-full border rounded px-3 py-2 text-right">{{ question.question_ar if question else '' }}</textarea>
+  </div>
+
+  <div id="choices" class="space-y-2" dir="rtl">
+    {% for c in choices %}
+      <div class="flex items-center gap-2">
+        <input type="radio" name="correct_index" value="{{ loop.index0 }}" {{ 'checked' if question and question.correct_index == loop.index0 }}>
+        <input name="choices" value="{{ c }}" required class="flex-1 border rounded px-3 py-2 text-right" placeholder="{{ t('admin.choice') }} {{ loop.index }}">
+      </div>
+    {% endfor %}
+  </div>
+  <button type="button" onclick="addChoice()" class="text-emerald-700 underline text-sm">+ {{ t('admin.add_choice') }} (max 12)</button>
+  <small class="block text-slate-500">{{ t('admin.correct') }}: select via radio</small>
+
+  <div class="flex gap-2">
+    <button class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800">{{ t('admin.save') }}</button>
+    <a href="{{ url_for('admin.matches') }}" class="bg-slate-300 px-4 py-2 rounded">{{ t('admin.cancel') }}</a>
+  </div>
+</form>
+
+<script>
+function addChoice() {
+  const box = document.getElementById('choices');
+  const i = box.children.length;
+  if (i >= 12) { alert('Maximum 12 choices.'); return; }
+  const row = document.createElement('div');
+  row.className = 'flex items-center gap-2';
+  row.innerHTML = `<input type="radio" name="correct_index" value="${i}">
+                   <input name="choices" required class="flex-1 border rounded px-3 py-2 text-right" placeholder="Choice ${i+1}">`;
+  box.appendChild(row);
+}
+</script>
+{% endblock %}
