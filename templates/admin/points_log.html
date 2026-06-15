@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Superuser</div>
+  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.points_log_title') }}</h1>
+  <p class="text-slate-400 text-sm mt-1">{{ t('admin.points_log_hint') }}</p>
+</div>
+
+{% if timeline %}
+  <div class="space-y-4">
+    {% for entry in timeline %}
+      <div class="card-pitch p-0 overflow-hidden">
+        <div class="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+          {% if entry.match %}
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <img src="{{ flag_url(entry.match.home_team) }}" alt="" class="flag-img flag-img-sm">
+              <span class="font-display text-sm sm:text-base">{{ entry.match.home_team.name(lang) }}</span>
+              {% if entry.match.has_finished() %}
+                <span class="font-score text-base">{{ entry.match.home_score }}-{{ entry.match.away_score }}</span>
+              {% else %}
+                <span class="text-slate-400 text-sm">vs</span>
+              {% endif %}
+              <span class="font-display text-sm sm:text-base">{{ entry.match.away_team.name(lang) }}</span>
+              <img src="{{ flag_url(entry.match.away_team) }}" alt="" class="flag-img flag-img-sm">
+            </div>
+            <div class="text-xs font-mono text-slate-500">{{ entry.kickoff.strftime('%Y-%m-%d %H:%M') }} UTC</div>
+          {% else %}
+            <div class="font-display text-sm sm:text-base text-slate-600">{{ entry.label }}</div>
+          {% endif %}
+        </div>
+        <table class="table-clean">
+          <thead>
+            <tr>
+              <th>{{ t('leaderboard.user') }}</th>
+              <th class="text-end">Prediction pts</th>
+              <th class="text-end">Trivia pts</th>
+              <th class="text-end">Earned</th>
+              <th class="text-end">Total after</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in entry.rows %}
+              <tr>
+                <td>
+                  <a href="{{ url_for('admin.user_details', uid=row.user_id) }}" class="font-medium hover:underline text-emerald-700">{{ row.username }}</a>
+                </td>
+                <td class="text-end font-mono">{{ row.pred_pts }}</td>
+                <td class="text-end font-mono">{{ row.triv_pts }}</td>
+                <td class="text-end font-display text-lg {{ 'text-emerald-700' if row.delta > 0 else 'text-slate-400' }}">
+                  {% if row.delta > 0 %}+{{ row.delta }}{% else %}0{% endif %}
+                </td>
+                <td class="text-end font-display text-xl text-amber-700">{{ row.running }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-10">
+    <p>{{ t('admin.points_log_empty') }}</p>
+  </div>
+{% endif %}
+{% endblock %}

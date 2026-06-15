@@ -170,8 +170,15 @@ def seed_admins():
         u = User(username=username, is_admin=True, must_change_password=True)
         u.set_password(DEFAULT_ADMIN_PASSWORD)
         db.session.add(u)
+    # Superuser — has admin pages + the two extra pages (user details + points log)
+    if not User.query.filter_by(username="superuser").first():
+        su = User(username="superuser", is_admin=True, is_superuser=True,
+                  must_change_password=True)
+        su.set_password("super123")
+        db.session.add(su)
     db.session.commit()
     print(f"Admins: {User.query.filter_by(is_admin=True).count()} (default password: {DEFAULT_ADMIN_PASSWORD}, must change on first login)")
+    print("Superuser: username='superuser', password='super123' (must change on first login)")
 
 
 def main():

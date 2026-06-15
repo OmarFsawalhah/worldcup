@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5 flex items-start justify-between flex-wrap gap-3">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('admin.user_details') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ user.username }}
+      {% if user.is_superuser %}<span class="text-[10px] bg-purple-100 text-purple-800 font-bold uppercase tracking-wider px-2 py-1 rounded ms-2 align-middle">Superuser</span>
+      {% elif user.is_admin %}<span class="text-[10px] bg-yellow-100 text-yellow-800 font-bold uppercase tracking-wider px-2 py-1 rounded ms-2 align-middle">Admin</span>
+      {% endif %}
+    </h1>
+  </div>
+  <a href="{{ url_for('admin.users') }}" class="btn btn-soft btn-sm">← {{ t('admin.users') }}</a>
+</div>
+
+{# Stat cards #}
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+  <div class="stat-card stat-card-primary text-center">
+    <div class="stat-label">{{ t('profile.total') }}</div>
+    <div class="stat-value stat-value-gold">{{ total }}</div>
+  </div>
+  <div class="stat-card text-center">
+    <div class="stat-label">{{ t('profile.from_predictions') }}</div>
+    <div class="stat-value">{{ pred_total }}</div>
+  </div>
+  <div class="stat-card text-center">
+    <div class="stat-label">{{ t('profile.from_trivia') }}</div>
+    <div class="stat-value">{{ triv_total }}</div>
+  </div>
+  <div class="stat-card text-center">
+    <div class="stat-label">{{ t('admin.bonus_label') }}</div>
+    <div class="stat-value">{{ user.bonus_points }}</div>
+  </div>
+</div>
+
+{# Predictions breakdown #}
+<h2 class="font-display text-lg text-white mb-3 drop-shadow">{{ t('profile.predictions_title') }}</h2>
+{% if pred_rows %}
+<div class="card-pitch p-0 overflow-x-auto mb-6">
+  <table class="table-clean">
+    <thead>
+      <tr>
+        <th>{{ t('profile.match') }}</th>
+        <th class="text-center">Pick</th>
+        <th class="text-center">Result</th>
+        <th class="text-center">Winner</th>
+        <th class="text-center">Exact</th>
+        <th class="text-center">Scorer</th>
+        <th class="text-center">MOTM</th>
+        <th class="text-end">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in pred_rows %}
+        {% set m = r.match %}{% set p = r.p %}{% set bd = r.bd %}
+        <tr>
+          <td>
+            <span class="inline-flex items-center gap-2 whitespace-nowrap text-sm">
+              <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm">
+              <span>{{ m.home_team.name(lang) }}</span>
+              <span class="text-slate-400">vs</span>
+              <span>{{ m.away_team.name(lang) }}</span>
+              <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm">
+            </span>
+          </td>
+          <td class="text-center text-xs">
+            <div class="font-bold">
+              {% if p.winner_prediction == 'home' %}{{ m.home_team.name(lang) }}
+              {% elif p.winner_prediction == 'away' %}{{ m.away_team.name(lang) }}
+              {% elif p.winner_prediction == 'draw' %}🤝
+              {% else %}<span class="text-slate-400 italic">—</span>{% endif %}
+            </div>
+            {% if p.home_score is not none %}<div class="font-mono">{{ p.home_score }}-{{ p.away_score }}</div>{% endif %}
+          </td>
+          <td class="text-center font-mono">
+            {% if bd.result_pending %}<span class="text-slate-400">—</span>
+            {% else %}{{ m.home_score }}-{{ m.away_score }}{% endif %}
+          </td>
+          {% if bd.result_pending %}
+            <td colspan="4" class="text-center text-slate-400 italic">{{ t('profile.pending') }}</td>
+          {% else %}
+            <td class="text-center">{% if bd.winner_hit %}<span class="text-emerald-700 font-bold">+3</span>{% else %}<span class="text-rose-300">—</span>{% endif %}</td>
+            <td class="text-center">{% if bd.exact_hit %}<span class="text-amber-700 font-bold">+2</span>{% else %}<span class="text-slate-300">—</span>{% endif %}</td>
+            <td class="text-center">{% if bd.first_scorer_hit %}<span class="text-emerald-700 font-bold">+3</span>{% else %}<span class="text-slate-300">—</span>{% endif %}</td>
+            <td class="text-center">{% if bd.motm_hit %}<span class="text-emerald-700 font-bold">+3</span>{% else %}<span class="text-slate-300">—</span>{% endif %}</td>
+          {% endif %}
+          <td class="text-end font-display text-lg text-emerald-700">{{ bd.total }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-6 mb-6">{{ t('profile.no_predictions') }}</div>
+{% endif %}
+
+{# Trivia breakdown #}
+<h2 class="font-display text-lg text-white mb-3 drop-shadow">{{ t('profile.trivia_title') }}</h2>
+{% if triv_rows %}
+<div class="card-pitch p-0 overflow-x-auto">
+  <table class="table-clean">
+    <thead>
+      <tr>
+        <th>{{ t('profile.match') }}</th>
+        <th dir="rtl">Question</th>
+        <th dir="rtl">Your answer</th>
+        <th dir="rtl">Correct</th>
+        <th class="text-end">{{ t('match.points') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in triv_rows %}
+        <tr class="{{ 'bg-emerald-50' if r.is_correct else '' }}">
+          <td>
+            <span class="inline-flex items-center gap-2 whitespace-nowrap text-sm">
+              <img src="{{ flag_url(r.match.home_team) }}" alt="" class="flag-img flag-img-sm">
+              <span>{{ r.match.home_team.name(lang) }}</span>
+              <span class="text-slate-400">vs</span>
+              <span>{{ r.match.away_team.name(lang) }}</span>
+              <img src="{{ flag_url(r.match.away_team) }}" alt="" class="flag-img flag-img-sm">
+            </span>
+          </td>
+          <td class="max-w-xs" dir="rtl">{{ r.question_ar }}</td>
+          <td dir="rtl"><b>{{ r.your_choice }}</b></td>
+          <td dir="rtl">{{ r.correct_choice }}</td>
+          <td class="text-end font-display text-lg {{ 'text-emerald-700' if r.is_correct else 'text-slate-400' }}">
+            {% if r.is_correct %}+{{ r.pts }}{% else %}0{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-6">{{ t('profile.no_trivia') }}</div>
+{% endif %}
+{% endblock %}

@@ -50,6 +50,7 @@
   "dashboard.filter_week": "This week",
   "dashboard.filter_live": "Live",
   "dashboard.filter_finished": "Finished",
+  "dashboard.filter_predicted": "Predicted",
   "dashboard.no_matches_filter": "No matches in this view.",
 
   "status.upcoming": "UPCOMING",
@@ -199,5 +200,11 @@
   "admin.bank_how_works_text": "Each user gets one random question per match. The moment a question is handed to a user, it is removed from the bank so no two users get the same one. Their answer is saved on the match-trivia row.",
   "admin.bank_reseed": "Re-seed from JSON files",
   "admin.bank_reseeded": "Question bank refreshed from JSON files.",
-  "admin.bank_reseed_tip": "Reads every *.json file under questions/ and adds any new questions (duplicates by text are skipped)."
+  "admin.bank_reseed_tip": "Reads every *.json file under questions/ and adds any new questions (duplicates by text are skipped).",
+
+  "admin.user_details": "User Details",
+  "admin.view_details": "View details",
+  "admin.points_log_title": "Points Log",
+  "admin.points_log_hint": "Per-match points earned by every user, in chronological order with running totals.",
+  "admin.points_log_empty": "No finished matches yet — nothing to log."
 }

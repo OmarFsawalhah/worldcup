@@ -24,6 +24,16 @@ def admin_required(fn):
     return wrapper
 
 
+def superuser_required(fn):
+    @wraps(fn)
+    @login_required
+    def wrapper(*a, **kw):
+        if not getattr(current_user, "is_superuser", False):
+            abort(403)
+        return fn(*a, **kw)
+    return wrapper
+
+
 @bp.route("/")
 @admin_required
 def home():
@@ -258,3 +268,116 @@ def _populate_match(m, form):
     m.kickoff_utc = datetime.fromisoformat(ko)
     m.venue = form.get("venue") or None
     return m
+
+
+# ============================================================
+#                    Superuser-only views
+# ============================================================
+
+@bp.route("/users/<int:uid>")
+@superuser_required
+def user_details(uid):
+    """Full points breakdown for one user (every prediction + every trivia
+    answer + bonus + grand total)."""
+    from scoring import prediction_breakdown
+    user = db.session.get(User, uid) or abort(404)
+
+    preds = Prediction.query.filter_by(user_id=uid).all()
+    pred_rows = []
+    for p in sorted(preds, key=lambda x: x.match.kickoff_utc):
+        pred_rows.append({
+            "p": p,
+            "match": p.match,
+            "bd": prediction_breakdown(p, p.match),
+        })
+
+    from models import MatchTrivia
+    triv_rows = (
+        MatchTrivia.query
+        .filter_by(user_id=uid)
+        .filter(MatchTrivia.choice_index.isnot(None))
+        .all()
+    )
+    triv_data = []
+    for t in sorted(triv_rows, key=lambda r: r.match.kickoff_utc):
+        choices = json.loads(t.choices_json)
+        triv_data.append({
+            "match": t.match,
+            "question_ar": t.question_ar,
+            "your_choice": choices[t.choice_index] if t.choice_index is not None and 0 <= t.choice_index < len(choices) else "?",
+            "correct_choice": choices[t.correct_index] if 0 <= t.correct_index < len(choices) else "?",
+            "is_correct": t.choice_index == t.correct_index,
+            "pts": t.points_awarded,
+        })
+
+    pred_total = sum(r["bd"]["total"] for r in pred_rows)
+    triv_total = sum(r["pts"] for r in triv_data)
+    total = pred_total + triv_total + (user.bonus_points or 0)
+
+    return render_template(
+        "admin/user_details.html",
+        user=user,
+        pred_rows=pred_rows,
+        triv_rows=triv_data,
+        pred_total=pred_total,
+        triv_total=triv_total,
+        total=total,
+    )
+
+
+@bp.route("/points-log")
+@superuser_required
+def points_log():
+    """Timeline of points: for each finished match (chronological), for each
+    user, show points earned and running total. Lets you see 'before vs after'
+    for any match."""
+    # Find all finished matches in kickoff order
+    finished = (
+        Match.query
+        .filter(Match.status == "finished")
+        .order_by(Match.kickoff_utc.asc())
+        .all()
+    )
+    # All non-zero participants — pick everyone with any prediction or trivia
+    users = User.query.order_by(User.username).all()
+
+    # Build per-user delta + running total for each match
+    # Result: list of {match, kickoff, rows: [{username, pred_pts, triv_pts, delta, running}]}
+    running = {u.id: u.bonus_points or 0 for u in users}  # start running with bonus
+    timeline = []
+    # First row: "Starting state" (just bonuses, if any)
+    if any(running.values()):
+        timeline.append({
+            "label": "Starting bonuses",
+            "kickoff": None,
+            "rows": [
+                {"user_id": u.id, "username": u.username, "pred_pts": 0,
+                 "triv_pts": 0, "delta": running[u.id], "running": running[u.id]}
+                for u in users if running[u.id] != 0
+            ],
+        })
+    from models import MatchTrivia
+    for m in finished:
+        match_rows = []
+        for u in users:
+            pred = Prediction.query.filter_by(user_id=u.id, match_id=m.id).first()
+            pred_pts = pred.points_awarded if pred else 0
+            mt = MatchTrivia.query.filter_by(user_id=u.id, match_id=m.id).first()
+            triv_pts = mt.points_awarded if mt else 0
+            delta = pred_pts + triv_pts
+            if delta == 0 and not pred and not mt:
+                continue  # user wasn't involved in this match at all
+            running[u.id] += delta
+            match_rows.append({
+                "user_id": u.id, "username": u.username,
+                "pred_pts": pred_pts, "triv_pts": triv_pts,
+                "delta": delta, "running": running[u.id],
+            })
+        if match_rows:
+            timeline.append({
+                "match": m,
+                "kickoff": m.kickoff_utc,
+                "rows": match_rows,
+            })
+
+    return render_template("admin/points_log.html", timeline=timeline, users=users)

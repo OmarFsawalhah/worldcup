@@ -50,6 +50,7 @@
   "dashboard.filter_week": "هذا الأسبوع",
   "dashboard.filter_live": "جارية",
   "dashboard.filter_finished": "منتهية",
+  "dashboard.filter_predicted": "توقعاتي",
   "dashboard.no_matches_filter": "لا توجد مباريات ضمن هذا التصفية.",
 
   "status.upcoming": "قادمة",
@@ -199,5 +200,11 @@
   "admin.bank_how_works_text": "كل مستخدم يحصل على سؤال عشوائي واحد لكل مباراة. يُحذف السؤال من البنك فور تسليمه لمستخدم، فلا يحصل اثنان على نفس السؤال أبداً. تُحفظ إجابة المستخدم في صف المباراة الخاص به.",
   "admin.bank_reseed": "إعادة التحميل من ملفات JSON",
   "admin.bank_reseeded": "تم تحديث بنك الأسئلة من ملفات JSON.",
-  "admin.bank_reseed_tip": "يقرأ جميع ملفات *.json داخل مجلد questions/ ويضيف الأسئلة الجديدة فقط (يتجاهل المكررات بنص السؤال)."
+  "admin.bank_reseed_tip": "يقرأ جميع ملفات *.json داخل مجلد questions/ ويضيف الأسئلة الجديدة فقط (يتجاهل المكررات بنص السؤال).",
+
+  "admin.user_details": "تفاصيل المستخدم",
+  "admin.view_details": "عرض التفاصيل",
+  "admin.points_log_title": "سجل النقاط",
+  "admin.points_log_hint": "النقاط التي حصل عليها كل مستخدم بحسب كل مباراة، مرتّبة زمنياً مع المجموع التراكمي.",
+  "admin.points_log_empty": "لا توجد مباريات منتهية بعد — لا شيء لعرضه."
 }

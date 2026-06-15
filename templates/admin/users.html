@@ -2,9 +2,17 @@
 {% block container_class %}max-w-7xl{% endblock %}
 {% block content %}
 
-<div class="mb-5">
-  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
-  <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.users_title') }}</h1>
+<div class="mb-5 flex items-end justify-between flex-wrap gap-3">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">Admin</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.users_title') }}</h1>
+  </div>
+  {% if current_user.is_superuser %}
+    <a href="{{ url_for('admin.points_log') }}" class="btn btn-gold btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>{{ t('admin.points_log_title') }}</span>
+    </a>
+  {% endif %}
 </div>
 
 {# Desktop #}
@@ -19,6 +27,7 @@
         <th class="text-end">{{ t('admin.bonus_label') }}</th>
         <th class="text-end">{{ t('leaderboard.points') }}</th>
         <th>{{ t('admin.joined') }}</th>
+        {% if current_user.is_superuser %}<th class="text-end"></th>{% endif %}
       </tr>
     </thead>
     <tbody>
@@ -44,6 +53,11 @@
           </td>
           <td class="text-end font-display text-xl text-emerald-700">{{ r.points }}</td>
           <td class="text-xs text-slate-500 font-mono">{{ r.user.created_at.strftime('%Y-%m-%d') }}</td>
+          {% if current_user.is_superuser %}
+            <td class="text-end">
+              <a href="{{ url_for('admin.user_details', uid=r.user.id) }}" class="btn btn-soft btn-xs">{{ t('admin.view_details') }}</a>
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>

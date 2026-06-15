@@ -107,6 +107,9 @@ def _auto_migrate():
         if "bonus_points" not in cols:
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE users ADD COLUMN bonus_points INTEGER DEFAULT 0 NOT NULL"))
+        if "is_superuser" not in cols:
+            with db.engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN is_superuser BOOLEAN DEFAULT 0 NOT NULL"))
     if "matches" in insp.get_table_names():
         cols = {c["name"] for c in insp.get_columns("matches")}
         if "calculated_by_id" not in cols:

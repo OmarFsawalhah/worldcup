@@ -21,6 +21,7 @@
       ('week', t('dashboard.filter_week')),
       ('live', t('dashboard.filter_live')),
       ('finished', t('dashboard.filter_finished')),
+      ('predicted', t('dashboard.filter_predicted')),
     ] %}
     {% for code, label in filters %}
       <button type="button" data-filter="{{ code }}"
@@ -53,7 +54,8 @@
            class="match-card card-pitch block"
            data-kickoff="{{ ko_iso }}"
            data-status="{{ m.status }}"
-           data-finished="{{ '1' if m.has_finished() else '0' }}">
+           data-finished="{{ '1' if m.has_finished() else '0' }}"
+           data-predicted="{{ '1' if m.id in predicted_ids else '0' }}">
 
           <div class="flex items-center justify-between text-xs mb-3 gap-2">
             <span class="font-mono text-slate-500 truncate" data-countdown="{{ ko_iso }}">{{ ko_iso }}</span>
@@ -116,19 +118,20 @@
   function startOfDay(d) { const n = new Date(d); n.setHours(0,0,0,0); return n; }
   function inRange(ts, from, to) { return ts >= from && ts < to; }
 
-  function matches(filter, ko, status, finished) {
+  function matches(filter, ko, status, finished, predicted) {
     const now = new Date();
     const today0 = startOfDay(now);
     const tom0 = new Date(today0.getTime() + 86400000);
     const dayAfter = new Date(tom0.getTime() + 86400000);
     const week = new Date(today0.getTime() + 7 * 86400000);
     switch (filter) {
-      case 'today':    return inRange(ko, today0, tom0);
-      case 'tomorrow': return inRange(ko, tom0, dayAfter);
-      case 'week':     return inRange(ko, today0, week);
-      case 'live':     return (ko <= now) && !finished;
-      case 'finished': return finished;
-      default:         return true;
+      case 'today':     return inRange(ko, today0, tom0);
+      case 'tomorrow':  return inRange(ko, tom0, dayAfter);
+      case 'week':      return inRange(ko, today0, week);
+      case 'live':      return (ko <= now) && !finished;
+      case 'finished':  return finished;
+      case 'predicted': return predicted;
+      default:          return true;
     }
   }
 
@@ -137,7 +140,9 @@
     let shown = 0;
     cards.forEach(card => {
       const ko = new Date(card.dataset.kickoff);
-      const ok = matches(filter, ko, card.dataset.status, card.dataset.finished === '1');
+      const ok = matches(filter, ko, card.dataset.status,
+                         card.dataset.finished === '1',
+                         card.dataset.predicted === '1');
       card.classList.toggle('hidden', !ok);
       if (ok) shown += 1;
     });

@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    is_superuser = db.Column(db.Boolean, default=False, nullable=False)
     must_change_password = db.Column(db.Boolean, default=False, nullable=False)
     bonus_points = db.Column(db.Integer, default=0, nullable=False)  # manual admin adjustment
     created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
