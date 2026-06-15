@@ -143,7 +143,9 @@ def refresh_api():
         flash(f"Refresh failed: {e}", "error")
         return redirect(url_for("admin.matches"))
     flash(t("admin.refresh_done",
-            statuses=result["updated_status"], scores=result["updated_score"]),
+            statuses=result["updated_status"],
+            scores=result["updated_score"],
+            scorers=result.get("updated_scorer", 0)),
           "success")
     return redirect(url_for("admin.matches"))
 

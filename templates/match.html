@@ -261,40 +261,115 @@
     <span>{{ t('match.locked_msg') }}</span>
   </div>
 
-  {% if prediction %}
-  <div class="card-pitch mb-6">
-    <h2 class="font-display text-lg mb-4 text-center">{{ t('match.your_prediction') }}</h2>
-    <div class="text-center">
-      <div class="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.pick_winner') }}</div>
-      <div class="font-display text-2xl mt-2">
-        {% if prediction.winner_prediction == 'home' %}{{ match.home_team.name(lang) }}
-        {% elif prediction.winner_prediction == 'away' %}{{ match.away_team.name(lang) }}
-        {% elif prediction.winner_prediction == 'draw' %}🤝 {{ t('match.draw') }}
-        {% else %}<span class="text-slate-400 text-base italic">{{ t('match.summary_none') }}</span>{% endif %}
-      </div>
-    </div>
-    {% if prediction.home_score is not none %}
-      <div class="text-center mt-4">
-        <div class="text-xs uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.exact_score_optional') }}</div>
-        <div class="font-score text-3xl mt-2">{{ prediction.home_score }} <span class="text-slate-400">-</span> {{ prediction.away_score }}</div>
-      </div>
-    {% endif %}
-    <div class="text-sm text-center text-slate-600 mt-4 space-y-1">
-      {% if prediction.first_scorer %}<div>⚽ {{ prediction.first_scorer.name(lang) }}</div>{% endif %}
-      {% if prediction.motm %}<div>⭐ {{ prediction.motm.name(lang) }}{% endif %}</div>
-    </div>
-    {% if match.has_finished() %}
-      <div class="text-center mt-5">
-        <div class="inline-block bg-emerald-50 border-2 border-emerald-200 rounded-2xl px-5 py-3">
-          <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">{{ t('match.points') }}</div>
-          <div class="font-display text-3xl text-emerald-700 mt-1">{{ prediction.points_awarded }}</div>
-        </div>
-      </div>
-    {% endif %}
-  </div>
-  {% else %}
-  <div class="card-pitch mb-6 text-center text-slate-500">{{ t('match.no_pred') }}</div>
+  {# ---------- Prediction vs Actual side-by-side ---------- #}
+  {% set actual_winner = none %}
+  {% if match.has_finished() %}
+    {% if match.home_score > match.away_score %}{% set actual_winner = 'home' %}
+    {% elif match.away_score > match.home_score %}{% set actual_winner = 'away' %}
+    {% else %}{% set actual_winner = 'draw' %}{% endif %}
   {% endif %}
+  {% set winner_hit = prediction and prediction.winner_prediction == actual_winner %}
+  {% set exact_hit = winner_hit and prediction.home_score is not none and prediction.home_score == match.home_score and prediction.away_score == match.away_score %}
+  {% set fs_hit = prediction and match.first_scorer_id and prediction.first_scorer_id == match.first_scorer_id %}
+  {% set motm_hit = prediction and match.motm_id and prediction.motm_id == match.motm_id %}
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+    {# YOUR PREDICTION #}
+    <div class="card-pitch">
+      <h2 class="font-display text-base mb-4 text-center flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        {{ t('match.your_prediction') }}
+      </h2>
+      {% if prediction %}
+        <div class="text-center">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.pick_winner') }}</div>
+          <div class="font-display text-xl mt-1 flex items-center justify-center gap-2">
+            <span>
+              {% if prediction.winner_prediction == 'home' %}{{ match.home_team.name(lang) }}
+              {% elif prediction.winner_prediction == 'away' %}{{ match.away_team.name(lang) }}
+              {% elif prediction.winner_prediction == 'draw' %}🤝 {{ t('match.draw') }}
+              {% else %}<span class="text-slate-400 text-base italic">{{ t('match.summary_none') }}</span>{% endif %}
+            </span>
+            {% if match.has_finished() and prediction.winner_prediction %}
+              {% if winner_hit %}<span class="text-emerald-600 text-lg">✓</span>{% else %}<span class="text-rose-400 text-lg">✗</span>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+        {% if prediction.home_score is not none %}
+          <div class="text-center mt-3">
+            <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.score') }}</div>
+            <div class="font-score text-2xl mt-1 flex items-center justify-center gap-2">
+              <span>{{ prediction.home_score }} <span class="text-slate-400">-</span> {{ prediction.away_score }}</span>
+              {% if match.has_finished() %}
+                {% if exact_hit %}<span class="text-amber-600 text-base">✓ +2</span>{% else %}<span class="text-rose-400 text-base">✗</span>{% endif %}
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+        <div class="text-sm text-center text-slate-600 mt-3 space-y-1">
+          {% if prediction.first_scorer %}
+            <div class="flex items-center justify-center gap-2">
+              <span>⚽ {{ prediction.first_scorer.name(lang) }}</span>
+              {% if match.has_finished() and match.first_scorer_id %}
+                {% if fs_hit %}<span class="text-emerald-600">✓</span>{% else %}<span class="text-rose-400">✗</span>{% endif %}
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if prediction.motm %}
+            <div class="flex items-center justify-center gap-2">
+              <span>⭐ {{ prediction.motm.name(lang) }}</span>
+              {% if match.has_finished() and match.motm_id %}
+                {% if motm_hit %}<span class="text-emerald-600">✓</span>{% else %}<span class="text-rose-400">✗</span>{% endif %}
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+        {% if match.has_finished() %}
+          <div class="text-center mt-4">
+            <div class="inline-block bg-emerald-50 border-2 border-emerald-200 rounded-xl px-4 py-2">
+              <div class="text-[10px] uppercase tracking-[0.2em] text-emerald-700 font-bold">{{ t('match.points') }}</div>
+              <div class="font-display text-2xl text-emerald-700">{{ prediction.points_awarded }}</div>
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="text-center text-slate-400 italic py-4">{{ t('match.no_pred') }}</div>
+      {% endif %}
+    </div>
+
+    {# ACTUAL RESULT #}
+    <div class="card-pitch">
+      <h2 class="font-display text-base mb-4 text-center flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        {{ t('match.actual_result') }}
+      </h2>
+      {% if match.has_finished() %}
+        <div class="text-center">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.pick_winner') }}</div>
+          <div class="font-display text-xl mt-1">
+            {% if actual_winner == 'home' %}{{ match.home_team.name(lang) }}
+            {% elif actual_winner == 'away' %}{{ match.away_team.name(lang) }}
+            {% else %}🤝 {{ t('match.draw') }}{% endif %}
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.score') }}</div>
+          <div class="font-score text-2xl mt-1">{{ match.home_score }} <span class="text-slate-400">-</span> {{ match.away_score }}</div>
+        </div>
+        <div class="text-sm text-center text-slate-600 mt-3 space-y-1">
+          {% if match.first_scorer %}<div>⚽ {{ match.first_scorer.name(lang) }}</div>{% endif %}
+          {% if match.motm %}<div>⭐ {{ match.motm.name(lang) }}</div>{% endif %}
+          {% if not match.first_scorer and not match.motm %}
+            <div class="text-slate-400 italic">{{ t('match.no_scorer_motm_yet') }}</div>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="text-center text-slate-400 italic py-4">{{ t('match.result_pending') }}</div>
+      {% endif %}
+    </div>
+
+  </div>
 
   {# Trivia answer (if any) is shown on the Profile page — keep the
      match detail focused on the prediction summary. #}
