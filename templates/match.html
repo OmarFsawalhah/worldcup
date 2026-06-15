@@ -199,7 +199,7 @@
         <div class="flex items-center justify-between mb-3">
           <span class="text-xs text-slate-500 flex items-center gap-1.5">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span id="trivia-timer-label">{{ t('match.trivia_timer', s=15) }}</span>
+            <span id="trivia-timer-label">{{ t('match.trivia_timer', s=45) }}</span>
           </span>
           <div class="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
             <div id="trivia-timer-bar" class="h-full bg-gradient-to-r from-emerald-500 to-yellow-400 transition-all" style="width: 100%"></div>
@@ -453,12 +453,13 @@
     const barEl = document.getElementById('trivia-timer-bar');
     const choicesEl = document.getElementById('trivia-choices');
     const timeoutEl = document.getElementById('trivia-timeout-msg');
-    let left = 15;
+    const TRIVIA_SECONDS = 45;
+    let left = TRIVIA_SECONDS;
     labelEl.textContent = labels.timerFmt.replace('__S__', left);
     barEl.style.width = '100%';
     const intv = setInterval(() => {
       left -= 1;
-      barEl.style.width = (left / 15 * 100) + '%';
+      barEl.style.width = (left / TRIVIA_SECONDS * 100) + '%';
       if (left <= 0) {
         clearInterval(intv);
         labelEl.textContent = labels.timerFmt.replace('__S__', 0);
