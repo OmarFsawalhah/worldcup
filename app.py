@@ -101,15 +101,17 @@ def _auto_migrate():
                 conn.execute(text("ALTER TABLE trivia_questions ADD COLUMN author_id INTEGER"))
     if "users" in insp.get_table_names():
         cols = {c["name"] for c in insp.get_columns("users")}
+        # Use DEFAULT FALSE (not 0) so the ALTER works on both Postgres and SQLite.
+        bool_default = "FALSE"
         if "must_change_password" not in cols:
             with db.engine.begin() as conn:
-                conn.execute(text("ALTER TABLE users ADD COLUMN must_change_password BOOLEAN DEFAULT 0 NOT NULL"))
+                conn.execute(text(f"ALTER TABLE users ADD COLUMN must_change_password BOOLEAN DEFAULT {bool_default} NOT NULL"))
         if "bonus_points" not in cols:
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE users ADD COLUMN bonus_points INTEGER DEFAULT 0 NOT NULL"))
         if "is_superuser" not in cols:
             with db.engine.begin() as conn:
-                conn.execute(text("ALTER TABLE users ADD COLUMN is_superuser BOOLEAN DEFAULT 0 NOT NULL"))
+                conn.execute(text(f"ALTER TABLE users ADD COLUMN is_superuser BOOLEAN DEFAULT {bool_default} NOT NULL"))
     if "matches" in insp.get_table_names():
         cols = {c["name"] for c in insp.get_columns("matches")}
         if "calculated_by_id" not in cols:
