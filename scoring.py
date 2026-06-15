@@ -3,7 +3,7 @@ or a trivia question's correct answer."""
 
 import json
 
-from models import db, Match, Prediction, TriviaQuestion, TriviaAnswer
+from models import db, Match, Prediction, TriviaQuestion, TriviaAnswer, MatchTrivia
 
 # Primary prediction: winner / draw
 POINTS_WINNER = 3
@@ -49,7 +49,8 @@ def score_match(match: Match) -> None:
             pts += POINTS_MOTM
         p.points_awarded = pts
 
-    # also score trivia answers attached to this match (if question + correct answer set)
+    # Note: per-user trivia (MatchTrivia) is scored at answer-submit time,
+    # not here. Legacy TriviaQuestion/TriviaAnswer pathways still scored if present.
     if match.trivia is not None:
         score_trivia(match.trivia)
 
@@ -66,11 +67,15 @@ def user_total_points(user_id: int) -> int:
     from models import User
     pred_total = db.session.query(db.func.coalesce(db.func.sum(Prediction.points_awarded), 0)) \
         .filter(Prediction.user_id == user_id).scalar() or 0
-    triv_total = db.session.query(db.func.coalesce(db.func.sum(TriviaAnswer.points_awarded), 0)) \
+    # Trivia points now come from MatchTrivia (per-user random assignment).
+    triv_total = db.session.query(db.func.coalesce(db.func.sum(MatchTrivia.points_awarded), 0)) \
+        .filter(MatchTrivia.user_id == user_id).scalar() or 0
+    # Legacy: still include any pre-existing TriviaAnswer points (so old data isn't lost).
+    legacy_triv = db.session.query(db.func.coalesce(db.func.sum(TriviaAnswer.points_awarded), 0)) \
         .filter(TriviaAnswer.user_id == user_id).scalar() or 0
     user = db.session.get(User, user_id)
     bonus = user.bonus_points if user else 0
-    return int(pred_total) + int(triv_total) + int(bonus)
+    return int(pred_total) + int(triv_total) + int(legacy_triv) + int(bonus)
 
 
 def user_exact_score_hits(user_id: int) -> int:

@@ -22,7 +22,7 @@ os.environ["DATABASE_URL"] = f"sqlite:///{TMP_DB}"
 os.environ["SECRET_KEY"] = "test-secret"
 
 from app import app, db  # noqa: E402
-from models import User, Team, Player, Match, Prediction, TriviaQuestion, TriviaAnswer  # noqa: E402
+from models import User, Team, Player, Match, Prediction, TriviaQuestion, TriviaAnswer, QuestionBank, MatchTrivia  # noqa: E402
 
 PASSED = []
 FAILED = []
@@ -153,53 +153,48 @@ def main():
     r = c2.get("/", follow_redirects=False)
     check("admin reaches dashboard after pw change", r.status_code == 200)
 
-    print("\n[6] Admin creates trivia (authored, lock works)")
-    from werkzeug.datastructures import MultiDict
-    trivia_data = MultiDict([
-        ("question_ar", "سؤال تجريبي؟"),
-        ("choices", "خيار أ"),
-        ("choices", "خيار ب"),
-        ("choices", "خيار ج"),
-        ("correct_index", "1"),
-    ])
-    r = c2.post(f"/admin/matches/{future_id}/trivia", data=trivia_data,
-                follow_redirects=False)
-    check("trivia create POST succeeds", r.status_code == 302)
+    print("\n[6] Seed the question bank with one canned question")
     with app.app_context():
-        m = db.session.get(Match, future_id)
-        q = m.trivia
-        q_correct_index = q.correct_index if q else None
-        q_author_username = q.author.username if q and q.author else None
-    check("trivia stored on match", q is not None and q_correct_index == 1)
-    check("trivia author = anas", q_author_username == "anas")
+        QuestionBank.query.delete()
+        MatchTrivia.query.delete()
+        db.session.add(QuestionBank(
+            question_ar="سؤال البنك التجريبي؟",
+            choices_json=json.dumps(["خيار أ", "خيار ب", "خيار ج"], ensure_ascii=False),
+            correct_index=1,
+            difficulty="medium",
+        ))
+        db.session.commit()
+        bank_before = QuestionBank.query.count()
+    check("question bank seeded with 1 question", bank_before == 1)
 
-    print("\n[7] Alice answers trivia (saved); anas tries (blocked)")
-    # Push match kickoff to within 1h so trivia is open
+    print("\n[7] Alice opens match -> gets a random question + answers via wizard")
+    # Push match kickoff to within 1h so things stay unlocked
     with app.app_context():
         m = db.session.get(Match, future_id)
         m.kickoff_utc = datetime.now(timezone.utc) + timedelta(minutes=30)
         db.session.commit()
     r = c.get(f"/match/{future_id}")
-    check("alice sees trivia form", b'name="trivia_choice_index"' in r.data or b'name="choice_index"' in r.data)
-    r = c.post(f"/match/{future_id}", data={"action": "trivia", "choice_index": "1"},
-               follow_redirects=False)
+    check("alice sees trivia step in wizard", b'name="trivia_choice_index"' in r.data)
     with app.app_context():
-        ans = TriviaAnswer.query.filter_by(user_id=alice.id).first()
-    check("alice's trivia answer saved", ans is not None and ans.choice_index == 1)
-    r = c2.get(f"/match/{future_id}")
-    # In the wizard, the author lock is enforced server-side and the trivia step is simply omitted.
-    # We look for the actual <input ... name="trivia_choice_index"> (not the JS reference).
-    check("anas (author) sees no trivia answer form",
-          b'<input type="radio" name="trivia_choice_index"' not in r.data
-          and b'<input type="radio" name="choice_index"' not in r.data)
-    r = c2.post(f"/match/{future_id}", data={"action": "trivia", "choice_index": "1"},
-                follow_redirects=False)
+        mt = MatchTrivia.query.filter_by(user_id=alice.id, match_id=future_id).first()
+        bank_after = QuestionBank.query.count()
+    check("MatchTrivia row created for alice", mt is not None)
+    check("question removed from bank (197 -> N-1)", bank_after == bank_before - 1, f"got {bank_after}")
+    # Alice submits the wizard with the correct trivia answer (index 1).
+    r = c.post(f"/match/{future_id}", data={
+        "action": "wizard",
+        "winner_prediction": "home",
+        "home_score": "2", "away_score": "1",
+        "trivia_choice_index": "1",
+    }, follow_redirects=False)
+    check("wizard submit succeeds", r.status_code == 302)
     with app.app_context():
-        anas_ans = TriviaAnswer.query.filter_by(user_id=anas.id).first()
-    check("anas blocked from answering own trivia", anas_ans is None)
+        mt = MatchTrivia.query.filter_by(user_id=alice.id, match_id=future_id).first()
+    check("alice trivia answer saved (instant)", mt.choice_index == 1)
+    check("alice trivia awarded +3 instantly", mt.points_awarded == 3, f"got {mt.points_awarded}")
 
-    print("\n[8] Save result, leaderboard does NOT move until Calc Points")
-    # Lock the match by moving kickoff to the past so the result can be reasoned about
+    print("\n[8] Save result, leaderboard does NOT move until Calc Points (for prediction pts)")
+    # Lock the match by moving kickoff to the past
     with app.app_context():
         m = db.session.get(Match, future_id)
         m.kickoff_utc = datetime.now(timezone.utc) - timedelta(minutes=5)
@@ -211,17 +206,17 @@ def main():
     check("save result POST succeeds", r.status_code == 302)
     with app.app_context():
         p = Prediction.query.filter_by(user_id=alice.id, match_id=future_id).first()
-    check("alice's points still 0 (pending Calc)", p.points_awarded == 0)
+    check("alice's prediction points still 0 (pending Calc)", p.points_awarded == 0)
 
-    print("\n[9] Calc Points awards exact-score + trivia")
+    print("\n[9] Calc Points awards prediction points (trivia already scored)")
     r = c2.post(f"/admin/matches/{future_id}/calc_points", follow_redirects=False)
     check("calc points POST succeeds", r.status_code == 302)
     with app.app_context():
         p = Prediction.query.filter_by(user_id=alice.id, match_id=future_id).first()
-        ans = TriviaAnswer.query.filter_by(user_id=alice.id).first()
+        mt = MatchTrivia.query.filter_by(user_id=alice.id, match_id=future_id).first()
     # Alice predicted home win + 2-1 → +3 winner + +2 exact bonus = 5
     check("alice prediction awarded 5 pts (winner+exact bonus)", p.points_awarded == 5, f"got {p.points_awarded}")
-    check("alice trivia awarded +3 (correct option 1)", ans.points_awarded == 3, f"got {ans.points_awarded}")
+    check("alice trivia still +3 (scored at submit time)", mt.points_awarded == 3, f"got {mt.points_awarded}")
 
     print("\n[10] Leaderboard reflects scoring; profile shows breakdown")
     r = c.get("/leaderboard")

@@ -185,5 +185,16 @@
   "admin.bonus_save": "Save",
   "admin.bonus_tip": "Manual point adjustment",
   "admin.bonus_saved": "Bonus points updated.",
-  "admin.bonus_help": "Use this column to add or subtract points manually (e.g. to backfill predictions on matches that finished before this app launched). The number replaces the previous bonus; it doesn't add to it. The total in the rightmost column already includes this bonus."
+  "admin.bonus_help": "Use this column to add or subtract points manually (e.g. to backfill predictions on matches that finished before this app launched). The number replaces the previous bonus; it doesn't add to it. The total in the rightmost column already includes this bonus.",
+
+  "admin.question_bank": "Question Bank",
+  "admin.question_bank_title": "Trivia Question Bank",
+  "admin.bank_remaining": "Remaining in bank",
+  "admin.bank_assigned": "Assigned to users",
+  "admin.bank_answered": "Answered",
+  "admin.bank_how_works": "How it works",
+  "admin.bank_how_works_text": "Each user gets one random question per match. The moment a question is handed to a user, it is removed from the bank so no two users get the same one. Their answer is saved on the match-trivia row.",
+  "admin.bank_reseed": "Re-seed from JSON files",
+  "admin.bank_reseeded": "Question bank refreshed from JSON files.",
+  "admin.bank_reseed_tip": "Reads every *.json file under questions/ and adds any new questions (duplicates by text are skipped)."
 }

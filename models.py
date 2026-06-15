@@ -147,3 +147,35 @@ class TriviaAnswer(db.Model):
     created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
 
     __table_args__ = (db.UniqueConstraint("user_id", "question_id", name="uq_user_question"),)
+
+
+class QuestionBank(db.Model):
+    """Global pool of trivia questions. Rows are deleted the moment a question
+    is assigned to a user (so the same question is never given twice)."""
+    __tablename__ = "question_bank"
+    id = db.Column(db.Integer, primary_key=True)
+    question_ar = db.Column(db.Text, nullable=False)
+    choices_json = db.Column(db.Text, nullable=False)        # JSON list of strings
+    correct_index = db.Column(db.Integer, nullable=False)
+    difficulty = db.Column(db.String(16), nullable=True)     # 'medium'/'hard'/'very_hard' (optional)
+
+
+class MatchTrivia(db.Model):
+    """One question randomly assigned to (user, match). Snapshots the question
+    so it survives even after the QuestionBank row is deleted. Holds the user's
+    answer + points (scored instantly when answer is submitted)."""
+    __tablename__ = "match_trivia"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    match_id = db.Column(db.Integer, db.ForeignKey("matches.id"), nullable=False)
+    question_ar = db.Column(db.Text, nullable=False)
+    choices_json = db.Column(db.Text, nullable=False)
+    correct_index = db.Column(db.Integer, nullable=False)
+    choice_index = db.Column(db.Integer, nullable=True)      # user's answer (null until submitted)
+    points_awarded = db.Column(db.Integer, default=0, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+    user = db.relationship("User", foreign_keys=[user_id])
+    match = db.relationship("Match", foreign_keys=[match_id])
+
+    __table_args__ = (db.UniqueConstraint("user_id", "match_id", name="uq_user_match_trivia"),)

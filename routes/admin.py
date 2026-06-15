@@ -5,7 +5,7 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
 from flask_login import login_required, current_user
 
-from models import db, Match, Team, Player, TriviaQuestion, Prediction, User
+from models import db, Match, Team, Player, TriviaQuestion, Prediction, User, QuestionBank, MatchTrivia
 from scoring import score_match, user_total_points, user_exact_score_hits
 from i18n import t
 
@@ -34,7 +34,25 @@ def home():
 @admin_required
 def matches():
     all_matches = Match.query.order_by(Match.kickoff_utc.asc()).all()
-    return render_template("admin/matches.html", matches=all_matches)
+    bank_remaining = QuestionBank.query.count()
+    return render_template("admin/matches.html", matches=all_matches,
+                           bank_remaining=bank_remaining)
+
+
+@bp.route("/question-bank", methods=["GET", "POST"])
+@admin_required
+def question_bank():
+    if request.method == "POST":
+        # Re-seed: import any new questions from questions/*.json
+        from scripts.seed_question_bank import seed
+        seed()
+        flash(t("admin.bank_reseeded"), "success")
+        return redirect(url_for("admin.question_bank"))
+    remaining = QuestionBank.query.count()
+    assignments = MatchTrivia.query.count()
+    answered = MatchTrivia.query.filter(MatchTrivia.choice_index.isnot(None)).count()
+    return render_template("admin/question_bank.html",
+                           remaining=remaining, assignments=assignments, answered=answered)
 
 
 @bp.route("/matches/new", methods=["GET", "POST"])

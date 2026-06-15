@@ -19,6 +19,10 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>{{ t('admin.users') }}</span>
     </a>
+    <a href="{{ url_for('admin.question_bank') }}" class="btn btn-ghost btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>{{ t('admin.question_bank') }} <span class="ms-1 text-yellow-400 font-bold">{{ bank_remaining }}</span></span>
+    </a>
     <a href="{{ url_for('admin.match_new') }}" class="btn btn-primary btn-sm">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span>{{ t('admin.add_match') }}</span>
@@ -60,11 +64,6 @@
     {% else %}
       <span class="btn btn-soft btn-xs opacity-60 cursor-not-allowed" title="{{ t('admin.already_calculated_by', who=m.calculated_by.username) }}">⚡ 🔒</span>
     {% endif %}
-  {% endif %}
-  {% if m.trivia or not m.is_locked() %}
-    <a href="{{ url_for('admin.match_trivia', mid=m.id) }}" class="btn btn-xs" style="background:#6366f1;color:#fff">❓ {{ t('admin.trivia') }}{% if m.trivia %} ✓{% endif %}</a>
-  {% else %}
-    <span class="btn btn-soft btn-xs opacity-60 cursor-not-allowed" title="{{ t('admin.trivia_locked_new') }}">❓ 🔒</span>
   {% endif %}
   <a href="{{ url_for('admin.match_predictions', mid=m.id) }}" class="btn btn-ghost btn-xs" style="background:#475569;color:#fff;border-color:transparent">{{ t('admin.predictions') }}</a>
   <a href="{{ url_for('admin.match_edit', mid=m.id) }}" class="btn btn-xs" style="background:#d97706;color:#fff">✎ {{ t('admin.edit_match') }}</a>

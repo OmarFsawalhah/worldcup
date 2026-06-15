@@ -3,9 +3,8 @@
 {% set lang = current_lang() %}
 {% set locked = match.is_locked() %}
 {% set ko_iso = match.kickoff_aware().isoformat() %}
-{% set is_author = current_user.is_authenticated and match.trivia and match.trivia.author_id == current_user.id %}
-{% set trivia_available = match.trivia and match.trivia_open() and not is_author %}
-{% set already_voted = trivia_answer is not none %}
+{% set trivia_available = user_trivia is not none and user_trivia.choice_index is none %}
+{% set already_voted = user_trivia is not none and user_trivia.choice_index is not none %}
 
 {# ===== Match hero ===== #}
 <div class="card-pitch mb-5 sm:mb-6 overflow-hidden relative">
@@ -206,7 +205,7 @@
             <div id="trivia-timer-bar" class="h-full bg-gradient-to-r from-emerald-500 to-yellow-400 transition-all" style="width: 100%"></div>
           </div>
         </div>
-        <div dir="rtl" class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-right font-medium">{{ match.trivia.question_ar }}</div>
+        <div dir="rtl" class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-right font-medium">{{ user_trivia.question_ar }}</div>
         <div id="trivia-choices" class="space-y-2" dir="rtl">
           {% for c in trivia_choices %}
             <label class="choice-card">
@@ -297,22 +296,8 @@
   <div class="card-pitch mb-6 text-center text-slate-500">{{ t('match.no_pred') }}</div>
   {% endif %}
 
-  {% if match.trivia %}
-  <div class="card-pitch" dir="rtl">
-    <h2 class="font-display text-lg mb-3 text-right">{{ t('match.trivia') }}</h2>
-    <div class="bg-slate-50 rounded-xl p-3 mb-3 text-right">{{ match.trivia.question_ar }}</div>
-    {% if trivia_answer %}
-      <div class="text-sm text-slate-600 text-right">
-        إجابتك: <b>{{ trivia_choices[trivia_answer.choice_index] }}</b>
-        {% if match.has_finished() %}
-          <span class="text-emerald-700 font-bold">— {{ trivia_answer.points_awarded }} {{ t('match.points') }}</span>
-        {% endif %}
-      </div>
-    {% else %}
-      <p class="text-slate-500 text-right">{{ t('match.trivia_locked') }}</p>
-    {% endif %}
-  </div>
-  {% endif %}
+  {# Trivia answer (if any) is shown on the Profile page — keep the
+     match detail focused on the prediction summary. #}
 {% endif %}
 
 {% if not locked %}

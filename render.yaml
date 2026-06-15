@@ -3,7 +3,7 @@ services:
     name: worldcup-predictor
     runtime: python
     plan: free
-    buildCommand: pip install -r requirements.txt && python scripts/seed.py
+    buildCommand: pip install -r requirements.txt && python scripts/seed.py && python scripts/seed_question_bank.py
     startCommand: gunicorn app:app
     envVars:
       - key: SECRET_KEY
