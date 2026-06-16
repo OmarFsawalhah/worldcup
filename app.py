@@ -82,9 +82,14 @@ def create_app():
             session["lang"] = code
         return redirect(request_referrer_or_root())
 
-    with app.app_context():
-        db.create_all()
-        _auto_migrate()
+    # Skip schema setup at gunicorn boot — it already ran during the build
+    # phase (scripts/seed.py imports this module). On Render's free-tier
+    # Postgres, the cold connection can take 30-60s and times out the
+    # port scan. SKIP_DB_INIT=1 in the runtime env tells us to skip.
+    if not os.environ.get("SKIP_DB_INIT"):
+        with app.app_context():
+            db.create_all()
+            _auto_migrate()
 
     return app
 

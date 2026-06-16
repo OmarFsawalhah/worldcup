@@ -16,6 +16,8 @@ services:
         value: 3.11.9
       - key: FOOTBALL_DATA_API_KEY
         sync: false  # set this manually in Render dashboard after first deploy
+      - key: SKIP_DB_INIT
+        value: "1"   # schema is created during build; skip at boot for fast port-bind
 
 databases:
   - name: worldcup-db
