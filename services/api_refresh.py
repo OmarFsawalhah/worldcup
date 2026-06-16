@@ -13,7 +13,6 @@ Admin overrides are never clobbered:
 """
 import os
 import re
-import time
 import unicodedata
 
 import requests
@@ -86,14 +85,12 @@ def _match_player_to_db(api_name: str, candidates: list) -> int | None:
     return best.id if best else None
 
 
-def _api_get(path: str, headers: dict, max_retry: int = 1):
-    """GET with one retry on 429."""
+def _api_get(path: str, headers: dict):
+    """GET with a tight timeout. On 429, raise immediately — we cap detail
+    calls so this should rarely fire, and blocking for 60s to retry would
+    time out the admin's Refresh request."""
     url = f"{API_BASE}{path}"
-    r = requests.get(url, headers=headers, timeout=20)
-    if r.status_code == 429 and max_retry > 0:
-        wait = int(r.headers.get("X-RequestCounter-Reset", 60))
-        time.sleep(wait + 1)
-        return _api_get(path, headers, max_retry - 1)
+    r = requests.get(url, headers=headers, timeout=8)
     r.raise_for_status()
     return r.json()
 
@@ -148,10 +145,13 @@ def refresh_match_statuses():
     updated_scorer = 0
     skipped = 0
 
-    # We will optionally hit /matches/<id> for newly-finished matches. The free
-    # tier allows 10 req/min, so we throttle.
+    # We will optionally hit /matches/<id> for finished matches missing a scorer.
+    # Free tier = 10 req/min; we already used 1 call for the list above, so
+    # cap detail calls at 6 per Refresh and rely on the 429 retry as a safety
+    # net. NO sleep between calls — long blocking sleeps were timing out the
+    # HTTP request on Render.
     detail_calls = 0
-    DETAIL_CAP = 8  # leave headroom under the 10-req/min ceiling
+    DETAIL_CAP = 6
 
     for m_api in api_matches:
         home_code = (m_api.get("homeTeam") or {}).get("tla") or ""
@@ -181,20 +181,25 @@ def refresh_match_statuses():
                 m_local.away_score = api_a
                 updated_score += 1
 
-        # If match is finished AND no first_scorer set yet, try the detail call
+        # If match is finished AND no first_scorer set yet, try the detail call.
+        # Wrapped in try/except so a single bad detail call never crashes the
+        # whole refresh.
         if (m_local.status == "finished"
                 and m_local.first_scorer_id is None
                 and detail_calls < DETAIL_CAP):
             api_match_id = m_api.get("id")
             if api_match_id:
-                time.sleep(7)  # throttle to stay under 10 req/min
                 detail_calls += 1
-                scorer_player_id = _fetch_first_scorer(
-                    api_match_id, home_id, away_id, headers
-                )
-                if scorer_player_id:
-                    m_local.first_scorer_id = scorer_player_id
-                    updated_scorer += 1
+                try:
+                    scorer_player_id = _fetch_first_scorer(
+                        api_match_id, home_id, away_id, headers
+                    )
+                    if scorer_player_id:
+                        m_local.first_scorer_id = scorer_player_id
+                        updated_scorer += 1
+                except Exception:
+                    # Skip this match's scorer; rest of refresh continues
+                    pass
 
     db.session.commit()
     return {
