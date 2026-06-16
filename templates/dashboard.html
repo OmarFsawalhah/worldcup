@@ -5,10 +5,21 @@
 <div class="mb-5 sm:mb-7">
   <div class="flex items-center justify-between gap-3 flex-wrap">
     <div>
-      <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">FIFA World Cup 2026</div>
+      <div class="flex items-center gap-2 mb-1">
+        <span class="wc26-emblem">2026</span>
+        <span class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold">FIFA World Cup</span>
+      </div>
       <h1 class="page-title text-3xl sm:text-4xl">{{ t('dashboard.title') }}</h1>
     </div>
+    <div class="hosts-row" title="USA · Canada · Mexico">
+      <span class="host-chip"><img src="https://flagcdn.com/w40/us.png" alt="USA"> USA</span>
+      <span class="host-sep"></span>
+      <span class="host-chip"><img src="https://flagcdn.com/w40/ca.png" alt="Canada"> CAN</span>
+      <span class="host-sep"></span>
+      <span class="host-chip"><img src="https://flagcdn.com/w40/mx.png" alt="Mexico"> MEX</span>
+    </div>
   </div>
+  <div class="host-stripe mt-4"></div>
 </div>
 
 {# ===== Filter tabs ===== #}

@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="min-h-[80vh] flex items-center justify-center">
+<div class="min-h-[80vh] flex items-center justify-center auth-stage">
   <div class="max-w-md w-full">
     <div class="text-center mb-6">
       <div class="inline-flex w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400 to-amber-500 items-center justify-center shadow-lg shadow-yellow-500/40 mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="1"><path d="m12 2 3.5 4.5L21 8l-3 4.5L19 18l-7-2-7 2 1-5.5L3 8l5.5-1.5z"/></svg>
       </div>
+      <div class="mb-2"><span class="wc26-emblem">USA · CAN · MEX 2026</span></div>
       <h1 class="page-title text-3xl mb-1">{{ t('auth.login_title') }}</h1>
       <p class="text-slate-400 text-sm">{{ t('app_name') }}</p>
+      <div class="host-stripe mt-4 max-w-[180px] mx-auto"></div>
     </div>
 
     <div class="card-pitch">

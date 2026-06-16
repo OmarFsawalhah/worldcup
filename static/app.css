@@ -746,3 +746,93 @@ textarea:focus-visible {
 
 /* RTL helpers retained */
 html[dir="rtl"] .rtl\:space-x-reverse > * + * { --tw-space-x-reverse: 1; }
+
+/* ============================================================
+   WC 2026 host-country theming (USA · Canada · Mexico)
+   ============================================================ */
+
+/* Tri-stripe accent in host country colors: USA red, neutral, MEX green */
+.host-stripe {
+  height: 4px;
+  background: linear-gradient(90deg,
+    #B22234 0%, #B22234 33%,        /* USA red */
+    #D52B1E 33%, #D52B1E 66%,       /* Canada red */
+    #006847 66%, #006847 100%);     /* Mexico green */
+  border-radius: 999px;
+  width: 100%;
+  opacity: 0.9;
+}
+
+/* WC2026 emblem badge — a small chip with "26" + host stripe */
+.wc26-emblem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(16, 185, 129, 0.18));
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  color: var(--text-on-dark);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.wc26-emblem::before {
+  content: "";
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #B22234 0 33%, #D52B1E 33% 66%, #006847 66% 100%);
+}
+
+/* Hosts chip row — small flag avatars + city/country label */
+.hosts-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+}
+.hosts-row .host-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  letter-spacing: 0.04em;
+}
+.hosts-row .host-chip img {
+  width: 18px;
+  height: 12px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.20);
+  object-fit: cover;
+}
+.hosts-row .host-sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+/* Subtle stadium background motif for auth pages */
+.auth-stage {
+  position: relative;
+  isolation: isolate;
+}
+.auth-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 80% at 50% 0%, rgba(178, 34, 52, 0.10), transparent 70%),
+    radial-gradient(50% 60% at 100% 100%, rgba(0, 104, 71, 0.10), transparent 70%),
+    radial-gradient(45% 60% at 0% 100%, rgba(251, 191, 36, 0.10), transparent 70%);
+  pointer-events: none;
+}
