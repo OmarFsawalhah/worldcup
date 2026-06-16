@@ -36,7 +36,6 @@
             <tr>
               <th>{{ t('leaderboard.user') }}</th>
               <th class="text-end">Prediction pts</th>
-              <th class="text-end">Trivia pts</th>
               <th class="text-end">Earned</th>
               <th class="text-end">Total after</th>
             </tr>
@@ -48,7 +47,6 @@
                   <a href="{{ url_for('admin.user_details', uid=row.user_id) }}" class="font-medium hover:underline text-emerald-700">{{ row.username }}</a>
                 </td>
                 <td class="text-end font-mono">{{ row.pred_pts }}</td>
-                <td class="text-end font-mono">{{ row.triv_pts }}</td>
                 <td class="text-end font-display text-lg {{ 'text-emerald-700' if row.delta > 0 else 'text-slate-400' }}">
                   {% if row.delta > 0 %}+{{ row.delta }}{% else %}0{% endif %}
                 </td>

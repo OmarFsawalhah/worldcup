@@ -16,7 +16,7 @@
 </div>
 
 {# Stat cards #}
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
   <div class="stat-card stat-card-primary text-center">
     <div class="stat-label">{{ t('profile.total') }}</div>
     <div class="stat-value stat-value-gold">{{ total }}</div>
@@ -24,10 +24,6 @@
   <div class="stat-card text-center">
     <div class="stat-label">{{ t('profile.from_predictions') }}</div>
     <div class="stat-value">{{ pred_total }}</div>
-  </div>
-  <div class="stat-card text-center">
-    <div class="stat-label">{{ t('profile.from_trivia') }}</div>
-    <div class="stat-value">{{ triv_total }}</div>
   </div>
   <div class="stat-card text-center">
     <div class="stat-label">{{ t('admin.bonus_label') }}</div>
@@ -96,44 +92,4 @@
   <div class="card-pitch text-center text-slate-500 py-6 mb-6">{{ t('profile.no_predictions') }}</div>
 {% endif %}
 
-{# Trivia breakdown #}
-<h2 class="font-display text-lg text-white mb-3 drop-shadow">{{ t('profile.trivia_title') }}</h2>
-{% if triv_rows %}
-<div class="card-pitch p-0 overflow-x-auto">
-  <table class="table-clean">
-    <thead>
-      <tr>
-        <th>{{ t('profile.match') }}</th>
-        <th dir="rtl">Question</th>
-        <th dir="rtl">Your answer</th>
-        <th dir="rtl">Correct</th>
-        <th class="text-end">{{ t('match.points') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for r in triv_rows %}
-        <tr class="{{ 'bg-emerald-50' if r.is_correct else '' }}">
-          <td>
-            <span class="inline-flex items-center gap-2 whitespace-nowrap text-sm">
-              <img src="{{ flag_url(r.match.home_team) }}" alt="" class="flag-img flag-img-sm">
-              <span>{{ r.match.home_team.name(lang) }}</span>
-              <span class="text-slate-400">vs</span>
-              <span>{{ r.match.away_team.name(lang) }}</span>
-              <img src="{{ flag_url(r.match.away_team) }}" alt="" class="flag-img flag-img-sm">
-            </span>
-          </td>
-          <td class="max-w-xs" dir="rtl">{{ r.question_ar }}</td>
-          <td dir="rtl"><b>{{ r.your_choice }}</b></td>
-          <td dir="rtl">{{ r.correct_choice }}</td>
-          <td class="text-end font-display text-lg {{ 'text-emerald-700' if r.is_correct else 'text-slate-400' }}">
-            {% if r.is_correct %}+{{ r.pts }}{% else %}0{% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
-  <div class="card-pitch text-center text-slate-500 py-6">{{ t('profile.no_trivia') }}</div>
-{% endif %}
 {% endblock %}

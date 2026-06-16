@@ -5,7 +5,7 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
 from flask_login import login_required, current_user
 
-from models import db, Match, Team, Player, TriviaQuestion, Prediction, User, QuestionBank, MatchTrivia
+from models import db, Match, Team, Player, Prediction, User
 from scoring import score_match, user_total_points, user_exact_score_hits
 from i18n import t
 
@@ -44,25 +44,7 @@ def home():
 @admin_required
 def matches():
     all_matches = Match.query.order_by(Match.kickoff_utc.asc()).all()
-    bank_remaining = QuestionBank.query.count()
-    return render_template("admin/matches.html", matches=all_matches,
-                           bank_remaining=bank_remaining)
-
-
-@bp.route("/question-bank", methods=["GET", "POST"])
-@admin_required
-def question_bank():
-    if request.method == "POST":
-        # Re-seed: import any new questions from questions/*.json
-        from scripts.seed_question_bank import seed
-        seed()
-        flash(t("admin.bank_reseeded"), "success")
-        return redirect(url_for("admin.question_bank"))
-    remaining = QuestionBank.query.count()
-    assignments = MatchTrivia.query.count()
-    answered = MatchTrivia.query.filter(MatchTrivia.choice_index.isnot(None)).count()
-    return render_template("admin/question_bank.html",
-                           remaining=remaining, assignments=assignments, answered=answered)
+    return render_template("admin/matches.html", matches=all_matches)
 
 
 @bp.route("/matches/new", methods=["GET", "POST"])
@@ -192,62 +174,6 @@ def user_adjust(uid):
     return redirect(url_for("admin.users"))
 
 
-@bp.route("/matches/<int:mid>/trivia", methods=["GET", "POST"])
-@admin_required
-def match_trivia(mid):
-    m = db.session.get(Match, mid) or abort(404)
-    q = m.trivia
-    # Block creating a NEW question on a match whose kickoff has passed.
-    # Editing existing questions is still allowed (so admins can fix
-    # a wrong correct-answer choice and rescore).
-    if q is None and m.is_locked():
-        flash(t("admin.trivia_locked_new"), "error")
-        return redirect(url_for("admin.matches"))
-    if request.method == "POST":
-        question_ar = (request.form.get("question_ar") or "").strip()
-        choices = [c.strip() for c in request.form.getlist("choices") if c.strip()]
-        try:
-            correct = int(request.form.get("correct_index"))
-        except (TypeError, ValueError):
-            correct = -1
-        if not question_ar or len(choices) < 2 or not (0 <= correct < len(choices)):
-            flash("Need a question, ≥2 choices, and a correct answer.", "error")
-            return redirect(url_for("admin.match_trivia", mid=mid))
-        if q is None:
-            q = TriviaQuestion(match_id=m.id, question_ar=question_ar,
-                               choices_json=json.dumps(choices, ensure_ascii=False),
-                               correct_index=correct,
-                               author_id=current_user.id)
-            db.session.add(q)
-        else:
-            q.question_ar = question_ar
-            q.choices_json = json.dumps(choices, ensure_ascii=False)
-            q.correct_index = correct
-            # Author stays the original creator unless the field is null (legacy rows)
-            if q.author_id is None:
-                q.author_id = current_user.id
-        db.session.commit()
-        # rescore trivia answers in case correct_index changed
-        from scoring import score_trivia
-        score_trivia(q)
-        flash(t("admin.saved"), "success")
-        return redirect(url_for("admin.matches"))
-    choices = json.loads(q.choices_json) if q else ["", ""]
-    return render_template("admin/trivia.html", match=m, question=q, choices=choices)
-
-
-@bp.route("/matches/<int:mid>/trivia/delete", methods=["POST"])
-@admin_required
-def match_trivia_delete(mid):
-    m = db.session.get(Match, mid) or abort(404)
-    if m.trivia is None:
-        return redirect(url_for("admin.matches"))
-    db.session.delete(m.trivia)
-    db.session.commit()
-    flash(t("admin.trivia_deleted"), "success")
-    return redirect(url_for("admin.matches"))
-
-
 @bp.route("/matches/<int:mid>/predictions")
 @admin_required
 def match_predictions(mid):
@@ -277,8 +203,7 @@ def _populate_match(m, form):
 @bp.route("/users/<int:uid>")
 @superuser_required
 def user_details(uid):
-    """Full points breakdown for one user (every prediction + every trivia
-    answer + bonus + grand total)."""
+    """Full points breakdown for one user (every prediction + bonus + grand total)."""
     from scoring import prediction_breakdown
     user = db.session.get(User, uid) or abort(404)
 
@@ -291,36 +216,16 @@ def user_details(uid):
             "bd": prediction_breakdown(p, p.match),
         })
 
-    from models import MatchTrivia
-    triv_rows = (
-        MatchTrivia.query
-        .filter_by(user_id=uid)
-        .filter(MatchTrivia.choice_index.isnot(None))
-        .all()
-    )
-    triv_data = []
-    for t in sorted(triv_rows, key=lambda r: r.match.kickoff_utc):
-        choices = json.loads(t.choices_json)
-        triv_data.append({
-            "match": t.match,
-            "question_ar": t.question_ar,
-            "your_choice": choices[t.choice_index] if t.choice_index is not None and 0 <= t.choice_index < len(choices) else "?",
-            "correct_choice": choices[t.correct_index] if 0 <= t.correct_index < len(choices) else "?",
-            "is_correct": t.choice_index == t.correct_index,
-            "pts": t.points_awarded,
-        })
-
     pred_total = sum(r["bd"]["total"] for r in pred_rows)
-    triv_total = sum(r["pts"] for r in triv_data)
-    total = pred_total + triv_total + (user.bonus_points or 0)
+    total = pred_total + (user.bonus_points or 0)
 
     return render_template(
         "admin/user_details.html",
         user=user,
         pred_rows=pred_rows,
-        triv_rows=triv_data,
+        triv_rows=[],
         pred_total=pred_total,
-        triv_total=triv_total,
+        triv_total=0,
         total=total,
     )
 
@@ -356,21 +261,18 @@ def points_log():
                 for u in users if running[u.id] != 0
             ],
         })
-    from models import MatchTrivia
     for m in finished:
         match_rows = []
         for u in users:
             pred = Prediction.query.filter_by(user_id=u.id, match_id=m.id).first()
             pred_pts = pred.points_awarded if pred else 0
-            mt = MatchTrivia.query.filter_by(user_id=u.id, match_id=m.id).first()
-            triv_pts = mt.points_awarded if mt else 0
-            delta = pred_pts + triv_pts
-            if delta == 0 and not pred and not mt:
+            delta = pred_pts
+            if delta == 0 and not pred:
                 continue  # user wasn't involved in this match at all
             running[u.id] += delta
             match_rows.append({
                 "user_id": u.id, "username": u.username,
-                "pred_pts": pred_pts, "triv_pts": triv_pts,
+                "pred_pts": pred_pts, "triv_pts": 0,
                 "delta": delta, "running": running[u.id],
             })
         if match_rows:

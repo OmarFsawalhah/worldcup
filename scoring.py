@@ -1,9 +1,6 @@
-"""Auto-scoring logic. Pure function called when admin saves a match result
-or a trivia question's correct answer."""
+"""Auto-scoring logic. Pure function called when admin saves a match result."""
 
-import json
-
-from models import db, Match, Prediction, TriviaQuestion, TriviaAnswer, MatchTrivia
+from models import db, Match, Prediction
 
 # Primary prediction: winner / draw
 POINTS_WINNER = 3
@@ -11,7 +8,6 @@ POINTS_WINNER = 3
 POINTS_EXACT_BONUS = 2
 POINTS_FIRST_SCORER = 3
 POINTS_MOTM = 3
-POINTS_TRIVIA = 3
 
 
 def _winner_side(home, away):
@@ -49,17 +45,6 @@ def score_match(match: Match) -> None:
             pts += POINTS_MOTM
         p.points_awarded = pts
 
-    # Note: per-user trivia (MatchTrivia) is scored at answer-submit time,
-    # not here. Legacy TriviaQuestion/TriviaAnswer pathways still scored if present.
-    if match.trivia is not None:
-        score_trivia(match.trivia)
-
-    db.session.commit()
-
-
-def score_trivia(question: TriviaQuestion) -> None:
-    for ans in question.answers:
-        ans.points_awarded = POINTS_TRIVIA if ans.choice_index == question.correct_index else 0
     db.session.commit()
 
 
@@ -67,15 +52,9 @@ def user_total_points(user_id: int) -> int:
     from models import User
     pred_total = db.session.query(db.func.coalesce(db.func.sum(Prediction.points_awarded), 0)) \
         .filter(Prediction.user_id == user_id).scalar() or 0
-    # Trivia points now come from MatchTrivia (per-user random assignment).
-    triv_total = db.session.query(db.func.coalesce(db.func.sum(MatchTrivia.points_awarded), 0)) \
-        .filter(MatchTrivia.user_id == user_id).scalar() or 0
-    # Legacy: still include any pre-existing TriviaAnswer points (so old data isn't lost).
-    legacy_triv = db.session.query(db.func.coalesce(db.func.sum(TriviaAnswer.points_awarded), 0)) \
-        .filter(TriviaAnswer.user_id == user_id).scalar() or 0
     user = db.session.get(User, user_id)
     bonus = user.bonus_points if user else 0
-    return int(pred_total) + int(triv_total) + int(legacy_triv) + int(bonus)
+    return int(pred_total) + int(bonus)
 
 
 def user_exact_score_hits(user_id: int) -> int:
