@@ -93,7 +93,10 @@ def leaderboard():
     if not current_user.is_authenticated:
         return redirect(url_for("auth.login"))
     from models import User
-    users = User.query.all()
+    # Hide superusers from the public leaderboard.
+    users = User.query.filter(
+        (User.is_superuser.is_(False)) | (User.is_superuser.is_(None))
+    ).all()
     rows = []
     for u in users:
         rows.append({
