@@ -115,7 +115,10 @@ def match_calc_points(mid):
     if m.home_score is None or m.away_score is None:
         flash("Save the result first.", "error")
         return redirect(url_for("admin.matches"))
-    if m.calculated_by_id and m.calculated_by_id != current_user.id:
+    # Superusers can always recalc, even if another admin claimed it.
+    if (m.calculated_by_id
+            and m.calculated_by_id != current_user.id
+            and not getattr(current_user, "is_superuser", False)):
         flash(t("admin.already_calculated_by", who=m.calculated_by.username), "error")
         return redirect(url_for("admin.matches"))
     score_match(m)

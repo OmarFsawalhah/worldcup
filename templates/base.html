@@ -59,11 +59,11 @@
           {% if current_user.is_authenticated %}
             {{ nav_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
             {{ nav_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
-            {{ nav_link(url_for('public.profile'), t('nav.profile'), ep == 'public.profile', ico_user) }}
-            {{ nav_link(url_for('auth.change_password'), t('nav.change_password'), ep == 'auth.change_password', ico_key) }}
             {% if current_user.is_admin %}
               {{ nav_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
             {% endif %}
+            {{ nav_link(url_for('public.profile'), t('nav.profile'), ep == 'public.profile', ico_user) }}
+            {{ nav_link(url_for('auth.change_password'), t('nav.change_password'), ep == 'auth.change_password', ico_key) }}
             <a href="{{ url_for('auth.logout') }}" class="nav-link" title="{{ current_user.username }}">
               <span>{{ ico_logout|safe }}</span>
               <span class="hidden lg:inline">{{ t('nav.logout') }}</span>
@@ -99,11 +99,11 @@
         {% if current_user.is_authenticated %}
           {{ mobile_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
           {{ mobile_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
-          {{ mobile_link(url_for('public.profile'), t('nav.profile'), ep == 'public.profile', ico_user) }}
-          {{ mobile_link(url_for('auth.change_password'), t('nav.change_password'), ep == 'auth.change_password', ico_key) }}
           {% if current_user.is_admin %}
             {{ mobile_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
           {% endif %}
+          {{ mobile_link(url_for('public.profile'), t('nav.profile'), ep == 'public.profile', ico_user) }}
+          {{ mobile_link(url_for('auth.change_password'), t('nav.change_password'), ep == 'auth.change_password', ico_key) }}
           <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-3 py-3 rounded-lg text-rose-300 hover:bg-rose-500/10 transition font-medium">
             <span class="w-5 h-5 flex items-center justify-center">{{ ico_logout|safe }}</span>
             <span>{{ t('nav.logout') }} ({{ current_user.username }})</span>

@@ -59,7 +59,7 @@
 {% macro action_buttons(m) %}
   <a href="{{ url_for('admin.match_result', mid=m.id) }}" class="btn btn-primary btn-xs">{{ t('admin.result') }}</a>
   {% if m.home_score is not none %}
-    {% if not m.calculated_by_id or m.calculated_by_id == current_user.id %}
+    {% if not m.calculated_by_id or m.calculated_by_id == current_user.id or current_user.is_superuser %}
       <form method="post" action="{{ url_for('admin.match_calc_points', mid=m.id) }}" class="inline">
         <button class="btn btn-gold btn-xs">⚡ {{ t('admin.calc_points') }}{% if m.calculated_by_id == current_user.id %} ↻{% endif %}</button>
       </form>
