@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, abort, flash, jsonify
 from flask_login import login_required, current_user
 
-from models import db, Match, Team, Player, Prediction, Notification
+from models import db, Match, Team, Player, Prediction, Notification, PushSubscription
 from scoring import user_total_points, user_exact_score_hits, prediction_breakdown
 from i18n import t
 
@@ -176,3 +176,73 @@ def notifications_mark_all_read():
     )
     db.session.commit()
     return redirect(url_for("public.notifications"))
+
+
+# ============================================================
+#  Web Push — phone-tray notifications
+# ============================================================
+
+@bp.route("/push/vapid-key")
+@login_required
+def push_vapid_key():
+    """Public VAPID key, used by the browser to register a push subscription."""
+    from services.push import vapid_public_key, is_configured
+    return jsonify({
+        "publicKey": vapid_public_key() or "",
+        "enabled": is_configured(),
+    })
+
+
+@bp.route("/push/subscribe", methods=["POST"])
+@login_required
+def push_subscribe():
+    """Browser POSTs the subscription dict from pushManager.subscribe()."""
+    data = request.get_json(silent=True) or {}
+    endpoint = (data.get("endpoint") or "").strip()
+    keys = data.get("keys") or {}
+    p256dh = (keys.get("p256dh") or "").strip()
+    auth = (keys.get("auth") or "").strip()
+    if not endpoint or not p256dh or not auth:
+        return jsonify({"ok": False, "error": "missing fields"}), 400
+
+    existing = PushSubscription.query.filter_by(endpoint=endpoint).first()
+    if existing:
+        existing.user_id = current_user.id
+        existing.p256dh = p256dh
+        existing.auth = auth
+        existing.user_agent = request.headers.get("User-Agent", "")[:255]
+    else:
+        sub = PushSubscription(
+            user_id=current_user.id,
+            endpoint=endpoint, p256dh=p256dh, auth=auth,
+            user_agent=request.headers.get("User-Agent", "")[:255],
+        )
+        db.session.add(sub)
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@bp.route("/push/unsubscribe", methods=["POST"])
+@login_required
+def push_unsubscribe():
+    data = request.get_json(silent=True) or {}
+    endpoint = (data.get("endpoint") or "").strip()
+    if endpoint:
+        PushSubscription.query.filter_by(endpoint=endpoint).delete()
+        db.session.commit()
+    return jsonify({"ok": True})
+
+
+@bp.route("/push/test", methods=["POST"])
+@login_required
+def push_test():
+    """Sends a test push to the current user — for debugging."""
+    from services.push import send_push
+    n = send_push(
+        user_id=current_user.id,
+        title="WC2026 Test",
+        body="If you see this, push notifications work!",
+        url="/notifications",
+        tag="test",
+    )
+    return jsonify({"ok": True, "sent": n})

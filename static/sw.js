@@ -8,7 +8,7 @@
 // Versioning: bump CACHE_NAME any time we want to force users to re-download
 // cached assets. Old caches are cleaned in the activate event.
 
-const CACHE_NAME = 'wc2026-shell-v1';
+const CACHE_NAME = 'wc2026-shell-v2';
 const STATIC_ASSETS = [
   '/static/app.css',
   '/static/countdown.js',
@@ -31,6 +31,43 @@ self.addEventListener('activate', (event) => {
     )
   );
   self.clients.claim();
+});
+
+// ============ Web Push ============
+self.addEventListener('push', (event) => {
+  let data = {};
+  if (event.data) {
+    try { data = event.data.json(); } catch (e) { data = { title: 'WC2026', body: event.data.text() }; }
+  }
+  const title = data.title || 'WC2026';
+  const options = {
+    body: data.body || '',
+    icon: '/static/icons/icon-192.png',
+    badge: '/static/icons/icon-192.png',
+    vibrate: [120, 60, 120],
+    data: { url: data.url || '/' },
+    tag: data.tag || undefined,        // tag collapses duplicate notifications
+    renotify: !!data.tag,
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || '/';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+      // If the app is already open in any window, focus it and navigate
+      for (const w of wins) {
+        if ('focus' in w) {
+          w.navigate ? w.navigate(url) : w.postMessage({ type: 'nav', url });
+          return w.focus();
+        }
+      }
+      // Otherwise open a new window
+      return self.clients.openWindow(url);
+    })
+  );
 });
 
 self.addEventListener('fetch', (event) => {

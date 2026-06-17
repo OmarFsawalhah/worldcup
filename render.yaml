@@ -18,6 +18,15 @@ services:
         sync: false  # set this manually in Render dashboard after first deploy
       - key: SKIP_DB_INIT
         value: "1"   # schema is created during build; skip at boot for fast port-bind
+      # Web Push (phone-tray notifications). Generate with:
+      #   python scripts/generate_vapid_keys.py
+      # then paste the two values in the Render dashboard.
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_CLAIM_EMAIL
+        sync: false
 
 databases:
   - name: worldcup-db

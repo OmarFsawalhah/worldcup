@@ -22,12 +22,13 @@ def _utcnow():
 
 def _safe_add(notification: Notification) -> bool:
     """Add and commit a notification, returning True if it landed.
-    Swallows IntegrityError (duplicate by unique constraint) and any
-    other DB error so the caller is never broken by notifications."""
+    Also fires a Web Push to all of the user's subscribed devices
+    (best-effort). Swallows IntegrityError (duplicate by unique
+    constraint) and any other DB error so the caller is never broken
+    by notifications."""
     try:
         db.session.add(notification)
         db.session.commit()
-        return True
     except IntegrityError:
         db.session.rollback()
         return False
@@ -39,6 +40,25 @@ def _safe_add(notification: Notification) -> bool:
         except Exception:
             pass
         return False
+
+    # Fire Web Push best-effort. Never let it block the caller.
+    try:
+        from services.push import send_push
+        send_push(
+            user_id=notification.user_id,
+            title="WC2026",
+            body=notification.message_en,  # English by default — phone OS
+                                            # owns the tray, not our i18n.
+            url=notification.link_url or "/",
+            tag=f"{notification.kind}-{notification.target_id or 0}",
+        )
+    except Exception as exc:
+        try:
+            import logging
+            logging.warning("Web Push send failed: %s", exc)
+        except Exception:
+            pass
+    return True
 
 
 # =====================================================================

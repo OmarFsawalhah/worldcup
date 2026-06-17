@@ -67,10 +67,43 @@
 - **`notify_round_closed`** — called from `scoring.py:score_match` when the last unscored match of a stage finishes. Generates one row per non-superuser with their rank + points. Idempotent via `unique(user_id, kind='round_closed', target_id=stage_int)`.
 - **`fire_starting_match_reminders`** — lazy, called from `routes/public.py:dashboard` on every page load. Walks matches in `[now+50min, now+70min]`, creates one notification per non-predicting user. Idempotent via the same unique constraint.
 
+### Phase 4 — Web Push (phone-tray notifications)  ✅ DEPLOYED (pending Render env vars)
+
+**What it does:** every in-app notification now ALSO fires a Web Push to all of the user's subscribed devices, so the phone buzzes and shows a notification in the system tray even when the app is closed.
+
+**Files added/changed:**
+- `requirements.txt` — added `pywebpush==2.0.0`
+- `app.py` — load `.env` via `python-dotenv` (was already a dep, just never loaded)
+- `models.py` — `PushSubscription` (user_id, endpoint, p256dh, auth, user_agent)
+- `services/push.py` (new) — `is_configured()`, `vapid_public_key()`, `send_push(user_id, title, body, url, tag)`. Cleans up dead subscriptions on 404/410.
+- `services/notifications.py` — `_safe_add()` now also calls `send_push()` after committing the row; failure swallowed so it never blocks the in-app notification.
+- `routes/public.py` — four new endpoints under `/push/`:
+  - `GET /push/vapid-key` — returns `{publicKey, enabled}`
+  - `POST /push/subscribe` — stores a subscription
+  - `POST /push/unsubscribe` — drops one
+  - `POST /push/test` — sends a test push to the current user
+- `static/sw.js` — bumped to `wc2026-shell-v2`; added `push` and `notificationclick` event handlers.
+- `templates/notifications.html` — added an "Enable phone notifications" panel with permission flow, subscribe button, status indicator, and a Send-test button.
+- `translations/en.json` + `ar.json` — 10 new keys (`notifications.push_*`).
+- `render.yaml` — added 3 `sync: false` env vars: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_CLAIM_EMAIL`.
+- `scripts/generate_vapid_keys.py` (new) — one-shot key generator.
+
+**One-time setup required:**
+
+1. Run `python scripts/generate_vapid_keys.py` locally.
+2. For local dev: paste the values into `.env`.
+3. For Render: set the same three env vars in the dashboard. **Use a different key pair for production** (don't reuse local dev keys).
+4. Once env vars are set, users will see the "Enable phone notifications" button on `/notifications`. If env vars are missing, the button shows "Push isn't configured on the server yet — ask the admin."
+
+**Caveats (documented for users in the rules update):**
+- iPhone: requires **iOS 16.4+** AND the PWA must be installed via Add to Home Screen first.
+- Android: works on all modern Chrome.
+- A user can disable push from the same panel; the subscription is dropped server-side too.
+- Push messages send the **English** body — the OS notification tray doesn't know which language the user picked in the app.
+
 ### Future (not yet built)
-- **Web Push** for true push notifications when the app is closed. Requires VAPID keys, push library, and a fresh permission flow. Optional — only adds value over in-app for the "app is closed" case.
-- Sound on new notification (one-line `new Audio('beep.mp3').play()` if user wants it).
-- Per-user mute/preferences page.
+- Per-user mute/preferences page (e.g. mute T-1h reminders but keep results).
+- Sound on new notification.
 
 ---
 

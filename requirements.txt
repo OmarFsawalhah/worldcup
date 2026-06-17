@@ -8,3 +8,4 @@ requests==2.32.3
 beautifulsoup4==4.12.3
 python-dotenv==1.0.1
 psycopg2-binary==2.9.9
+pywebpush==2.0.0

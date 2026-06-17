@@ -2,6 +2,13 @@ import os
 from flask import Flask, redirect, url_for, session
 from flask_login import LoginManager, current_user
 
+# Load .env for local development (no-op if not installed / file missing)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 from models import db, User
 from i18n import load_translations, t, current_lang, is_rtl
 

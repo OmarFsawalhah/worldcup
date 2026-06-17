@@ -199,6 +199,25 @@ class Notification(db.Model):
         return self.message_ar if lang == "ar" else self.message_en
 
 
+class PushSubscription(db.Model):
+    """A browser's Web Push subscription. One user can have many (one per
+    device/browser). When we send a push, we hit every row for that user.
+
+    `endpoint` is the unique URL the OS push service exposes; `p256dh` and
+    `auth` are the ECDH keys we encrypt the payload with.
+    """
+    __tablename__ = "push_subscriptions"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    endpoint = db.Column(db.String(500), unique=True, nullable=False)
+    p256dh = db.Column(db.String(255), nullable=False)
+    auth = db.Column(db.String(255), nullable=False)
+    user_agent = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+    user = db.relationship("User", foreign_keys=[user_id])
+
+
 class MatchTrivia(db.Model):
     """One question randomly assigned to (user, match). Snapshots the question
     so it survives even after the QuestionBank row is deleted. Holds the user's
