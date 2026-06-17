@@ -31,6 +31,11 @@
   "auth.password_too_short": "يجب أن تكون كلمة المرور الجديدة 6 أحرف على الأقل.",
   "auth.password_changed": "تم تحديث كلمة المرور.",
   "nav.change_password": "تغيير كلمة المرور",
+  "nav.notifications": "الإشعارات",
+  "notifications.section": "الإشعارات",
+  "notifications.title": "الإشعارات",
+  "notifications.mark_all_read": "تعليم الكل كمقروء",
+  "notifications.empty": "لا توجد إشعارات بعد. توقّع بعض المباريات وعد لاحقاً!",
 
   "dashboard.title": "المباريات القادمة",
   "dashboard.group": "المجموعة {letter}",

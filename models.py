@@ -161,6 +161,44 @@ class QuestionBank(db.Model):
     difficulty = db.Column(db.String(16), nullable=True)     # 'medium'/'hard'/'very_hard' (optional)
 
 
+class Notification(db.Model):
+    """In-app notification. One row per (user, event). Shown in the bell
+    dropdown / on /notifications page. No external delivery channel yet.
+
+    `kind` values:
+      - 'match_starting'   → T-1h reminder for an upcoming match the user
+                             hasn't predicted yet
+      - 'match_scored'     → admin ran Calc Points on a match
+      - 'round_closed'     → last match of a stage finished
+      - 'manual_bonus'     → admin set/changed bonus_points
+
+    `target_id` together with `kind` provides idempotency (we don't
+    re-create the same event-notification twice).
+    """
+    __tablename__ = "notifications"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    kind = db.Column(db.String(32), nullable=False)
+    target_id = db.Column(db.Integer, nullable=True)  # match_id, etc.
+    message_en = db.Column(db.String(255), nullable=False)
+    message_ar = db.Column(db.String(255), nullable=False)
+    link_url = db.Column(db.String(255), nullable=True)
+    is_read = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+    user = db.relationship("User", foreign_keys=[user_id])
+
+    __table_args__ = (
+        db.UniqueConstraint("user_id", "kind", "target_id",
+                            name="uq_user_kind_target"),
+        db.Index("ix_notifications_user_unread",
+                 "user_id", "is_read"),
+    )
+
+    def message(self, lang="en"):
+        return self.message_ar if lang == "ar" else self.message_en
+
+
 class MatchTrivia(db.Model):
     """One question randomly assigned to (user, match). Snapshots the question
     so it survives even after the QuestionBank row is deleted. Holds the user's

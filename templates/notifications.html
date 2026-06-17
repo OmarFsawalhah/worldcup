@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-3xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="flex items-start justify-between flex-wrap gap-3 mb-5">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('notifications.section') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">🔔 {{ t('notifications.title') }}</h1>
+  </div>
+  {% if items %}
+    <form method="post" action="{{ url_for('public.notifications_mark_all_read') }}">
+      <button class="btn btn-soft btn-sm">{{ t('notifications.mark_all_read') }}</button>
+    </form>
+  {% endif %}
+</div>
+
+{% if items %}
+  <div class="card-pitch p-0 overflow-hidden">
+    {% for n in items %}
+      <a href="{{ n.link_url or '#' }}"
+         data-nid="{{ n.id }}"
+         class="notif-row flex items-start gap-3 px-4 py-3 border-b border-slate-100 last:border-b-0 transition
+                {{ 'bg-yellow-50/60 hover:bg-yellow-50' if not n.is_read else 'hover:bg-slate-50' }}">
+        <div class="shrink-0 mt-1">
+          {% if not n.is_read %}
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow shadow-emerald-500/40"></span>
+          {% else %}
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-200"></span>
+          {% endif %}
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="text-sm {{ 'font-semibold text-slate-900' if not n.is_read else 'text-slate-700' }}">
+            {{ n.message(lang) }}
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5 font-mono" data-iso="{{ n.created_at.isoformat() }}Z">
+            {{ n.created_at.strftime('%Y-%m-%d %H:%M') }} UTC
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-10">
+    <div class="text-4xl mb-2">📭</div>
+    <p>{{ t('notifications.empty') }}</p>
+  </div>
+{% endif %}
+
+<script>
+(function () {
+  // Mark a notification read when clicked. We let the link navigate, but
+  // fire the POST in the background so the badge updates.
+  document.querySelectorAll('.notif-row[data-nid]').forEach(row => {
+    row.addEventListener('click', () => {
+      const id = row.dataset.nid;
+      fetch('/notifications/' + id + '/read', { method: 'POST' }).catch(() => null);
+    });
+  });
+
+  // Render created_at in user's local timezone
+  document.querySelectorAll('[data-iso]').forEach(el => {
+    const d = new Date(el.dataset.iso);
+    if (!isNaN(d)) {
+      el.textContent = d.toLocaleString();
+    }
+  });
+})();
+</script>
+{% endblock %}

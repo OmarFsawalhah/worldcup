@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
+from flask import Blueprint, render_template, request, redirect, url_for, abort, flash, jsonify
 from flask_login import login_required, current_user
 
-from models import db, Match, Team, Player, Prediction
+from models import db, Match, Team, Player, Prediction, Notification
 from scoring import user_total_points, user_exact_score_hits, prediction_breakdown
 from i18n import t
 
@@ -14,6 +14,15 @@ STAGE_ORDER = ["group", "r32", "r16", "qf", "sf", "third", "final"]
 def dashboard():
     if not current_user.is_authenticated:
         return redirect(url_for("auth.login"))
+    # Lazy fire of "match starting in ~1h" reminders — runs once per dashboard
+    # load, fully idempotent so it's safe to call constantly.
+    try:
+        from services.notifications import fire_starting_match_reminders
+        fire_starting_match_reminders()
+    except Exception:
+        import logging
+        logging.exception("starting reminders failed")
+
     matches = Match.query.order_by(Match.kickoff_utc.asc()).all()
     predicted_ids = {p.match_id for p in
                      Prediction.query.with_entities(Prediction.match_id)
@@ -127,3 +136,43 @@ def profile():
         pred_rows=pred_rows, triv_rows=[],
         pred_total=pred_total, triv_total=0, total=total,
     )
+
+
+# ============================================================
+#  In-app notifications
+# ============================================================
+
+@bp.route("/notifications")
+@login_required
+def notifications():
+    from services.notifications import list_for_user
+    items = list_for_user(current_user.id, limit=100)
+    return render_template("notifications.html", items=items)
+
+
+@bp.route("/notifications/unread_count")
+@login_required
+def notifications_unread_count():
+    from services.notifications import unread_count_for
+    return jsonify({"unread": unread_count_for(current_user.id)})
+
+
+@bp.route("/notifications/<int:nid>/read", methods=["POST"])
+@login_required
+def notification_read(nid):
+    n = db.session.get(Notification, nid) or abort(404)
+    if n.user_id != current_user.id:
+        abort(403)
+    n.is_read = True
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@bp.route("/notifications/mark_all_read", methods=["POST"])
+@login_required
+def notifications_mark_all_read():
+    Notification.query.filter_by(user_id=current_user.id, is_read=False).update(
+        {"is_read": True}
+    )
+    db.session.commit()
+    return redirect(url_for("public.notifications"))

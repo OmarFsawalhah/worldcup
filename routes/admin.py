@@ -171,8 +171,16 @@ def user_adjust(uid):
     except ValueError:
         flash("Invalid number.", "error")
         return redirect(url_for("admin.users"))
+    delta = bonus - (u.bonus_points or 0)
     u.bonus_points = bonus
     db.session.commit()
+    if delta != 0:
+        try:
+            from services.notifications import notify_manual_bonus
+            notify_manual_bonus(u, delta, current_user.username)
+        except Exception:
+            import logging
+            logging.exception("notify_manual_bonus failed")
     flash(t("admin.bonus_saved"), "success")
     return redirect(url_for("admin.users"))
 

@@ -16,9 +16,9 @@
 - App opens full-screen (no browser UI), shows our gold "26" icon, brand-coloured splash.
 
 ### Notification channel
-- **Telegram bot**, not Web Push.
-- Reasoning: Telegram works on every device with no iOS-16.4 quirks, no VAPID, no service-worker push handler. Users link their account with `/start <code>` once.
-- A user without Telegram still uses the app normally — they just don't get pings.
+- **In-app only.** Bell icon in the nav with an unread count, plus a `/notifications` history page. No Telegram, no Web Push, no external dependency.
+- Reasoning: works for every user on every device, no setup. The PWA install makes opening the app a one-tap action, so missing a notification just means "you'll see it next time you open the app" — fine for a small friends group.
+- *(Pivoted from Telegram. The user doesn't have Telegram even though their friends do, and in-app is simpler. Web Push remains a future option if anyone wants notifications when the app is closed.)*
 
 ### Notifications shipped (only these 4)
 1. **T-1h before kickoff** — per match, sent once. "Last hour to predict {Home} vs {Away}".
@@ -44,34 +44,29 @@
 
 **Acceptance:** Chrome on Android shows "Install app" prompt; the installed shortcut opens full-screen with our icon. iOS users can add to home screen and the app opens full-screen.
 
-### Phase 2 — Telegram bot scaffolding
-- `python-telegram-bot` added to requirements.
-- New model: `TelegramLink` (user_id, chat_id, linked_at).
-- New route: `/profile/notifications` — shows the link status. If unlinked, displays a 6-digit code + a "Open Telegram" button that deep-links to `t.me/<bot>?start=<code>` so the bot can claim the user.
-- Bot lives in `services/telegram_bot.py`. Runs in long-polling mode as a separate process (Render: background worker). On `/start <code>`, looks up the pending link, stamps `chat_id`.
-
-**Required from user:** bot username + `TELEGRAM_BOT_TOKEN` (created via @BotFather). I'll prompt for this before phase 2.
-
-### Phase 3 — Notification triggers
-- New module `services/notifications.py` with one function per type:
-  - `notify_match_starting(match)` — finds users who haven't predicted, sends T-1h alert.
-  - `notify_match_scored(prediction)` — called from `score_match()` for every prediction.
-  - `notify_round_closed(stage)` — called when last match of a stage is finalized.
+### Phase 2 — In-app notifications (schema + service + triggers)
+- New model `Notification`: id, user_id, kind, message_en, message_ar, link_url, is_read, created_at. Each user has their own row per event.
+- New module `services/notifications.py` with one function per kind:
+  - `notify_match_scored(prediction, match)` — called from `score_match()` per prediction.
+  - `notify_round_closed(stage)` — called when the last match of a stage finishes calc.
   - `notify_manual_bonus(user, delta, admin)` — called from `/admin/users/<id>/adjust`.
-- All wrapped in try/except — a notification failure never blocks the admin action.
-- Throttled: each (user, type, target_id) is recorded in a `NotificationLog` table to prevent duplicates.
+  - `notify_match_starting(user, match)` — triggered lazily on dashboard load for matches in [now+50min, now+70min] that the user hasn't been notified about and hasn't predicted.
+- All triggers wrapped in try/except — never block the admin action.
+- Idempotency: `Notification` has a unique constraint on `(user_id, kind, target_id)` so re-firing the same event doesn't create duplicates.
 
-### Phase 4 — Scheduler for T-1h pings
-- Cron-style background job. Two options:
-  - A: APScheduler embedded in the web process (simplest, but lost on free Render restarts every ~15 min).
-  - B: Render Cron Job firing a POST to `/admin/internal/check-pings` every 10 min.
-- Going with **B** — Render handles the schedule, our endpoint is idempotent (uses NotificationLog).
-- Endpoint walks every upcoming match where `kickoff_utc` is in [now+50min, now+70min] and not yet pinged, fires `notify_match_starting`.
+### Phase 3 — UI: bell + notifications page
+- Bell icon in the nav (between Leaderboard and Profile) with a red unread-count badge.
+- `/notifications` page showing the user's history, newest first, with "Mark all read" button.
+- Click a notification → marks it read and navigates to `link_url` (if any).
+- Tiny JS in `base.html` polling `/notifications/unread_count` every 30 seconds while the page is open, updating the badge live.
 
-### Phase 5 — Polish + rules update
-- Profile page section explaining how notifications work + "Unlink Telegram" button.
-- Translation keys for all bot messages (EN + AR).
-- Docs/rules update mentioning the install steps and bot link.
+### Phase 4 — Polish + rules update
+- Profile page section explaining what notifications appear.
+- Translation keys for all message types (EN + AR).
+- Docs/rules update.
+
+### Future (NOT in this branch)
+- Web Push notifications — true push when the app is closed. Requires VAPID keys, a push library, and a fresh permission flow. Only adds value for the "app is closed" use case.
 
 ---
 
@@ -79,17 +74,14 @@
 
 (Will update as I build.)
 
-- `static/manifest.webmanifest` (new)
-- `static/sw.js` (new)
-- `static/icons/` (new — 192/512 PNG + maskable + apple-touch)
-- `templates/base.html` (link + register)
-- `models.py` (+ TelegramLink, + NotificationLog)
-- `app.py` (auto-migrate new tables)
-- `routes/public.py` (+ notifications settings page)
-- `routes/admin.py` (+ internal check-pings endpoint)
-- `services/telegram_bot.py` (new)
-- `services/notifications.py` (new)
-- `scoring.py` (hook into `score_match` to fire notify_match_scored / notify_round_closed)
-- `requirements.txt` (+ python-telegram-bot)
-- `render.yaml` (+ background worker for the bot, + cron for pings)
+- `static/manifest.webmanifest` (new) — done phase 1
+- `static/sw.js` (new) — done phase 1
+- `static/icons/` (new) — done phase 1
+- `templates/base.html` (manifest link + SW register done; bell icon coming)
+- `models.py` (+ Notification table)
+- `app.py` (auto-migrate the new table)
+- `services/notifications.py` (new — 4 trigger functions)
+- `routes/public.py` (+ /notifications page + /notifications/unread_count endpoint + lazy match-starting trigger on dashboard)
+- `routes/admin.py` (+ hook into user_adjust → notify_manual_bonus)
+- `scoring.py` (+ hook into score_match → notify_match_scored + notify_round_closed)
 - `translations/{en,ar}.json`

@@ -47,6 +47,20 @@ def score_match(match: Match) -> None:
 
     db.session.commit()
 
+    # Best-effort notifications (never block the scoring)
+    try:
+        from services.notifications import notify_match_scored, notify_round_closed
+        notify_match_scored(match)
+        # If this was the last unscored match of the stage, fire round_closed
+        remaining = Match.query.filter_by(stage=match.stage).filter(
+            (Match.home_score.is_(None)) | (Match.away_score.is_(None))
+        ).count()
+        if remaining == 0:
+            notify_round_closed(match.stage)
+    except Exception:
+        import logging
+        logging.exception("notification trigger failed")
+
 
 def user_total_points(user_id: int) -> int:
     from models import User
