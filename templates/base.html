@@ -140,6 +140,33 @@
     </div>
   </nav>
 
+  {# ===== Install-app banner (hidden when already installed) ===== #}
+  {% if current_user.is_authenticated %}
+  <div id="install-banner" class="hidden bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-900 px-4 py-2 text-sm flex items-center justify-between gap-3 sticky top-0 z-40">
+    <div class="flex items-center gap-2 min-w-0">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M12 3v12"/><polyline points="8 11 12 15 16 11"/><path d="M3 21h18"/></svg>
+      <span class="font-semibold truncate">{{ t('install.banner_text') }}</span>
+    </div>
+    <div class="flex items-center gap-1 shrink-0">
+      <button id="install-btn" type="button" class="bg-slate-900 text-yellow-300 px-3 py-1 rounded-lg text-xs font-bold">{{ t('install.install_btn') }}</button>
+      <button id="install-dismiss" type="button" class="text-slate-900/70 hover:text-slate-900 px-2 py-1" title="{{ t('install.dismiss') }}">×</button>
+    </div>
+  </div>
+
+  {# iOS install help modal #}
+  <div id="ios-install-help" class="hidden fixed inset-0 z-50 bg-black/60 items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 text-slate-900">
+      <h3 class="font-display text-xl mb-2">{{ t('install.ios_title') }}</h3>
+      <ol class="text-sm space-y-2 list-decimal list-inside text-slate-700">
+        <li>{{ t('install.ios_step1') }}</li>
+        <li>{{ t('install.ios_step2') }}</li>
+        <li>{{ t('install.ios_step3') }}</li>
+      </ol>
+      <button id="ios-help-close" class="btn btn-primary w-full mt-4">OK</button>
+    </div>
+  </div>
+  {% endif %}
+
   <main class="{% block container_class %}max-w-6xl{% endblock %} mx-auto p-3 sm:p-5 lg:p-6">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -176,19 +203,120 @@
     }
 
     {% if current_user.is_authenticated %}
+    // Install-app banner. Logic:
+    //   - Hide entirely if already running as an installed PWA
+    //   - On Android Chrome, capture beforeinstallprompt → button triggers prompt
+    //   - On iOS Safari, no API exists → button shows a step-by-step help modal
+    //   - User can dismiss; we remember in localStorage for 30 days
+    (function () {
+      const banner = document.getElementById('install-banner');
+      const btn = document.getElementById('install-btn');
+      const dismissBtn = document.getElementById('install-dismiss');
+      const iosHelp = document.getElementById('ios-install-help');
+      const iosClose = document.getElementById('ios-help-close');
+      if (!banner) return;
+
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                        || window.navigator.standalone === true;
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const dismissedAt = Number(localStorage.getItem('install-dismissed') || 0);
+      const recentlyDismissed = Date.now() - dismissedAt < 30 * 24 * 3600 * 1000;
+
+      let deferredPrompt = null;
+
+      function showIosHelp() {
+        iosHelp.classList.remove('hidden');
+        iosHelp.classList.add('flex');
+      }
+      function hideIosHelp() {
+        iosHelp.classList.add('hidden');
+        iosHelp.classList.remove('flex');
+      }
+      iosClose.addEventListener('click', hideIosHelp);
+
+      // Android / desktop Chrome path
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (!isStandalone && !recentlyDismissed) banner.classList.remove('hidden');
+      });
+
+      // iOS Safari path — no event, just show the banner with help modal
+      if (isiOS && !isStandalone && !recentlyDismissed) {
+        banner.classList.remove('hidden');
+      }
+
+      // App got installed → hide banner forever
+      window.addEventListener('appinstalled', () => {
+        banner.classList.add('hidden');
+        deferredPrompt = null;
+      });
+
+      btn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const choice = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          if (choice.outcome === 'accepted') banner.classList.add('hidden');
+        } else if (isiOS) {
+          showIosHelp();
+        } else {
+          // Desktop Chrome where beforeinstallprompt didn't fire (already
+          // installed elsewhere, or browser doesn't allow it). Show a tip.
+          alert({{ t('install.no_prompt') | tojson }});
+        }
+      });
+
+      dismissBtn.addEventListener('click', () => {
+        banner.classList.add('hidden');
+        localStorage.setItem('install-dismissed', Date.now().toString());
+      });
+    })();
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
     // Live unread-count badge on the bell icon. Polls every 30s and on focus.
+    // Plays a short "ding" if the count goes UP since last check (sound only
+    // applies while the page is open — when the app is closed, the OS plays
+    // its own notification sound).
     (function () {
       const badges = [
         document.getElementById('notif-badge'),
         document.getElementById('notif-badge-mobile'),
       ].filter(Boolean);
       if (!badges.length) return;
+      let lastCount = null;
+
+      function playDing() {
+        try {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (!Ctx) return;
+          const ctx = new Ctx();
+          const now = ctx.currentTime;
+          // Two short notes: G5 then C6 (cheerful)
+          [[783.99, 0], [1046.5, 0.12]].forEach(([freq, t]) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.type = 'sine'; o.frequency.value = freq;
+            g.gain.setValueAtTime(0, now + t);
+            g.gain.linearRampToValueAtTime(0.18, now + t + 0.02);
+            g.gain.exponentialRampToValueAtTime(0.0001, now + t + 0.20);
+            o.connect(g); g.connect(ctx.destination);
+            o.start(now + t); o.stop(now + t + 0.22);
+          });
+        } catch (e) { /* user hasn't interacted yet → autoplay blocked, ignore */ }
+      }
+
       function update() {
         fetch('/notifications/unread_count', { headers: { 'Accept': 'application/json' } })
           .then(r => r.ok ? r.json() : null)
           .then(d => {
             if (!d) return;
             const n = d.unread || 0;
+            if (lastCount !== null && n > lastCount) {
+              playDing();
+            }
+            lastCount = n;
             badges.forEach(b => {
               if (n > 0) {
                 b.textContent = n > 99 ? '99+' : n;
