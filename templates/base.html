@@ -68,12 +68,6 @@
           {% if current_user.is_authenticated %}
             {{ nav_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
             {{ nav_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
-            <a href="{{ url_for('public.notifications') }}"
-               class="nav-link relative {% if ep == 'public.notifications' %}active{% endif %}"
-               title="{{ t('nav.notifications') }}">
-              <span>{{ ico_bell|safe }}</span>
-              <span id="notif-badge" class="hidden absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center px-1"></span>
-            </a>
             {% if current_user.is_admin %}
               {{ nav_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
             {% endif %}
@@ -82,6 +76,13 @@
             <a href="{{ url_for('auth.logout') }}" class="nav-link" title="{{ current_user.username }}">
               <span>{{ ico_logout|safe }}</span>
               <span class="hidden lg:inline">{{ t('nav.logout') }}</span>
+            </a>
+            {# Bell — sits beside the language pill #}
+            <a href="{{ url_for('public.notifications') }}"
+               class="nav-link relative ms-1 {% if ep == 'public.notifications' %}active{% endif %}"
+               title="{{ t('nav.notifications') }}">
+              <span>{{ ico_bell|safe }}</span>
+              <span id="notif-badge" class="hidden absolute -top-1 -right-1 min-w-[16px] h-[16px] rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center px-1"></span>
             </a>
           {% else %}
             {{ nav_link(url_for('auth.login'), t('nav.login'), ep == 'auth.login') }}
@@ -94,8 +95,16 @@
           </a>
         </div>
 
-        {# Mobile lang + hamburger #}
+        {# Mobile bell + lang + hamburger #}
         <div class="md:hidden flex items-center gap-2 ms-auto">
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('public.notifications') }}"
+               class="relative p-2 rounded-lg text-white hover:bg-white/10 transition"
+               title="{{ t('nav.notifications') }}">
+              {{ ico_bell|safe }}
+              <span id="notif-badge-mobile" class="hidden absolute top-0.5 right-0.5 min-w-[16px] h-[16px] rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center px-1"></span>
+            </a>
+          {% endif %}
           <a href="{{ url_for('set_lang', code='ar' if current_lang() == 'en' else 'en') }}"
              class="btn btn-gold btn-xs" title="{{ t('lang.toggle') }}">
             <span>{{ 'AR' if current_lang() == 'ar' else 'EN' }}</span>
@@ -114,7 +123,6 @@
         {% if current_user.is_authenticated %}
           {{ mobile_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
           {{ mobile_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
-          {{ mobile_link(url_for('public.notifications'), t('nav.notifications'), ep == 'public.notifications', ico_bell) }}
           {% if current_user.is_admin %}
             {{ mobile_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
           {% endif %}
@@ -170,20 +178,25 @@
     {% if current_user.is_authenticated %}
     // Live unread-count badge on the bell icon. Polls every 30s and on focus.
     (function () {
-      const badge = document.getElementById('notif-badge');
-      if (!badge) return;
+      const badges = [
+        document.getElementById('notif-badge'),
+        document.getElementById('notif-badge-mobile'),
+      ].filter(Boolean);
+      if (!badges.length) return;
       function update() {
         fetch('/notifications/unread_count', { headers: { 'Accept': 'application/json' } })
           .then(r => r.ok ? r.json() : null)
           .then(d => {
             if (!d) return;
             const n = d.unread || 0;
-            if (n > 0) {
-              badge.textContent = n > 99 ? '99+' : n;
-              badge.classList.remove('hidden');
-            } else {
-              badge.classList.add('hidden');
-            }
+            badges.forEach(b => {
+              if (n > 0) {
+                b.textContent = n > 99 ? '99+' : n;
+                b.classList.remove('hidden');
+              } else {
+                b.classList.add('hidden');
+              }
+            });
           })
           .catch(() => null);
       }
