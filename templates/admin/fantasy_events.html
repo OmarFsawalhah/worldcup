@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('admin.fantasy_events_title') }}</div>
+  <h1 class="page-title text-2xl sm:text-3xl">
+    {{ match.home_team.name(lang) }} <span class="text-slate-400">vs</span> {{ match.away_team.name(lang) }}
+  </h1>
+  <div class="text-xs font-mono text-slate-400 mt-1">{{ match.kickoff_utc.strftime('%Y-%m-%d %H:%M') }} UTC</div>
+</div>
+
+<form method="post" id="events-form" class="space-y-6">
+
+  {# ============ Two-column team blocks: Starters + Subs + Cards ============ #}
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+    {% for side, team, players in [('home', match.home_team, home_players),
+                                     ('away', match.away_team, away_players)] %}
+    <div class="card-pitch">
+      <div class="flex items-center gap-2 mb-3">
+        <img src="{{ flag_url(team) }}" alt="" class="flag-img flag-img-sm">
+        <h2 class="font-display text-lg">{{ team.name(lang) }}</h2>
+      </div>
+
+      <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-2">{{ t('admin.fe_starters') }} <span class="text-slate-400">(11)</span></div>
+      <div class="grid grid-cols-2 gap-1.5 mb-4">
+        {% for p in players %}
+          {% set ev = existing.get(p.id) %}
+          <label class="player-check">
+            <input type="checkbox" name="starters" value="{{ p.id }}" {{ 'checked' if ev and ev.started }}>
+            <span>{% if p.shirt_number %}<b class="text-slate-400">{{ p.shirt_number }}</b> {% endif %}{{ p.name(lang) }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-2">{{ t('admin.fe_subs_in') }}</div>
+      <div class="grid grid-cols-2 gap-1.5 mb-4">
+        {% for p in players %}
+          {% set ev = existing.get(p.id) %}
+          <label class="player-check">
+            <input type="checkbox" name="subs" value="{{ p.id }}" {{ 'checked' if ev and ev.came_on }}>
+            <span>{% if p.shirt_number %}<b class="text-slate-400">{{ p.shirt_number }}</b> {% endif %}{{ p.name(lang) }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="text-[11px] uppercase tracking-wider text-amber-700 font-bold mb-2">{{ t('admin.fe_yellow') }}</div>
+          <div class="space-y-1">
+            {% for p in players %}
+              {% set ev = existing.get(p.id) %}
+              <label class="player-check player-check-sm">
+                <input type="checkbox" name="yellow" value="{{ p.id }}" {{ 'checked' if ev and ev.yellow }}>
+                <span>{% if p.shirt_number %}<b class="text-slate-400">{{ p.shirt_number }}</b> {% endif %}{{ p.name(lang) }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <div class="text-[11px] uppercase tracking-wider text-rose-700 font-bold mb-2">{{ t('admin.fe_red') }}</div>
+          <div class="space-y-1">
+            {% for p in players %}
+              {% set ev = existing.get(p.id) %}
+              <label class="player-check player-check-sm">
+                <input type="checkbox" name="red" value="{{ p.id }}" {{ 'checked' if ev and ev.red }}>
+                <span>{% if p.shirt_number %}<b class="text-slate-400">{{ p.shirt_number }}</b> {% endif %}{{ p.name(lang) }}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ============ Goals (scorer + assister per row) ============ #}
+  <div class="card-pitch">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-display text-lg">{{ t('admin.fe_goals') }}</h2>
+      <button type="button" id="add-goal" class="btn btn-soft btn-xs">+ {{ t('admin.fe_add_goal') }}</button>
+    </div>
+    <div id="goals-list" class="space-y-2">
+      {# Initially render one row per existing goal #}
+      {% set ns = namespace(rendered=0) %}
+      {% for pid, ev in existing.items() %}
+        {% for _ in range(ev.goals or 0) %}
+          {% set ns.rendered = ns.rendered + 1 %}
+          {% include 'admin/_fe_goal_row.html' with context %}
+        {% endfor %}
+      {% endfor %}
+      {# Always show at least one empty row #}
+      {% if ns.rendered == 0 %}
+        {% set pid = None %}
+        {% include 'admin/_fe_goal_row.html' with context %}
+      {% endif %}
+    </div>
+  </div>
+
+  {# ============ Own goals ============ #}
+  <div class="card-pitch">
+    <h2 class="font-display text-lg mb-3">{{ t('admin.fe_own_goals') }}</h2>
+    <select name="owngoal_scorer" class="input" id="owngoal-select">
+      <option value="">— {{ t('match.summary_none') }} —</option>
+      <optgroup label="{{ match.home_team.name(lang) }}">
+        {% for p in home_players %}
+          <option value="{{ p.id }}" {{ 'selected' if existing.get(p.id) and (existing.get(p.id).own_goals or 0) > 0 }}>
+            {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+          </option>
+        {% endfor %}
+      </optgroup>
+      <optgroup label="{{ match.away_team.name(lang) }}">
+        {% for p in away_players %}
+          <option value="{{ p.id }}" {{ 'selected' if existing.get(p.id) and (existing.get(p.id).own_goals or 0) > 0 }}>
+            {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+          </option>
+        {% endfor %}
+      </optgroup>
+    </select>
+    <p class="text-xs text-slate-500 mt-1">{{ t('admin.fe_own_goals_hint') }}</p>
+  </div>
+
+  {# ============ MOTM ============ #}
+  <div class="card-pitch">
+    <h2 class="font-display text-lg mb-3">{{ t('admin.fe_motm') }}</h2>
+    <select name="motm_id" class="input">
+      <option value="">— {{ t('match.summary_none') }} —</option>
+      <optgroup label="{{ match.home_team.name(lang) }}">
+        {% for p in home_players %}
+          {% set ev = existing.get(p.id) %}
+          <option value="{{ p.id }}" {{ 'selected' if (ev and ev.is_motm) or match.motm_id == p.id }}>
+            {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+          </option>
+        {% endfor %}
+      </optgroup>
+      <optgroup label="{{ match.away_team.name(lang) }}">
+        {% for p in away_players %}
+          {% set ev = existing.get(p.id) %}
+          <option value="{{ p.id }}" {{ 'selected' if (ev and ev.is_motm) or match.motm_id == p.id }}>
+            {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+          </option>
+        {% endfor %}
+      </optgroup>
+    </select>
+  </div>
+
+  <div class="flex justify-between gap-2">
+    <a href="{{ url_for('admin.matches') }}" class="btn btn-soft btn-sm">{{ t('admin.back') }}</a>
+    <button class="btn btn-primary">{{ t('admin.save') }}</button>
+  </div>
+
+</form>
+
+{# Hidden template used to clone new goal rows #}
+<template id="goal-row-template">
+  <div class="goal-row grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
+    <select name="goal_scorer" class="input">
+      <option value="">— {{ t('admin.fe_scorer') }} —</option>
+      <optgroup label="{{ match.home_team.name(lang) }}">
+        {% for p in home_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+      </optgroup>
+      <optgroup label="{{ match.away_team.name(lang) }}">
+        {% for p in away_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+      </optgroup>
+    </select>
+    <select name="goal_assister" class="input">
+      <option value="">— {{ t('admin.fe_assister') }} —</option>
+      <optgroup label="{{ match.home_team.name(lang) }}">
+        {% for p in home_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+      </optgroup>
+      <optgroup label="{{ match.away_team.name(lang) }}">
+        {% for p in away_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+      </optgroup>
+    </select>
+    <button type="button" class="btn btn-danger btn-xs remove-goal">×</button>
+  </div>
+</template>
+
+<style>
+.player-check { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 6px;
+  border-radius: 8px; background: #f8fafc; cursor: pointer; user-select: none; }
+.player-check:hover { background: #f1f5f9; }
+.player-check input { margin: 0; }
+.player-check span { line-height: 1.1; }
+.player-check-sm { font-size: 11px; padding: 3px 5px; }
+.goal-row .input { width: 100%; }
+</style>
+
+<script>
+(function () {
+  const tmpl = document.getElementById('goal-row-template');
+  const list = document.getElementById('goals-list');
+
+  function bindRow(row) {
+    row.querySelector('.remove-goal').addEventListener('click', () => {
+      if (list.querySelectorAll('.goal-row').length > 1) row.remove();
+      else {
+        row.querySelectorAll('select').forEach(s => s.value = '');
+      }
+    });
+  }
+
+  document.querySelectorAll('#goals-list .goal-row').forEach(bindRow);
+
+  document.getElementById('add-goal').addEventListener('click', () => {
+    const node = tmpl.content.firstElementChild.cloneNode(true);
+    list.appendChild(node);
+    bindRow(node);
+  });
+})();
+</script>
+{% endblock %}

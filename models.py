@@ -54,9 +54,32 @@ class Player(db.Model):
     name_ar = db.Column(db.String(96), nullable=False)
     position = db.Column(db.String(16), nullable=True)
     shirt_number = db.Column(db.Integer, nullable=True)
+    # Fantasy fields
+    price = db.Column(db.Numeric(4, 1), default=4.0, nullable=False)  # €m, e.g. 12.5
+    photo_url = db.Column(db.String(500), nullable=True)
 
     def name(self, lang="en"):
         return self.name_ar if lang == "ar" else self.name_en
+
+    def fpl_position(self):
+        """Normalize whatever raw position value we stored ("Goalkeeper",
+        "Defence", "Midfield", "Offence", "Forward", "GK", etc.) into one of
+        the four short codes used by the fantasy game: GK / DEF / MID / FWD."""
+        raw = (self.position or "").strip().lower()
+        if not raw:
+            return "MID"
+        # Direct short-code hit
+        if raw.upper() in ("GK", "DEF", "MID", "FWD"):
+            return raw.upper()
+        if "goal" in raw or raw == "gk":
+            return "GK"
+        if "def" in raw or "back" in raw:
+            return "DEF"
+        if "mid" in raw:
+            return "MID"
+        if any(k in raw for k in ("forward", "fwd", "striker", "attack", "offence", "offense")):
+            return "FWD"
+        return "MID"
 
 
 class Match(db.Model):
@@ -159,6 +182,71 @@ class QuestionBank(db.Model):
     choices_json = db.Column(db.Text, nullable=False)        # JSON list of strings
     correct_index = db.Column(db.Integer, nullable=False)
     difficulty = db.Column(db.String(16), nullable=True)     # 'medium'/'hard'/'very_hard' (optional)
+
+
+class MatchEvent(db.Model):
+    """One row per (match, player). Captures every per-player event the admin
+    enters after a match — used by the fantasy game scoring engine.
+
+    Notes:
+    - Each match should have exactly ONE row per player who appeared.
+    - `started` and `came_on` are mutually exclusive (a player is either in
+      the starting XI or came on as a sub).
+    - `goals`, `assists`, `own_goals` are counts (can be >1 in a single match).
+    - `yellow` is bool — second yellow = red, handled by setting `red=True`.
+    """
+    __tablename__ = "match_events"
+    id = db.Column(db.Integer, primary_key=True)
+    match_id = db.Column(db.Integer, db.ForeignKey("matches.id"), nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=False)
+    started = db.Column(db.Boolean, default=False, nullable=False)
+    came_on = db.Column(db.Boolean, default=False, nullable=False)
+    goals = db.Column(db.Integer, default=0, nullable=False)
+    assists = db.Column(db.Integer, default=0, nullable=False)
+    own_goals = db.Column(db.Integer, default=0, nullable=False)
+    yellow = db.Column(db.Boolean, default=False, nullable=False)
+    red = db.Column(db.Boolean, default=False, nullable=False)
+    is_motm = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+    match = db.relationship("Match", foreign_keys=[match_id],
+                            backref=db.backref("events", cascade="all, delete-orphan"))
+    player = db.relationship("Player", foreign_keys=[player_id])
+
+    __table_args__ = (db.UniqueConstraint("match_id", "player_id", name="uq_match_player_event"),)
+
+
+class FantasySquad(db.Model):
+    """One per user. Holds 15 players via FantasyPick rows, plus captain/vice."""
+    __tablename__ = "fantasy_squads"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=True)
+    captain_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
+    vice_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
+    created_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+    updated_at = db.Column(db.DateTime, default=utcnow, onupdate=utcnow, nullable=False)
+
+    user = db.relationship("User", foreign_keys=[user_id])
+    captain = db.relationship("Player", foreign_keys=[captain_id])
+    vice = db.relationship("Player", foreign_keys=[vice_id])
+    picks = db.relationship("FantasyPick", backref="squad",
+                            lazy="dynamic", cascade="all, delete-orphan")
+
+
+class FantasyPick(db.Model):
+    """One of the 15 players in a squad. is_starter=True for the 11 in the
+    starting XI; False for the 4 bench players."""
+    __tablename__ = "fantasy_picks"
+    id = db.Column(db.Integer, primary_key=True)
+    squad_id = db.Column(db.Integer, db.ForeignKey("fantasy_squads.id"), nullable=False)
+    player_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=False)
+    is_starter = db.Column(db.Boolean, default=True, nullable=False)
+    slot = db.Column(db.Integer, nullable=True)  # 1..15 for ordering; optional
+
+    player = db.relationship("Player", foreign_keys=[player_id])
+
+    __table_args__ = (db.UniqueConstraint("squad_id", "player_id", name="uq_squad_player"),)
 
 
 class MatchTrivia(db.Model):

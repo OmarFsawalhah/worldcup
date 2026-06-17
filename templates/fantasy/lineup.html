@@ -1,0 +1,548 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="flex items-start justify-between flex-wrap gap-3 mb-4">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('fantasy.section') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ t('fantasy.lineup_title') }}</h1>
+    <p class="text-slate-300 text-sm mt-1">{{ t('fantasy.lineup_hint', n=starters) }}</p>
+  </div>
+  <div class="flex items-center gap-2 flex-wrap">
+  <a href="{{ url_for('fantasy.leaderboard') }}" class="btn btn-gold btn-sm">🏆 {{ t('fantasy.leaderboard_title') }}</a>
+  {% if not squad_locked %}
+    <a href="{{ url_for('fantasy.pick') }}" class="btn btn-soft btn-sm">← {{ t('fantasy.edit_squad') }}</a>
+  {% else %}
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-500/20 text-rose-100 text-xs font-bold">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      {{ t('fantasy.locked_label') }}
+    </span>
+  {% endif %}
+  </div>
+</div>
+
+{# Window banner — shows status + live countdown #}
+{% if window.next_event_at %}
+<div class="card-pitch mb-4 {% if window.status == 'locked' %}border-2 border-rose-300 bg-rose-50{% else %}border-2 border-emerald-300 bg-emerald-50{% endif %}">
+  <div class="flex items-center gap-3 flex-wrap">
+    {% if window.status == 'locked' %}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <div class="text-sm text-rose-900 flex-1 min-w-[200px]">
+        <div class="font-bold">{{ t('fantasy.locked_phase', phase=t('fantasy.phase_' + (window.phase_in_play or '')) ) }}</div>
+        <div class="text-xs mt-0.5 text-rose-700">{{ t('fantasy.locked_explain_short') }}</div>
+      </div>
+    {% else %}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <div class="text-sm text-emerald-900 flex-1 min-w-[200px]">
+        <div class="font-bold">{{ t('fantasy.window_open') }}</div>
+        <div class="text-xs mt-0.5 text-emerald-700">{{ t('fantasy.window_open_hint', phase=t('fantasy.phase_' + (window.next_phase or '')) ) }}</div>
+      </div>
+    {% endif %}
+    <div class="text-center">
+      <div class="text-[10px] uppercase tracking-wider font-bold text-slate-500">
+        {% if window.status == 'locked' %}{{ t('fantasy.opens_in') }}{% else %}{{ t('fantasy.closes_in') }}{% endif %}
+      </div>
+      <div id="window-countdown" class="font-display text-2xl" data-target="{{ window.next_event_at.isoformat() }}Z">…</div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const el = document.getElementById('window-countdown');
+  if (!el) return;
+  const target = new Date(el.dataset.target).getTime();
+  function tick() {
+    const now = Date.now();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+    const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
+    const m = Math.floor(diff / 60000);    diff -= m * 60000;
+    const s = Math.floor(diff / 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    el.textContent = (d > 0 ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+  tick(); setInterval(tick, 1000);
+})();
+</script>
+{% endif %}
+
+{# ===== Sticky status bar ===== #}
+<div class="card-pitch sticky top-2 z-30 mb-4">
+  <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+    <div class="text-center">
+      <div class="text-[10px] uppercase font-bold text-slate-500">{{ t('fantasy.starters') }}</div>
+      <div class="font-display text-base"><span id="cnt-starters">0</span>/{{ starters }}</div>
+    </div>
+    {% for pos in ['GK','DEF','MID','FWD'] %}
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold text-slate-500">{{ pos }}</div>
+        <div class="font-display text-base">
+          <span id="cnt-{{ pos }}">0</span>
+          <span class="text-slate-400 text-xs">({{ min_formation[pos] }}–{{ max_formation[pos] }})</span>
+        </div>
+      </div>
+    {% endfor %}
+    <form method="post" id="lineup-form" class="ms-auto">
+      <input type="hidden" name="captain_id" id="captain_id" value="{{ squad.captain_id or '' }}">
+      <input type="hidden" name="vice_id" id="vice_id" value="{{ squad.vice_id or '' }}">
+      {# Starter hidden inputs are injected by JS on submit #}
+      <button id="save-btn" class="btn btn-primary btn-sm" disabled>{{ t('fantasy.save_lineup') }}</button>
+    </form>
+  </div>
+  <div class="text-xs mt-2" id="lineup-msg"></div>
+</div>
+
+{# ===== Two-column layout ===== #}
+{% set groups = {'GK': [], 'DEF': [], 'MID': [], 'FWD': []} %}
+{% for pk in picks %}
+  {% set pos = pk.player.fpl_position() %}
+  {% if pos in groups %}
+    {% set _ = groups[pos].append(pk) %}
+  {% endif %}
+{% endfor %}
+
+<div class="grid grid-cols-1 lg:grid-cols-[5fr_6fr] gap-4">
+
+  {# ========== Pitch + bench ========== #}
+  <div>
+    <div class="pitch">
+      <div class="pitch-markings" aria-hidden="true">
+        <div class="pm-top-box"></div>
+        <div class="pm-top-box-inner"></div>
+        <div class="pm-arc-top"></div>
+        <div class="pm-halfway"></div>
+        <div class="pm-center"></div>
+        <div class="pm-bot-box"></div>
+        <div class="pm-bot-box-inner"></div>
+        <div class="pm-arc-bot"></div>
+      </div>
+
+      <div class="pitch-row" data-pos="GK" id="row-GK"></div>
+      <div class="pitch-row" data-pos="DEF" id="row-DEF"></div>
+      <div class="pitch-row" data-pos="MID" id="row-MID"></div>
+      <div class="pitch-row" data-pos="FWD" id="row-FWD"></div>
+    </div>
+
+    {# Bench (4 players) #}
+    <div class="bench-card">
+      <div class="text-[10px] uppercase tracking-wider font-bold text-slate-500 mb-2">{{ t('fantasy.bench') }}</div>
+      <div class="bench-row" id="bench-row"></div>
+    </div>
+  </div>
+
+  {# ========== Squad list (15 picks, grouped) ========== #}
+  <div>
+    {% for pos, items in groups.items() %}
+    {% if items %}
+      <div class="card-pitch mb-3">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="pos-pill pos-{{ pos }}">{{ pos }}</span>
+          <h2 class="font-display text-base">{{ t('fantasy.pos_' + pos|lower) }}</h2>
+        </div>
+        <div class="grid grid-cols-1 gap-1.5">
+          {% for pk in items %}
+            {% set p = pk.player %}
+            <div class="pick-row"
+                 data-pid="{{ p.id }}"
+                 data-pos="{{ p.fpl_position() }}"
+                 data-name="{{ p.name_en }}"
+                 data-photo="{{ p.photo_url or '' }}"
+                 data-shirt="{{ p.shirt_number or '?' }}"
+                 data-flag="{{ flag_url(p.team) }}"
+                 data-team-name="{{ p.team.name(lang) }}"
+                 data-price="{{ '%.1f' % (p.price | float) if p.price is not none else '4.0' }}"
+                 data-points="{{ points_map.get(p.id, 0) }}"
+                 data-initial-starter="{{ '1' if pk.is_starter else '0' }}">
+              <label class="starter-toggle">
+                <input type="checkbox" class="starter-check" {{ 'checked' if pk.is_starter }}>
+                <span class="dot"></span>
+              </label>
+              {% if p.photo_url %}
+                <img src="{{ p.photo_url }}" alt="" class="w-9 h-9 rounded-full object-cover bg-slate-200" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'sil-sm', textContent:'#{{ p.shirt_number or '?' }}'}))">
+              {% else %}
+                <div class="sil-sm">#{{ p.shirt_number or '?' }}</div>
+              {% endif %}
+              <div class="min-w-0 flex-1">
+                <div class="font-medium text-sm truncate">{{ p.name_en }}</div>
+                <div class="text-[10px] text-slate-500 flex items-center gap-1.5 truncate">
+                  <img src="{{ flag_url(p.team) }}" alt="" class="w-3.5 h-2.5 rounded-sm shrink-0">
+                  <span class="truncate">{{ p.team.name(lang) }}</span>
+                  <span class="text-emerald-700 font-bold">€{{ '%.1f' % (p.price | float) if p.price is not none else '4.0' }}m</span>
+                </div>
+              </div>
+              <button type="button" class="cv-btn cap-btn" title="{{ t('fantasy.captain') }}" data-role="captain">C</button>
+              <button type="button" class="cv-btn vice-btn" title="{{ t('fantasy.vice') }}" data-role="vice">V</button>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+/* ===== Pitch (reuse from picker, plus bench) ===== */
+.pitch {
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.05) 0 28px,
+      transparent 28px 56px),
+    linear-gradient(180deg, #047857 0%, #065f46 100%);
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 16px 8px;
+  display: flex; flex-direction: column;
+  gap: 4px;
+  aspect-ratio: 7 / 10;
+  min-height: 560px;
+  overflow: hidden;
+}
+.pitch-markings { position: absolute; inset: 0; pointer-events: none; }
+.pm-halfway { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: rgba(255,255,255,0.7); }
+.pm-center { position: absolute; left: 50%; top: 50%; width: 70px; height: 70px;
+  border: 2px solid rgba(255,255,255,0.7); border-radius: 50%; transform: translate(-50%, -50%); }
+.pm-top-box { position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  width: 56%; height: 14%; border: 2px solid rgba(255,255,255,0.7); border-top: none; }
+.pm-top-box-inner { position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  width: 26%; height: 6%; border: 2px solid rgba(255,255,255,0.7); border-top: none; }
+.pm-arc-top { position: absolute; left: 50%; top: 14%; transform: translate(-50%, -50%);
+  width: 80px; height: 40px; border: 2px solid rgba(255,255,255,0.7);
+  border-top: none; border-radius: 0 0 80px 80px / 0 0 40px 40px; }
+.pm-bot-box { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 56%; height: 14%; border: 2px solid rgba(255,255,255,0.7); border-bottom: none; }
+.pm-bot-box-inner { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 26%; height: 6%; border: 2px solid rgba(255,255,255,0.7); border-bottom: none; }
+.pm-arc-bot { position: absolute; left: 50%; bottom: 14%; transform: translate(-50%, 50%);
+  width: 80px; height: 40px; border: 2px solid rgba(255,255,255,0.7);
+  border-bottom: none; border-radius: 80px 80px 0 0 / 40px 40px 0 0; }
+
+.pitch-row {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-around; align-items: center;
+  flex: 1; gap: 6px;
+}
+.pitch-slot {
+  width: 72px; max-width: 22vw; aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.95);
+  border: 2px solid #fbbf24;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 4px; color: #0f172a;
+  position: relative;
+  transition: transform .15s ease;
+}
+.pitch-slot.is-captain { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.4); }
+.pitch-slot.is-vice { border-color: #94a3b8; box-shadow: 0 0 0 3px rgba(148,163,184,0.4); }
+.pitch-slot .ps-photo {
+  width: 36px; height: 36px; border-radius: 999px; object-fit: cover;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #475569; font-weight: 800; font-size: 11px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.ps-name {
+  font-size: 10px; font-weight: 700; line-height: 1.1;
+  margin-top: 2px; max-width: 100%; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ps-price { font-size: 9px; color: #047857; font-weight: 700; }
+.ps-flag {
+  position: absolute; top: 3px; right: 3px;
+  width: 14px; height: 10px; border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+}
+.ps-points {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  min-width: 26px; height: 22px; padding: 0 6px; border-radius: 999px;
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: white; font-weight: 900; font-size: 11px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+.ps-badge {
+  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 22px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 12px; color: #1a1a1a;
+  background: #fbbf24; box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.ps-badge.vice { background: #3b82f6; color: white; }
+.pitch-slot.is-vice { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.4); }
+
+/* ===== Bench ===== */
+.bench-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 8px;
+}
+.bench-row {
+  display: flex; gap: 8px; justify-content: space-around;
+  min-height: 88px;
+}
+.bench-row .pitch-slot {
+  background: rgba(255,255,255,0.85);
+  border: 2px dashed rgba(255,255,255,0.4);
+  color: #0f172a;
+  opacity: 0.85;
+}
+
+/* ===== Squad list rows ===== */
+.pick-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: white;
+}
+.pick-row.is-starter {
+  border-color: #10b981; background: #ecfdf5;
+}
+.starter-toggle { cursor: pointer; display: inline-flex; }
+.starter-check { display: none; }
+.dot {
+  width: 18px; height: 18px; border-radius: 999px;
+  background: #e2e8f0; border: 2px solid #cbd5e1;
+  display: inline-block; transition: background .12s ease, border-color .12s ease;
+}
+.starter-check:checked + .dot {
+  background: #10b981; border-color: #047857;
+  box-shadow: inset 0 0 0 3px white;
+}
+.cv-btn {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: #e2e8f0; color: #475569;
+  font-weight: 800; font-size: 12px; flex-shrink: 0;
+  cursor: pointer; border: none;
+}
+.cv-btn.is-on.cap-btn { background: #fbbf24; color: #1a1a1a; box-shadow: 0 0 0 2px #f59e0b inset; }
+.cv-btn.is-on.vice-btn { background: #3b82f6; color: white; box-shadow: 0 0 0 2px #1d4ed8 inset; }
+
+/* Disabled (already 11 starters, can't add more) */
+.starter-toggle.is-disabled { cursor: not-allowed; opacity: 0.5; }
+.starter-toggle.is-disabled .dot { background: #f1f5f9; border-color: #cbd5e1; }
+
+.sil-sm {
+  width: 36px; height: 36px; border-radius: 999px;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #475569; font-weight: 800; font-size: 10px; flex-shrink: 0;
+}
+.pos-pill {
+  display: inline-block; font-size: 10px; font-weight: 800;
+  padding: 2px 6px; border-radius: 4px; text-transform: uppercase;
+}
+.pos-pill.pos-GK { background: #fef3c7; color: #92400e; }
+.pos-pill.pos-DEF { background: #dcfce7; color: #166534; }
+.pos-pill.pos-MID { background: #dbeafe; color: #1e40af; }
+.pos-pill.pos-FWD { background: #fee2e2; color: #991b1b; }
+</style>
+
+<script>
+(function () {
+  const MIN_F = {{ min_formation|tojson }};
+  const MAX_F = {{ max_formation|tojson }};
+  const STARTERS = {{ starters }};
+
+  const form = document.getElementById('lineup-form');
+  const saveBtn = document.getElementById('save-btn');
+  const msg = document.getElementById('lineup-msg');
+  const cntStarters = document.getElementById('cnt-starters');
+  const captainInp = document.getElementById('captain_id');
+  const viceInp = document.getElementById('vice_id');
+
+  const rows = Array.from(document.querySelectorAll('.pick-row'));
+  const rowByPid = (pid) => rows.find(r => Number(r.dataset.pid) === Number(pid));
+
+  function meta(row) {
+    return {
+      id: Number(row.dataset.pid),
+      pos: row.dataset.pos,
+      name: row.dataset.name,
+      photo: row.dataset.photo,
+      shirt: row.dataset.shirt,
+      flag: row.dataset.flag,
+      teamName: row.dataset.teamName,
+      price: Number(row.dataset.price),
+      points: Number(row.dataset.points || 0),
+    };
+  }
+
+  function makeSlot(m) {
+    const slot = document.createElement('div');
+    slot.className = 'pitch-slot';
+    slot.dataset.pid = m.id;
+    if (Number(captainInp.value) === m.id) slot.classList.add('is-captain');
+    if (Number(viceInp.value) === m.id) slot.classList.add('is-vice');
+
+    const flag = document.createElement('img');
+    flag.className = 'ps-flag'; flag.src = m.flag; flag.alt = '';
+    slot.appendChild(flag);
+
+    // Points badge ("above the head")
+    const ptsBadge = document.createElement('div');
+    ptsBadge.className = 'ps-points';
+    ptsBadge.textContent = m.points || 0;
+    slot.appendChild(ptsBadge);
+
+    if (Number(captainInp.value) === m.id) {
+      const b = document.createElement('div'); b.className = 'ps-badge'; b.textContent = 'C';
+      slot.appendChild(b);
+    } else if (Number(viceInp.value) === m.id) {
+      const b = document.createElement('div'); b.className = 'ps-badge vice'; b.textContent = 'V';
+      slot.appendChild(b);
+    }
+
+    if (m.photo) {
+      const img = document.createElement('img');
+      img.className = 'ps-photo'; img.src = m.photo; img.alt = '';
+      img.onerror = () => {
+        const sil = document.createElement('div');
+        sil.className = 'ps-photo'; sil.textContent = '#' + m.shirt;
+        img.replaceWith(sil);
+      };
+      slot.appendChild(img);
+    } else {
+      const sil = document.createElement('div');
+      sil.className = 'ps-photo'; sil.textContent = '#' + m.shirt;
+      slot.appendChild(sil);
+    }
+
+    const name = document.createElement('div');
+    name.className = 'ps-name';
+    const parts = m.name.split(/\s+/);
+    name.textContent = parts.length > 1 ? parts[parts.length - 1] : m.name;
+    slot.appendChild(name);
+
+    const price = document.createElement('div');
+    price.className = 'ps-price'; price.textContent = '€' + m.price.toFixed(1) + 'm';
+    slot.appendChild(price);
+
+    return slot;
+  }
+
+  function render() {
+    ['GK','DEF','MID','FWD'].forEach(pos => {
+      const el = document.getElementById('row-' + pos);
+      el.innerHTML = '';
+    });
+    const bench = document.getElementById('bench-row');
+    bench.innerHTML = '';
+
+    let total = 0;
+    const posCount = { GK: 0, DEF: 0, MID: 0, FWD: 0 };
+    rows.forEach(r => {
+      const checked = r.querySelector('.starter-check').checked;
+      r.classList.toggle('is-starter', checked);
+      const m = meta(r);
+      if (checked) {
+        total += 1;
+        posCount[m.pos] = (posCount[m.pos] || 0) + 1;
+        document.getElementById('row-' + m.pos).appendChild(makeSlot(m));
+      } else {
+        bench.appendChild(makeSlot(m));
+      }
+
+      // Sync C/V button visuals
+      const capBtn = r.querySelector('.cap-btn');
+      const viceBtn = r.querySelector('.vice-btn');
+      capBtn.classList.toggle('is-on', Number(captainInp.value) === m.id);
+      viceBtn.classList.toggle('is-on', Number(viceInp.value) === m.id);
+    });
+
+    // Lock toggles for non-starters when we're already at STARTERS
+    const atLimit = total >= STARTERS;
+    rows.forEach(r => {
+      const checked = r.querySelector('.starter-check').checked;
+      r.querySelector('.starter-toggle').classList.toggle('is-disabled', atLimit && !checked);
+    });
+
+    cntStarters.textContent = total;
+    Object.keys(posCount).forEach(p => {
+      document.getElementById('cnt-' + p).textContent = posCount[p];
+    });
+    validate(total, posCount);
+  }
+
+  function validate(total, posCount) {
+    let problems = [];
+    if (total !== STARTERS) problems.push('{{ t('fantasy.err_starters_short') }} ' + total + '/' + STARTERS);
+    for (const p in MIN_F) {
+      if (posCount[p] < MIN_F[p]) problems.push(p + ' < ' + MIN_F[p]);
+      else if (posCount[p] > MAX_F[p]) problems.push(p + ' > ' + MAX_F[p]);
+    }
+    const capId = Number(captainInp.value) || 0;
+    const viceId = Number(viceInp.value) || 0;
+    if (!capId) problems.push('{{ t('fantasy.err_no_captain') }}');
+    if (!viceId) problems.push('{{ t('fantasy.err_no_vice') }}');
+    if (capId && viceId && capId === viceId) problems.push('{{ t('fantasy.err_captain_vice_same') }}');
+    if (capId) {
+      const r = rowByPid(capId);
+      if (r && !r.querySelector('.starter-check').checked) problems.push('{{ t('fantasy.err_captain_must_start') }}');
+    }
+    if (viceId) {
+      const r = rowByPid(viceId);
+      if (r && !r.querySelector('.starter-check').checked) problems.push('{{ t('fantasy.err_captain_must_start') }}');
+    }
+    saveBtn.disabled = problems.length > 0;
+    if (problems.length === 0) {
+      msg.textContent = '{{ t('fantasy.ready_save') }}';
+      msg.className = 'text-xs mt-2 text-emerald-700';
+    } else {
+      msg.textContent = problems.join(' · ');
+      msg.className = 'text-xs mt-2 text-rose-600';
+    }
+  }
+
+  rows.forEach(r => {
+    const check = r.querySelector('.starter-check');
+    // Intercept clicks on the toggle so we can block adding a 12th starter
+    r.querySelector('.starter-toggle').addEventListener('click', (e) => {
+      if (check.checked) return;  // unchecking is always allowed
+      // Count current starters before this change would commit
+      let total = 0;
+      rows.forEach(x => { if (x.querySelector('.starter-check').checked) total += 1; });
+      if (total >= STARTERS) {
+        e.preventDefault();
+        msg.textContent = '{{ t('fantasy.err_swap_first') }}';
+        msg.className = 'text-xs mt-2 text-rose-600';
+      }
+    });
+    check.addEventListener('change', render);
+    r.querySelector('.cap-btn').addEventListener('click', () => {
+      const m = meta(r);
+      captainInp.value = (Number(captainInp.value) === m.id) ? '' : m.id;
+      if (Number(viceInp.value) === m.id) viceInp.value = '';  // can't be both
+      render();
+    });
+    r.querySelector('.vice-btn').addEventListener('click', () => {
+      const m = meta(r);
+      viceInp.value = (Number(viceInp.value) === m.id) ? '' : m.id;
+      if (Number(captainInp.value) === m.id) captainInp.value = '';
+      render();
+    });
+  });
+
+  // On submit, inject starter checkboxes as form fields
+  form.addEventListener('submit', (e) => {
+    // Remove any previously injected
+    form.querySelectorAll('input[name=starter]').forEach(n => n.remove());
+    rows.forEach(r => {
+      if (r.querySelector('.starter-check').checked) {
+        const inp = document.createElement('input');
+        inp.type = 'hidden'; inp.name = 'starter'; inp.value = r.dataset.pid;
+        form.appendChild(inp);
+      }
+    });
+  });
+
+  render();
+})();
+</script>
+{% endblock %}

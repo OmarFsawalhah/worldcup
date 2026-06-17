@@ -57,10 +57,12 @@ def create_app():
     from routes.auth import bp as auth_bp
     from routes.public import bp as public_bp
     from routes.admin import bp as admin_bp
+    from routes.fantasy import bp as fantasy_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(fantasy_bp)
 
     # Force users with must_change_password=True to set a new one before they
     # can use the rest of the app.
@@ -122,6 +124,14 @@ def _auto_migrate():
         if "calculated_by_id" not in cols:
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE matches ADD COLUMN calculated_by_id INTEGER"))
+    if "players" in insp.get_table_names():
+        cols = {c["name"] for c in insp.get_columns("players")}
+        if "price" not in cols:
+            with db.engine.begin() as conn:
+                conn.execute(text("ALTER TABLE players ADD COLUMN price NUMERIC(4,1) DEFAULT 4.0 NOT NULL"))
+        if "photo_url" not in cols:
+            with db.engine.begin() as conn:
+                conn.execute(text("ALTER TABLE players ADD COLUMN photo_url VARCHAR(500)"))
     if "predictions" in insp.get_table_names():
         cols_info = {c["name"]: c for c in insp.get_columns("predictions")}
         cols = set(cols_info.keys())

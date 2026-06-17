@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-5xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('fantasy.section') }}</div>
+  <h1 class="page-title text-2xl sm:text-3xl">🏆 {{ t('fantasy.leaderboard_title') }}</h1>
+  <p class="text-slate-300 text-sm mt-1">{{ t('fantasy.leaderboard_hint') }}</p>
+</div>
+
+{% if rows %}
+  {# Top-3 podium #}
+  {% set top = rows[:3] %}
+  <div class="grid grid-cols-3 gap-3 mb-5 items-end">
+    {% set order = [1, 0, 2] %}
+    {% for i in order %}
+      {% if i < top|length %}
+        {% set r = top[i] %}
+        <div class="card-pitch text-center
+          {% if i == 0 %}order-2 ring-2 ring-yellow-400 transform sm:scale-105{% elif i == 1 %}order-1{% else %}order-3{% endif %}">
+          <div class="text-3xl">{% if i == 0 %}🥇{% elif i == 1 %}🥈{% else %}🥉{% endif %}</div>
+          <div class="font-display text-lg truncate mt-1">{{ r.username }}</div>
+          <div class="font-display text-2xl text-emerald-700">{{ r.total }}</div>
+          <div class="text-[10px] uppercase tracking-wider text-slate-500">{{ t('fantasy.pts') }}</div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div class="card-pitch p-0 overflow-hidden">
+    <div class="grid grid-cols-12 gap-2 px-4 py-3 bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider text-slate-500 font-semibold">
+      <div class="col-span-2">{{ t('leaderboard.rank') }}</div>
+      <div class="col-span-5">{{ t('leaderboard.user') }}</div>
+      <div class="col-span-3">{{ t('fantasy.captain') }}</div>
+      <div class="col-span-2 text-end">{{ t('fantasy.pts') }}</div>
+    </div>
+    {% for r in rows %}
+      <a href="{{ url_for('fantasy.breakdown', user_id=r.user_id) }}"
+         class="grid grid-cols-12 gap-2 px-4 py-3 items-center border-b border-slate-100 hover:bg-slate-50 transition
+                {{ 'bg-yellow-50/40' if loop.index <= 3 }}">
+        <div class="col-span-2">
+          {% if loop.index == 1 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 text-slate-900 font-display font-bold">1</span>
+          {% elif loop.index == 2 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 text-slate-900 font-display font-bold">2</span>
+          {% elif loop.index == 3 %}
+            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-amber-700 to-amber-800 text-white font-display font-bold">3</span>
+          {% else %}
+            <span class="inline-flex items-center justify-center w-8 h-8 text-slate-500 font-display font-semibold">{{ loop.index }}</span>
+          {% endif %}
+        </div>
+        <div class="col-span-5 font-medium truncate flex items-center gap-2">
+          <span class="truncate">{{ r.username }}</span>
+          {% if r.is_admin %}
+            <span class="text-[10px] font-bold bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded uppercase tracking-wider">{{ t('admin.role_admin') }}</span>
+          {% endif %}
+        </div>
+        <div class="col-span-3 text-xs text-slate-600 truncate">
+          {% if r.captain %}ⓒ {{ r.captain }}{% else %}<span class="text-slate-400 italic">—</span>{% endif %}
+        </div>
+        <div class="col-span-2 text-end font-display text-lg text-emerald-700">{{ r.total }}</div>
+      </a>
+    {% endfor %}
+  </div>
+
+  <p class="text-xs text-slate-400 mt-3 text-center">{{ t('fantasy.click_user_for_breakdown') }}</p>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-10">
+    <div class="text-4xl mb-2">🏟️</div>
+    <p>{{ t('fantasy.no_squads_yet') }}</p>
+    <a href="{{ url_for('fantasy.pick') }}" class="btn btn-primary btn-sm mt-3">{{ t('fantasy.pick_title') }}</a>
+  </div>
+{% endif %}
+{% endblock %}

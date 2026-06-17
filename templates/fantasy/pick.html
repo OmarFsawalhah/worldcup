@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="flex items-start justify-between flex-wrap gap-3 mb-4">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('fantasy.section') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ t('fantasy.pick_title') }}</h1>
+    <p class="text-slate-300 text-sm mt-1">{{ t('fantasy.pick_hint') }}</p>
+  </div>
+  <a href="{{ url_for('fantasy.leaderboard') }}" class="btn btn-gold btn-sm">🏆 {{ t('fantasy.leaderboard_title') }}</a>
+</div>
+
+{% if window.next_event_at %}
+<div class="card-pitch mb-4 border-2 border-emerald-300 bg-emerald-50">
+  <div class="flex items-center gap-3 flex-wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <div class="text-sm text-emerald-900 flex-1 min-w-[200px]">
+      <div class="font-bold">{{ t('fantasy.window_open') }}</div>
+      <div class="text-xs mt-0.5 text-emerald-700">{{ t('fantasy.window_open_hint', phase=t('fantasy.phase_' + (window.next_phase or '')) ) }}</div>
+    </div>
+    <div class="text-center">
+      <div class="text-[10px] uppercase tracking-wider font-bold text-slate-500">{{ t('fantasy.closes_in') }}</div>
+      <div id="window-countdown" class="font-display text-2xl" data-target="{{ window.next_event_at.isoformat() }}Z">…</div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  const el = document.getElementById('window-countdown');
+  if (!el) return;
+  const target = new Date(el.dataset.target).getTime();
+  function tick() {
+    const now = Date.now();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+    const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
+    const m = Math.floor(diff / 60000);    diff -= m * 60000;
+    const s = Math.floor(diff / 1000);
+    const pad = (n) => String(n).padStart(2, '0');
+    el.textContent = (d > 0 ? d + 'd ' : '') + pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+  tick(); setInterval(tick, 1000);
+})();
+</script>
+{% endif %}
+
+{# ===== Status bar (sticky, full-width) ===== #}
+<div class="card-pitch sticky top-2 z-30 mb-4">
+  <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+    <div class="flex-1 min-w-[180px]">
+      <div class="flex items-center justify-between text-[11px] uppercase tracking-wider font-bold mb-1">
+        <span>{{ t('fantasy.budget') }}</span>
+        <span><span id="spent" class="text-emerald-700">0.0</span> / <span class="text-slate-500">{{ '%.0f' % rules.budget }}</span> €m</span>
+      </div>
+      <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
+        <div id="budget-bar" class="h-full bg-gradient-to-r from-emerald-500 to-yellow-400 transition-all" style="width: 0%"></div>
+      </div>
+    </div>
+    {% for pos, q in rules.quotas.items() %}
+      <div class="text-center">
+        <div class="text-[10px] uppercase font-bold text-slate-500">{{ pos }}</div>
+        <div class="font-display text-base"><span id="cnt-{{ pos }}">0</span>/{{ q }}</div>
+      </div>
+    {% endfor %}
+    <div class="text-center">
+      <div class="text-[10px] uppercase font-bold text-slate-500">{{ t('fantasy.total') }}</div>
+      <div class="font-display text-base"><span id="cnt-total">0</span>/{{ rules.squad_size }}</div>
+    </div>
+  </div>
+  <form method="post" id="save-form" class="flex items-center gap-2 mt-3 flex-wrap">
+    <input type="hidden" name="selected_ids" id="selected_ids" value="{{ selected_ids|join(',') }}">
+    <button id="save-btn" class="btn btn-primary btn-sm" disabled>{{ t('fantasy.save_squad') }}</button>
+    <button type="button" id="clear-btn" class="btn btn-danger btn-sm">{{ t('fantasy.clear_all') }}</button>
+    <span id="save-msg" class="text-xs text-slate-500">{{ t('fantasy.pick_15') }}</span>
+  </form>
+</div>
+
+{# ===== Two-column layout: pitch left, list right ===== #}
+<div class="grid grid-cols-1 lg:grid-cols-[5fr_6fr] gap-4">
+
+  {# ============ Pitch ============ #}
+  <div>
+    <div class="pitch">
+      <div class="pitch-markings" aria-hidden="true">
+        <div class="pm-top-box"></div>
+        <div class="pm-top-box-inner"></div>
+        <div class="pm-arc-top"></div>
+        <div class="pm-halfway"></div>
+        <div class="pm-center"></div>
+        <div class="pm-bot-box"></div>
+        <div class="pm-bot-box-inner"></div>
+        <div class="pm-arc-bot"></div>
+      </div>
+
+      {# 4 rows: GK / DEF / MID / FWD. Slot counts match squad quotas. #}
+      <div class="pitch-row" data-pos="GK">
+        {% for i in range(rules.quotas.GK) %}<div class="pitch-slot" data-pos="GK" data-i="{{ i }}"></div>{% endfor %}
+      </div>
+      <div class="pitch-row" data-pos="DEF">
+        {% for i in range(rules.quotas.DEF) %}<div class="pitch-slot" data-pos="DEF" data-i="{{ i }}"></div>{% endfor %}
+      </div>
+      <div class="pitch-row" data-pos="MID">
+        {% for i in range(rules.quotas.MID) %}<div class="pitch-slot" data-pos="MID" data-i="{{ i }}"></div>{% endfor %}
+      </div>
+      <div class="pitch-row" data-pos="FWD">
+        {% for i in range(rules.quotas.FWD) %}<div class="pitch-slot" data-pos="FWD" data-i="{{ i }}"></div>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {# ============ Player browser ============ #}
+  <div>
+    {# Filters #}
+    <div class="card-pitch mb-3">
+      <div class="flex flex-wrap gap-2 items-center">
+        <input type="search" id="search" placeholder="{{ t('fantasy.search') }}" class="input flex-1 min-w-[160px]">
+        <select id="filter-team" class="input max-w-[180px]">
+          <option value="">{{ t('fantasy.all_teams') }}</option>
+          {% for tm in teams %}<option value="{{ tm.id }}">{{ tm.name(lang) }}</option>{% endfor %}
+        </select>
+        <div class="flex gap-1" id="filter-pos">
+          {% for code in ['ALL', 'GK', 'DEF', 'MID', 'FWD'] %}
+            <button type="button" data-pos="{{ code }}"
+                    class="filter-btn {% if code == 'ALL' %}active{% endif %} px-2.5 py-1.5 rounded-lg text-xs">
+              {{ code }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {# Player list — compact rows #}
+    <div id="player-list" class="card-pitch p-0 max-h-[640px] overflow-y-auto">
+      {% for p in all_players %}
+        <div class="player-row"
+             data-id="{{ p.id }}"
+             data-pos="{{ p.fpl_position() }}"
+             data-team="{{ p.team_id }}"
+             data-price="{{ '%.1f' % (p.price | float) if p.price is not none else '4.0' }}"
+             data-name="{{ p.name_en|lower }}"
+             data-shirt="{{ p.shirt_number or '?' }}"
+             data-photo="{{ p.photo_url or '' }}"
+             data-flag="{{ flag_url(p.team) }}"
+             data-team-name="{{ p.team.name(lang) }}"
+             data-points="{{ points_map.get(p.id, 0) }}">
+          {% if p.photo_url %}
+            <img src="{{ p.photo_url }}" alt="" class="w-9 h-9 rounded-full object-cover bg-slate-200 shrink-0" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'sil-sm', textContent:'#{{ p.shirt_number or '?' }}'}))">
+          {% else %}
+            <div class="sil-sm">#{{ p.shirt_number or '?' }}</div>
+          {% endif %}
+          <div class="min-w-0 flex-1">
+            <div class="font-medium text-sm truncate flex items-center gap-1.5">
+              <span class="pos-pill pos-{{ p.fpl_position() }}">{{ p.fpl_position() }}</span>
+              <span class="truncate">{{ p.name_en }}</span>
+            </div>
+            <div class="text-[10px] text-slate-500 flex items-center gap-1.5 truncate">
+              <img src="{{ flag_url(p.team) }}" alt="" class="w-3.5 h-2.5 inline-block rounded-sm shrink-0">
+              <span class="truncate">{{ p.team.name(lang) }}</span>
+            </div>
+          </div>
+          <div class="text-end shrink-0">
+            <div class="font-display text-sm text-emerald-700">€{{ '%.1f' % (p.price | float) if p.price is not none else '4.0' }}m</div>
+            <button type="button" class="pick-btn btn btn-soft btn-xs mt-1">{{ t('fantasy.add') }}</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+/* ====== Pitch ====== */
+.pitch {
+  position: relative;
+  background:
+    repeating-linear-gradient(0deg,
+      rgba(255,255,255,0.05) 0 28px,
+      transparent 28px 56px),
+    linear-gradient(180deg, #047857 0%, #065f46 100%);
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 12px;
+  padding: 16px 8px;
+  display: flex; flex-direction: column;
+  gap: 4px;
+  aspect-ratio: 7 / 10;
+  min-height: 560px;
+  overflow: hidden;
+}
+.pitch-markings { position: absolute; inset: 0; pointer-events: none; }
+.pm-halfway { position: absolute; left: 0; right: 0; top: 50%; height: 2px;
+  background: rgba(255,255,255,0.7); }
+.pm-center { position: absolute; left: 50%; top: 50%; width: 70px; height: 70px;
+  border: 2px solid rgba(255,255,255,0.7); border-radius: 50%;
+  transform: translate(-50%, -50%); }
+.pm-top-box { position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  width: 56%; height: 14%; border: 2px solid rgba(255,255,255,0.7);
+  border-top: none; }
+.pm-top-box-inner { position: absolute; left: 50%; top: 0; transform: translateX(-50%);
+  width: 26%; height: 6%; border: 2px solid rgba(255,255,255,0.7);
+  border-top: none; }
+.pm-arc-top { position: absolute; left: 50%; top: 14%; transform: translate(-50%, -50%);
+  width: 80px; height: 40px; border: 2px solid rgba(255,255,255,0.7);
+  border-top: none; border-radius: 0 0 80px 80px / 0 0 40px 40px; }
+.pm-bot-box { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 56%; height: 14%; border: 2px solid rgba(255,255,255,0.7);
+  border-bottom: none; }
+.pm-bot-box-inner { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%);
+  width: 26%; height: 6%; border: 2px solid rgba(255,255,255,0.7);
+  border-bottom: none; }
+.pm-arc-bot { position: absolute; left: 50%; bottom: 14%; transform: translate(-50%, 50%);
+  width: 80px; height: 40px; border: 2px solid rgba(255,255,255,0.7);
+  border-bottom: none; border-radius: 80px 80px 0 0 / 40px 40px 0 0; }
+
+.pitch-row {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-around; align-items: center;
+  flex: 1; gap: 6px;
+}
+.pitch-slot {
+  width: 72px; max-width: 22vw; aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 2px dashed rgba(255,255,255,0.30);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 4px; color: #ecfdf5;
+  position: relative;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.pitch-slot.filled {
+  background: rgba(255,255,255,0.95);
+  border: 2px solid #fbbf24;
+  color: #0f172a;
+  cursor: pointer;
+}
+.pitch-slot.filled:hover { transform: translateY(-2px); }
+.pitch-slot .ps-photo {
+  width: 36px; height: 36px; border-radius: 999px; object-fit: cover;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.pitch-slot .ps-name {
+  font-size: 10px; font-weight: 700; line-height: 1.1;
+  margin-top: 2px; max-width: 100%; text-align: center;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pitch-slot .ps-price {
+  font-size: 9px; color: #047857; font-weight: 700;
+}
+.pitch-slot .ps-flag {
+  position: absolute; top: 3px; right: 3px;
+  width: 14px; height: 10px; border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+}
+.pitch-slot .ps-points {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  min-width: 26px; height: 22px; padding: 0 6px; border-radius: 999px;
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: white; font-weight: 900; font-size: 11px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+.pitch-slot .ps-remove {
+  position: absolute; top: 0px; left: 2px;
+  width: 18px; height: 18px; border-radius: 999px;
+  background: #dc2626; color: white; font-weight: 800;
+  font-size: 12px; line-height: 18px; text-align: center;
+  cursor: pointer; opacity: 0; transition: opacity .15s ease;
+}
+.pitch-slot.filled:hover .ps-remove { opacity: 1; }
+.pitch-slot .ps-pos {
+  position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 800; padding: 1px 6px;
+  border-radius: 999px;
+}
+.pitch-slot[data-pos="GK"]  .ps-pos { background: #fef3c7; color: #92400e; }
+.pitch-slot[data-pos="DEF"] .ps-pos { background: #dcfce7; color: #166534; }
+.pitch-slot[data-pos="MID"] .ps-pos { background: #dbeafe; color: #1e40af; }
+.pitch-slot[data-pos="FWD"] .ps-pos { background: #fee2e2; color: #991b1b; }
+.pitch-slot.empty-label::before {
+  content: attr(data-pos);
+  font-size: 12px; font-weight: 800;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ====== Player list rows ====== */
+.player-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.player-row:last-child { border-bottom: none; }
+.player-row.is-selected { background: #ecfdf5; }
+.player-row.is-selected .pick-btn { background: #dc2626 !important; color: white; }
+.player-row.hidden { display: none; }
+.sil-sm {
+  width: 36px; height: 36px; border-radius: 999px;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #475569; font-weight: 800; font-size: 10px; flex-shrink: 0;
+}
+.pos-pill {
+  display: inline-block; font-size: 9px; font-weight: 800; padding: 1px 5px;
+  border-radius: 4px; text-transform: uppercase;
+}
+.pos-pill.pos-GK  { background: #fef3c7; color: #92400e; }
+.pos-pill.pos-DEF { background: #dcfce7; color: #166534; }
+.pos-pill.pos-MID { background: #dbeafe; color: #1e40af; }
+.pos-pill.pos-FWD { background: #fee2e2; color: #991b1b; }
+</style>
+
+<script>
+(function () {
+  const RULES = {{ rules|tojson }};
+  const initial = "{{ selected_ids|join(',') }}".split(',').filter(Boolean).map(Number);
+
+  // selected[pos] = ordered list of player ids
+  const selected = { GK: [], DEF: [], MID: [], FWD: [] };
+
+  const list = document.getElementById('player-list');
+  const rows = list.querySelectorAll('.player-row');
+  const search = document.getElementById('search');
+  const filterTeam = document.getElementById('filter-team');
+  const filterPosBtns = document.querySelectorAll('#filter-pos .filter-btn');
+  const selectedInp = document.getElementById('selected_ids');
+  const saveBtn = document.getElementById('save-btn');
+  const saveMsg = document.getElementById('save-msg');
+  const spentEl = document.getElementById('spent');
+  const budgetBar = document.getElementById('budget-bar');
+  const cntTotal = document.getElementById('cnt-total');
+  const slots = document.querySelectorAll('.pitch-slot');
+
+  // Pre-stamp empty slots with their position label
+  slots.forEach(s => s.classList.add('empty-label'));
+
+  let posFilter = 'ALL';
+
+  function rowForId(id) { return list.querySelector('.player-row[data-id="' + id + '"]'); }
+  function meta(id) {
+    const r = rowForId(id);
+    if (!r) return null;
+    return {
+      id, pos: r.dataset.pos, team: r.dataset.team,
+      price: Number(r.dataset.price), name: r.dataset.name,
+      shirt: r.dataset.shirt, photo: r.dataset.photo,
+      flag: r.dataset.flag, teamName: r.dataset.teamName,
+      points: Number(r.dataset.points || 0),
+    };
+  }
+
+  function emptySlot(pos) {
+    return Array.from(document.querySelectorAll('.pitch-slot[data-pos="' + pos + '"]'))
+      .find(s => !s.classList.contains('filled'));
+  }
+  function slotOf(id) {
+    return document.querySelector('.pitch-slot[data-player="' + id + '"]');
+  }
+
+  function fillSlot(slot, m) {
+    slot.classList.add('filled');
+    slot.classList.remove('empty-label');
+    slot.dataset.player = m.id;
+    slot.innerHTML = '';
+    const flag = document.createElement('img');
+    flag.className = 'ps-flag'; flag.src = m.flag; flag.alt = '';
+    slot.appendChild(flag);
+
+    // Points badge ("above the head")
+    const ptsBadge = document.createElement('div');
+    ptsBadge.className = 'ps-points';
+    ptsBadge.textContent = m.points || 0;
+    slot.appendChild(ptsBadge);
+
+    const remove = document.createElement('span');
+    remove.className = 'ps-remove'; remove.textContent = '×'; remove.title = 'Remove';
+    remove.addEventListener('click', (e) => { e.stopPropagation(); togglePick(m.id); });
+    slot.appendChild(remove);
+
+    if (m.photo) {
+      const img = document.createElement('img');
+      img.className = 'ps-photo'; img.src = m.photo; img.alt = '';
+      img.onerror = () => {
+        const sil = document.createElement('div');
+        sil.className = 'ps-photo';
+        sil.style.display = 'inline-flex';
+        sil.style.alignItems = 'center';
+        sil.style.justifyContent = 'center';
+        sil.style.color = '#475569';
+        sil.style.fontWeight = '800';
+        sil.style.fontSize = '11px';
+        sil.textContent = '#' + m.shirt;
+        img.replaceWith(sil);
+      };
+      slot.appendChild(img);
+    } else {
+      const sil = document.createElement('div');
+      sil.className = 'ps-photo';
+      sil.style.display = 'inline-flex';
+      sil.style.alignItems = 'center';
+      sil.style.justifyContent = 'center';
+      sil.style.color = '#475569';
+      sil.style.fontWeight = '800';
+      sil.style.fontSize = '11px';
+      sil.textContent = '#' + m.shirt;
+      slot.appendChild(sil);
+    }
+
+    const name = document.createElement('div');
+    name.className = 'ps-name';
+    // Shorten to last name when long
+    const parts = m.name.split(/\s+/);
+    name.textContent = parts.length > 1 ? parts[parts.length - 1] : m.name;
+    slot.appendChild(name);
+
+    const price = document.createElement('div');
+    price.className = 'ps-price'; price.textContent = '€' + m.price.toFixed(1) + 'm';
+    slot.appendChild(price);
+  }
+
+  function clearSlot(slot) {
+    slot.classList.remove('filled');
+    slot.removeAttribute('data-player');
+    slot.innerHTML = '';
+    slot.classList.add('empty-label');
+  }
+
+  function togglePick(id) {
+    const m = meta(id);
+    if (!m) return;
+    const arr = selected[m.pos];
+    const idx = arr.indexOf(id);
+    if (idx >= 0) {
+      arr.splice(idx, 1);
+      const s = slotOf(id);
+      if (s) clearSlot(s);
+    } else {
+      const reason = rejectAddBecause(m);
+      if (reason) { saveMsg.textContent = reason; return; }
+      const slot = emptySlot(m.pos);
+      if (!slot) { saveMsg.textContent = '{{ t('fantasy.err_pos_full') }}'; return; }
+      arr.push(id);
+      fillSlot(slot, m);
+    }
+    refreshList();
+    counters();
+  }
+
+  function rejectAddBecause(m) {
+    let curSpent = 0, curTeam = 0;
+    Object.values(selected).flat().forEach(id => {
+      const x = meta(id); if (!x) return;
+      curSpent += x.price;
+      if (x.team === m.team) curTeam++;
+    });
+    if (selected[m.pos].length >= RULES.quotas[m.pos]) return '{{ t('fantasy.err_pos_full') }}';
+    if (curTeam >= RULES.max_per_country) return '{{ t('fantasy.err_country_full') }}';
+    if (curSpent + m.price > RULES.budget + 0.001) return '{{ t('fantasy.err_budget_short') }}';
+    if (totalSelected() >= RULES.squad_size) return '{{ t('fantasy.err_too_many') }}';
+    return null;
+  }
+
+  function totalSelected() {
+    return selected.GK.length + selected.DEF.length + selected.MID.length + selected.FWD.length;
+  }
+
+  function refreshList() {
+    const all = new Set(Object.values(selected).flat());
+    rows.forEach(r => {
+      const isSel = all.has(Number(r.dataset.id));
+      r.classList.toggle('is-selected', isSel);
+      const btn = r.querySelector('.pick-btn');
+      btn.textContent = isSel ? '{{ t('fantasy.remove') }}' : '{{ t('fantasy.add') }}';
+    });
+  }
+
+  function counters() {
+    let spent = 0;
+    const teamCount = {};
+    Object.values(selected).flat().forEach(id => {
+      const m = meta(id); if (!m) return;
+      spent += m.price;
+      teamCount[m.team] = (teamCount[m.team] || 0) + 1;
+    });
+    spentEl.textContent = spent.toFixed(1);
+    const pct = Math.min(100, (spent / RULES.budget) * 100);
+    budgetBar.style.width = pct + '%';
+    spentEl.classList.toggle('text-rose-600', spent > RULES.budget);
+    cntTotal.textContent = totalSelected();
+    ['GK','DEF','MID','FWD'].forEach(p => {
+      document.getElementById('cnt-' + p).textContent = selected[p].length;
+    });
+
+    let ok = totalSelected() === RULES.squad_size && spent <= RULES.budget;
+    if (ok) {
+      for (const p in RULES.quotas) {
+        if (selected[p].length !== RULES.quotas[p]) { ok = false; break; }
+      }
+    }
+    if (ok) {
+      for (const tid in teamCount) {
+        if (teamCount[tid] > RULES.max_per_country) { ok = false; break; }
+      }
+    }
+    saveBtn.disabled = !ok;
+    if (ok) saveMsg.textContent = '{{ t('fantasy.ready') }}';
+    else if (spent > RULES.budget) saveMsg.textContent = '{{ t('fantasy.err_budget_short') }}';
+    else if (totalSelected() > RULES.squad_size) saveMsg.textContent = '{{ t('fantasy.err_too_many') }}';
+    else saveMsg.textContent = '{{ t('fantasy.pick_15') }}';
+
+    selectedInp.value = Object.values(selected).flat().join(',');
+  }
+
+  function applyFilter() {
+    const q = (search.value || '').toLowerCase().trim();
+    const tm = filterTeam.value;
+    rows.forEach(r => {
+      let ok = true;
+      if (posFilter !== 'ALL' && r.dataset.pos !== posFilter) ok = false;
+      if (ok && tm && r.dataset.team !== tm) ok = false;
+      if (ok && q && !r.dataset.name.includes(q)) ok = false;
+      r.classList.toggle('hidden', !ok);
+    });
+  }
+
+  rows.forEach(r => {
+    const btn = r.querySelector('.pick-btn');
+    btn.addEventListener('click', () => togglePick(Number(r.dataset.id)));
+  });
+
+  search.addEventListener('input', applyFilter);
+  filterTeam.addEventListener('change', applyFilter);
+  filterPosBtns.forEach(b => b.addEventListener('click', () => {
+    posFilter = b.dataset.pos;
+    filterPosBtns.forEach(x => x.classList.toggle('active', x === b));
+    applyFilter();
+  }));
+
+  // Clear-all button
+  document.getElementById('clear-btn').addEventListener('click', () => {
+    if (totalSelected() === 0) return;
+    if (!confirm('{{ t('fantasy.clear_confirm') }}')) return;
+    ['GK','DEF','MID','FWD'].forEach(p => selected[p].length = 0);
+    document.querySelectorAll('.pitch-slot.filled').forEach(clearSlot);
+    refreshList();
+    counters();
+  });
+
+  // Hydrate from initial selection
+  initial.forEach(id => {
+    const m = meta(id); if (!m) return;
+    const arr = selected[m.pos];
+    if (arr.length < RULES.quotas[m.pos]) {
+      arr.push(id);
+      const slot = emptySlot(m.pos);
+      if (slot) fillSlot(slot, m);
+    }
+  });
+
+  refreshList();
+  counters();
+})();
+</script>
+{% endblock %}

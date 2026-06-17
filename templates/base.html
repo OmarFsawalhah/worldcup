@@ -59,6 +59,7 @@
           {% if current_user.is_authenticated %}
             {{ nav_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
             {{ nav_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
+            {{ nav_link(url_for('fantasy.home'), t('nav.fantasy'), ep and ep.startswith('fantasy.'), ico_user) }}
             {% if current_user.is_admin %}
               {{ nav_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
             {% endif %}
@@ -99,6 +100,7 @@
         {% if current_user.is_authenticated %}
           {{ mobile_link(url_for('public.dashboard'), t('nav.dashboard'), ep == 'public.dashboard', ico_home) }}
           {{ mobile_link(url_for('public.leaderboard'), t('nav.leaderboard'), ep == 'public.leaderboard', ico_trophy) }}
+          {{ mobile_link(url_for('fantasy.home'), t('nav.fantasy'), ep and ep.startswith('fantasy.'), ico_user) }}
           {% if current_user.is_admin %}
             {{ mobile_link(url_for('admin.matches'), t('nav.admin'), ep and ep.startswith('admin.'), ico_settings) }}
           {% endif %}

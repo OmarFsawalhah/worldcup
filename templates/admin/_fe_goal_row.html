@@ -1,0 +1,31 @@
+{# Single editable goal row. Caller must define `pid` (scorer player id or None)
+   and the surrounding context provides home_players, away_players, match, lang. #}
+<div class="goal-row grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
+  <select name="goal_scorer" class="input">
+    <option value="">— {{ t('admin.fe_scorer') }} —</option>
+    <optgroup label="{{ match.home_team.name(lang) }}">
+      {% for p in home_players %}
+        <option value="{{ p.id }}" {{ 'selected' if pid == p.id }}>
+          {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+        </option>
+      {% endfor %}
+    </optgroup>
+    <optgroup label="{{ match.away_team.name(lang) }}">
+      {% for p in away_players %}
+        <option value="{{ p.id }}" {{ 'selected' if pid == p.id }}>
+          {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+        </option>
+      {% endfor %}
+    </optgroup>
+  </select>
+  <select name="goal_assister" class="input">
+    <option value="">— {{ t('admin.fe_assister') }} —</option>
+    <optgroup label="{{ match.home_team.name(lang) }}">
+      {% for p in home_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+    </optgroup>
+    <optgroup label="{{ match.away_team.name(lang) }}">
+      {% for p in away_players %}<option value="{{ p.id }}">{{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}</option>{% endfor %}
+    </optgroup>
+  </select>
+  <button type="button" class="btn btn-danger btn-xs remove-goal">×</button>
+</div>

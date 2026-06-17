@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-7xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="flex items-start justify-between flex-wrap gap-3 mb-5">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('admin.fantasy_section') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ t('admin.players_title') }}</h1>
+    <p class="text-slate-400 text-sm mt-1">{{ t('admin.players_hint') }}</p>
+  </div>
+  <a href="{{ url_for('admin.matches') }}" class="btn btn-soft btn-sm">← {{ t('admin.matches') }}</a>
+</div>
+
+{# Team picker #}
+<div class="card-pitch mb-4">
+  <form method="get" class="flex items-center gap-2 flex-wrap">
+    <label class="label mb-0 me-2">{{ t('admin.team') }}</label>
+    <select name="team" class="input max-w-xs" onchange="this.form.submit()">
+      {% for tm in teams %}
+        <option value="{{ tm.id }}" {{ 'selected' if team and tm.id == team.id }}>
+          {{ tm.name(lang) }}
+        </option>
+      {% endfor %}
+    </select>
+    <noscript><button class="btn btn-soft btn-sm">{{ t('admin.pick') }}</button></noscript>
+  </form>
+</div>
+
+{% if team %}
+  <form method="post">
+    <input type="hidden" name="team_id" value="{{ team.id }}">
+
+    {# Tier hint legend #}
+    <div class="flex items-center gap-2 text-xs text-slate-400 mb-3 flex-wrap">
+      <span class="font-bold uppercase tracking-wider me-2">{{ t('admin.tier_legend') }}:</span>
+      <span class="px-2 py-1 rounded bg-yellow-400/15 text-yellow-200">{{ t('admin.tier_superstar') }} €12–13</span>
+      <span class="px-2 py-1 rounded bg-emerald-400/15 text-emerald-200">{{ t('admin.tier_star') }} €9–11</span>
+      <span class="px-2 py-1 rounded bg-sky-400/15 text-sky-200">{{ t('admin.tier_regular') }} €7–8</span>
+      <span class="px-2 py-1 rounded bg-slate-400/15 text-slate-200">{{ t('admin.tier_role') }} €5–6</span>
+      <span class="px-2 py-1 rounded bg-slate-500/15 text-slate-300">{{ t('admin.tier_squad') }} €4</span>
+    </div>
+
+    <div class="card-pitch p-0 overflow-x-auto">
+      <table class="table-clean">
+        <thead>
+          <tr>
+            <th class="w-12">#</th>
+            <th>{{ t('admin.player') }}</th>
+            <th class="w-24">{{ t('admin.position') }}</th>
+            <th class="w-44">{{ t('admin.player_price') }} (€m)</th>
+            <th>{{ t('admin.player_photo') }}</th>
+            <th class="w-16 text-center">{{ t('admin.preview') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in players %}
+            <tr>
+              <td>
+                <input type="hidden" name="pid" value="{{ p.id }}">
+                <span class="font-mono text-slate-500">{{ p.shirt_number or '—' }}</span>
+              </td>
+              <td>
+                <div class="font-medium">{{ p.name_en }}</div>
+                {% if p.name_ar and p.name_ar != p.name_en %}
+                  <div class="text-xs text-slate-400" dir="rtl">{{ p.name_ar }}</div>
+                {% endif %}
+              </td>
+              <td class="text-xs text-slate-500">{{ p.position or '' }}</td>
+              <td>
+                <div class="flex items-center gap-1">
+                  <input type="number" name="price" step="0.5" min="4" max="15"
+                         value="{{ '%.1f' % (p.price | float) if p.price is not none else '4.0' }}"
+                         class="input w-24 text-end" inputmode="decimal">
+                  <div class="flex flex-col gap-0.5 text-[10px]">
+                    <button type="button" class="px-1.5 py-0.5 rounded bg-yellow-400/30 text-yellow-50 hover:bg-yellow-400/50" data-set-price="12">12</button>
+                    <button type="button" class="px-1.5 py-0.5 rounded bg-emerald-400/30 text-emerald-50 hover:bg-emerald-400/50" data-set-price="9">9</button>
+                    <button type="button" class="px-1.5 py-0.5 rounded bg-sky-400/30 text-sky-50 hover:bg-sky-400/50" data-set-price="7">7</button>
+                    <button type="button" class="px-1.5 py-0.5 rounded bg-slate-400/30 text-slate-50 hover:bg-slate-400/50" data-set-price="4">4</button>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <input type="url" name="photo" placeholder="https://..."
+                       value="{{ p.photo_url or '' }}" class="input">
+              </td>
+              <td class="text-center">
+                {% if p.photo_url %}
+                  <img src="{{ p.photo_url }}" alt="" class="inline-block w-10 h-10 rounded-full object-cover ring-2 ring-white/40">
+                {% else %}
+                  <div class="inline-flex w-10 h-10 rounded-full bg-slate-300 items-center justify-center text-slate-500 text-[10px] font-bold">
+                    #{{ p.shirt_number or '?' }}
+                  </div>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button class="btn btn-primary">{{ t('admin.save') }}</button>
+    </div>
+  </form>
+{% endif %}
+
+<script>
+(function () {
+  // Quick price preset buttons fill the price input next to them
+  document.querySelectorAll('[data-set-price]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const price = btn.dataset.setPrice;
+      const inp = btn.closest('td').querySelector('input[name=price]');
+      if (inp) inp.value = price;
+    });
+  });
+})();
+</script>
+{% endblock %}

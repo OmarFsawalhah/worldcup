@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-6xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="flex items-start justify-between flex-wrap gap-3 mb-5">
+  <div>
+    <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('fantasy.section') }}</div>
+    <h1 class="page-title text-2xl sm:text-3xl">{{ user.username }}</h1>
+    <p class="text-slate-300 text-sm mt-1">{{ t('fantasy.breakdown_hint') }}</p>
+  </div>
+  <a href="{{ url_for('fantasy.leaderboard') }}" class="btn btn-soft btn-sm">← {{ t('fantasy.leaderboard_title') }}</a>
+</div>
+
+{% if not squad or not breakdown %}
+  <div class="card-pitch text-center text-slate-500 py-8">
+    <p>{{ t('fantasy.no_squad_user') }}</p>
+  </div>
+{% else %}
+  {# Top stat cards #}
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+    <div class="stat-card stat-card-primary text-center">
+      <div class="stat-label">{{ t('fantasy.total_pts') }}</div>
+      <div class="stat-value stat-value-gold">{{ breakdown.total }}</div>
+    </div>
+    <div class="stat-card text-center">
+      <div class="stat-label">{{ t('fantasy.from_starters') }}</div>
+      <div class="stat-value">{{ breakdown.starters_total }}</div>
+    </div>
+    <div class="stat-card text-center">
+      <div class="stat-label">{{ t('fantasy.captain_bonus') }}</div>
+      <div class="stat-value">+{{ breakdown.captain_bonus }}</div>
+    </div>
+  </div>
+
+  {# Players table #}
+  <div class="card-pitch p-0 overflow-x-auto">
+    <table class="table-clean">
+      <thead>
+        <tr>
+          <th class="w-10"></th>
+          <th>{{ t('admin.player') }}</th>
+          <th class="w-16 text-center">{{ t('admin.position') }}</th>
+          <th class="w-20 text-end">{{ t('fantasy.raw_pts') }}</th>
+          <th class="w-20 text-end">{{ t('fantasy.captain_bonus_col') }}</th>
+          <th class="w-20 text-end">{{ t('fantasy.effective_pts') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in breakdown.rows %}
+          {% set p = r.player %}
+          <tr class="{{ 'bg-slate-50' if not r.is_starter }}">
+            <td>
+              {% if r.is_captain %}<span class="cv-pill cap">C</span>
+              {% elif r.is_vice %}<span class="cv-pill vice">V</span>
+              {% elif not r.is_starter %}<span class="text-[10px] text-slate-400 uppercase font-bold">{{ t('fantasy.bench') }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="flex items-center gap-2 min-w-0">
+                {% if p.photo_url %}
+                  <img src="{{ p.photo_url }}" alt="" class="w-8 h-8 rounded-full object-cover bg-slate-200" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'sil-xs', textContent:'#{{ p.shirt_number or '?' }}'}))">
+                {% else %}
+                  <div class="sil-xs">#{{ p.shirt_number or '?' }}</div>
+                {% endif %}
+                <div class="min-w-0">
+                  <div class="font-medium text-sm truncate">{{ p.name_en }}</div>
+                  <div class="text-[10px] text-slate-500 flex items-center gap-1.5">
+                    <img src="{{ flag_url(p.team) }}" alt="" class="w-3.5 h-2.5 rounded-sm">
+                    <span class="truncate">{{ p.team.name(lang) }}</span>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="pos-pill pos-{{ p.fpl_position() }}">{{ p.fpl_position() }}</span>
+            </td>
+            <td class="text-end font-mono">{{ r.raw_points }}</td>
+            <td class="text-end font-mono {{ 'text-yellow-700 font-bold' if r.captain_bonus }}">
+              {% if r.captain_bonus %}+{{ r.captain_bonus }}{% else %}<span class="text-slate-300">—</span>{% endif %}
+            </td>
+            <td class="text-end font-display text-lg {{ 'text-emerald-700' if r.is_starter and r.effective_points else 'text-slate-400' }}">
+              {{ r.effective_points }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="text-xs text-slate-400 mt-3">{{ t('fantasy.breakdown_note') }}</p>
+{% endif %}
+
+<style>
+.cv-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 6px;
+  font-weight: 800; font-size: 12px;
+}
+.cv-pill.cap { background: #fbbf24; color: #1a1a1a; box-shadow: 0 0 0 2px #f59e0b inset; }
+.cv-pill.vice { background: #3b82f6; color: white; box-shadow: 0 0 0 2px #1d4ed8 inset; }
+.sil-xs {
+  width: 32px; height: 32px; border-radius: 999px;
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #475569; font-weight: 800; font-size: 10px;
+}
+.pos-pill { display: inline-block; font-size: 10px; font-weight: 800;
+  padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+.pos-pill.pos-GK { background: #fef3c7; color: #92400e; }
+.pos-pill.pos-DEF { background: #dcfce7; color: #166534; }
+.pos-pill.pos-MID { background: #dbeafe; color: #1e40af; }
+.pos-pill.pos-FWD { background: #fee2e2; color: #991b1b; }
+</style>
+{% endblock %}

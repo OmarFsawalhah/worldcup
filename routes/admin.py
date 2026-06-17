@@ -5,7 +5,7 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, abort, flash
 from flask_login import login_required, current_user
 
-from models import db, Match, Team, Player, Prediction, User
+from models import db, Match, Team, Player, Prediction, User, MatchEvent
 from scoring import score_match, user_total_points, user_exact_score_hits
 from i18n import t
 
@@ -184,6 +184,145 @@ def match_predictions(mid):
     preds = Prediction.query.filter_by(match_id=mid).all()
     preds.sort(key=lambda p: (-p.points_awarded, p.user.username))
     return render_template("admin/predictions.html", match=m, predictions=preds)
+
+
+# ============================================================
+#  Fantasy: player price + photo editor (one team at a time).
+# ============================================================
+
+@bp.route("/players", methods=["GET", "POST"])
+@admin_required
+def fantasy_players():
+    teams = Team.query.order_by(Team.name_en).all()
+    selected_team_id = request.args.get("team", type=int) or request.form.get("team_id", type=int)
+    if not selected_team_id and teams:
+        selected_team_id = teams[0].id
+    team = db.session.get(Team, selected_team_id) if selected_team_id else None
+    players = (Player.query.filter_by(team_id=team.id).order_by(Player.shirt_number, Player.id).all()
+               if team else [])
+
+    if request.method == "POST":
+        # Form sends parallel arrays: pid[], price[], photo[]
+        ids = request.form.getlist("pid")
+        prices = request.form.getlist("price")
+        photos = request.form.getlist("photo")
+        updated = 0
+        for pid_raw, price_raw, photo_raw in zip(ids, prices, photos):
+            if not pid_raw.isdigit():
+                continue
+            p = db.session.get(Player, int(pid_raw))
+            if not p or p.team_id != team.id:
+                continue
+            try:
+                new_price = round(float(price_raw or 4.0), 1)
+            except ValueError:
+                new_price = 4.0
+            new_photo = (photo_raw or "").strip() or None
+            if float(p.price or 0) != new_price or (p.photo_url or None) != new_photo:
+                p.price = new_price
+                p.photo_url = new_photo
+                updated += 1
+        db.session.commit()
+        flash(t("admin.players_saved", n=updated), "success")
+        return redirect(url_for("admin.fantasy_players", team=team.id))
+
+    return render_template(
+        "admin/players.html",
+        teams=teams, team=team, players=players,
+    )
+
+
+# ============================================================
+#  Fantasy: per-match event entry (starters, subs, goals,
+#  assists, cards, own goals, MOTM). Used by the fantasy game.
+# ============================================================
+
+@bp.route("/matches/<int:mid>/fantasy-events", methods=["GET", "POST"])
+@admin_required
+def match_fantasy_events(mid):
+    m = db.session.get(Match, mid) or abort(404)
+    home_players = (Player.query.filter_by(team_id=m.home_team_id)
+                    .order_by(Player.shirt_number).all())
+    away_players = (Player.query.filter_by(team_id=m.away_team_id)
+                    .order_by(Player.shirt_number).all())
+    valid_ids = {p.id for p in home_players} | {p.id for p in away_players}
+
+    if request.method == "POST":
+        # Parse inputs
+        starter_ids = {int(x) for x in request.form.getlist("starters") if x.isdigit()}
+        sub_ids = {int(x) for x in request.form.getlist("subs") if x.isdigit()}
+        yellow_ids = {int(x) for x in request.form.getlist("yellow") if x.isdigit()}
+        red_ids = {int(x) for x in request.form.getlist("red") if x.isdigit()}
+        motm_raw = request.form.get("motm_id")
+        motm_id = int(motm_raw) if motm_raw and motm_raw.isdigit() else None
+
+        # Goals/own-goals: form sends arrays "goal_scorer[]" + "goal_assister[]"
+        # An empty scorer row is ignored.
+        scorer_list = request.form.getlist("goal_scorer")
+        assister_list = request.form.getlist("goal_assister")
+        owngoal_list = request.form.getlist("owngoal_scorer")
+
+        # Aggregate per-player counts
+        goals_count = {}
+        assists_count = {}
+        owngoals_count = {}
+        for s, a in zip(scorer_list, assister_list):
+            if s and s.isdigit():
+                sid = int(s)
+                if sid in valid_ids:
+                    goals_count[sid] = goals_count.get(sid, 0) + 1
+            if a and a.isdigit():
+                aid = int(a)
+                if aid in valid_ids:
+                    assists_count[aid] = assists_count.get(aid, 0) + 1
+        for og in owngoal_list:
+            if og and og.isdigit():
+                oid = int(og)
+                if oid in valid_ids:
+                    owngoals_count[oid] = owngoals_count.get(oid, 0) + 1
+
+        # Collect every player_id that has any event
+        involved = (starter_ids | sub_ids | yellow_ids | red_ids
+                    | set(goals_count) | set(assists_count) | set(owngoals_count))
+        if motm_id and motm_id in valid_ids:
+            involved.add(motm_id)
+        # Filter to valid players for this match
+        involved &= valid_ids
+
+        # Wipe existing event rows for this match (idempotent re-save)
+        MatchEvent.query.filter_by(match_id=m.id).delete()
+
+        for pid in involved:
+            ev = MatchEvent(
+                match_id=m.id,
+                player_id=pid,
+                started=pid in starter_ids,
+                came_on=pid in sub_ids and pid not in starter_ids,
+                goals=goals_count.get(pid, 0),
+                assists=assists_count.get(pid, 0),
+                own_goals=owngoals_count.get(pid, 0),
+                yellow=pid in yellow_ids,
+                red=pid in red_ids,
+                is_motm=(motm_id == pid),
+            )
+            db.session.add(ev)
+
+        # Also mirror MOTM onto Match.motm_id for the existing prediction-game UI
+        if motm_id and motm_id in valid_ids:
+            m.motm_id = motm_id
+        db.session.commit()
+        flash(t("admin.fantasy_events_saved"), "success")
+        return redirect(url_for("admin.matches"))
+
+    # GET — pre-fill from existing event rows
+    existing = {ev.player_id: ev for ev in MatchEvent.query.filter_by(match_id=m.id).all()}
+    return render_template(
+        "admin/fantasy_events.html",
+        match=m,
+        home_players=home_players,
+        away_players=away_players,
+        existing=existing,
+    )
 
 
 def _populate_match(m, form):

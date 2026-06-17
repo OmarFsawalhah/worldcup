@@ -15,6 +15,10 @@
         <span>{{ t('admin.refresh_api') }}</span>
       </button>
     </form>
+    <a href="{{ url_for('admin.fantasy_players') }}" class="btn btn-sm" style="background:#7c3aed;color:#fff;border-color:transparent">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+      <span>{{ t('admin.players_btn') }}</span>
+    </a>
     <a href="{{ url_for('admin.users') }}" class="btn btn-ghost btn-sm">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>{{ t('admin.users') }}</span>
@@ -67,6 +71,7 @@
       <span class="btn btn-soft btn-xs opacity-60 cursor-not-allowed" title="{{ t('admin.already_calculated_by', who=m.calculated_by.username) }}">⚡ 🔒</span>
     {% endif %}
   {% endif %}
+  <a href="{{ url_for('admin.match_fantasy_events', mid=m.id) }}" class="btn btn-xs" style="background:#7c3aed;color:#fff">⚡ {{ t('admin.fe_btn') }}</a>
   <a href="{{ url_for('admin.match_predictions', mid=m.id) }}" class="btn btn-ghost btn-xs" style="background:#475569;color:#fff;border-color:transparent">{{ t('admin.predictions') }}</a>
   <a href="{{ url_for('admin.match_edit', mid=m.id) }}" class="btn btn-xs" style="background:#d97706;color:#fff">✎ {{ t('admin.edit_match') }}</a>
   <form method="post" action="{{ url_for('admin.match_delete', mid=m.id) }}" class="inline" onsubmit="return confirm('Delete?')">
