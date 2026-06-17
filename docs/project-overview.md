@@ -197,6 +197,8 @@ Decorators in `routes/admin.py`: `@admin_required`, `@superuser_required`. Both 
 - **Username = lowercase, no spaces.** Always. Login lowercases input; DB must match.
 - **Predictions lock at kickoff.** Don't add UI that lets users edit after `is_locked()`.
 - **`Match.first_scorer_id` and `Match.motm_id` are the prediction-game fields.** (On the `fantasy-mvp` branch they're mirrored into `MatchEvent` — don't break that sync if you ever touch the fantasy events form there.)
+- **PWA + in-app notifications are live on main** (commits `39ee271` install, `87ab7c4` notifications, `bf5a4fd` bell-position). The bell sits beside the EN/AR language toggle; service worker registered in `base.html`; manifest at `/static/manifest.webmanifest`; icons in `/static/icons/`. See `docs/pwa-build-log.md` for the full spec.
+- **Notification triggers fire from**: `scoring.py:score_match` (match_scored + round_closed), `routes/admin.py:user_adjust` (manual_bonus), `routes/public.py:dashboard` (lazy match_starting reminders). All wrapped in try/except — notification failure never blocks the triggering action.
 - **Translations go in `en.json` AND `ar.json` in the same commit.**
 - **Superusers excluded from public leaderboards.** Don't accidentally include them.
 - **The trivia feature was removed in `d23f6a3`** (UI and scoring both); tables `TriviaQuestion`, `TriviaAnswer`, `QuestionBank`, `MatchTrivia` are dormant. Don't add new code against them — if trivia comes back, the user will tell us how.
