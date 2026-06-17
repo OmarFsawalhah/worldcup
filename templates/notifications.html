@@ -90,27 +90,37 @@
     } catch (e) { renderState(false); }
   }
 
+  function showError(msg) {
+    console.error('[push]', msg);
+    warningEl.textContent = msg;
+    warningEl.classList.remove('hidden');
+  }
+
   async function enable() {
     warningEl.classList.add('hidden');
     try {
+      console.log('[push] fetching vapid key…');
       const r = await fetch('/push/vapid-key');
       const cfg = await r.json();
+      console.log('[push] vapid config:', cfg);
       if (!cfg.enabled || !cfg.publicKey) {
-        warningEl.textContent = STR.notConfigured;
-        warningEl.classList.remove('hidden');
+        showError(STR.notConfigured);
         return;
       }
+      console.log('[push] requesting permission…');
       const perm = await Notification.requestPermission();
+      console.log('[push] permission:', perm);
       if (perm !== 'granted') {
-        warningEl.textContent = STR.blocked;
-        warningEl.classList.remove('hidden');
+        showError(STR.blocked);
         return;
       }
+      console.log('[push] subscribing…');
       const reg = await getReg();
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlB64ToUint8Array(cfg.publicKey),
       });
+      console.log('[push] subscribed:', sub.endpoint);
       await fetch('/push/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -118,8 +128,8 @@
       });
       renderState(true);
     } catch (e) {
-      warningEl.textContent = (e && e.message) || STR.unsupported;
-      warningEl.classList.remove('hidden');
+      console.error('[push] enable failed', e);
+      showError((e && e.message) || STR.unsupported);
     }
   }
 
@@ -140,9 +150,28 @@
   }
 
   btn.addEventListener('click', async () => {
-    const reg = await getReg();
-    const sub = await reg.pushManager.getSubscription();
-    if (sub) disable(); else enable();
+    console.log('[push] button clicked');
+    warningEl.classList.add('hidden');
+    try {
+      // 5-second timeout in case the SW never becomes ready
+      const ready = Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Service worker not ready (timeout). Try refreshing the page.')), 5000)),
+      ]);
+      const reg = await ready;
+      console.log('[push] SW ready:', reg.scope);
+      const sub = await reg.pushManager.getSubscription();
+      if (sub) {
+        console.log('[push] existing subscription → disabling');
+        disable();
+      } else {
+        console.log('[push] no subscription → enabling');
+        enable();
+      }
+    } catch (e) {
+      console.error('[push] click handler failed', e);
+      showError((e && e.message) || 'Unknown error — check the console.');
+    }
   });
 
   testBtn.addEventListener('click', () => {
