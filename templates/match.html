@@ -16,7 +16,8 @@
     {% endif %}
   </div>
 
-  <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center">
+  {# dir="ltr" so Home stays on the left + Away on the right, score digits next to the right team. #}
+  <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center" dir="ltr">
     {# Home #}
     <div class="flex flex-col items-center sm:flex-1">
       <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
@@ -265,7 +266,7 @@
           <div class="text-center mt-3">
             <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.score') }}</div>
             <div class="font-score text-2xl mt-1 flex items-center justify-center gap-2">
-              <span>{{ prediction.home_score }} <span class="text-slate-400">-</span> {{ prediction.away_score }}</span>
+              <span dir="ltr">{{ prediction.home_score }} <span class="text-slate-400">-</span> {{ prediction.away_score }}</span>
               {% if match.has_finished() %}
                 {% if exact_hit %}<span class="text-amber-600 text-base">✓ +2</span>{% else %}<span class="text-rose-400 text-base">✗</span>{% endif %}
               {% endif %}
@@ -320,7 +321,7 @@
         </div>
         <div class="text-center mt-3">
           <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.score') }}</div>
-          <div class="font-score text-2xl mt-1">{{ match.home_score }} <span class="text-slate-400">-</span> {{ match.away_score }}</div>
+          <div class="font-score text-2xl mt-1" dir="ltr">{{ match.home_score }} <span class="text-slate-400">-</span> {{ match.away_score }}</div>
         </div>
         <div class="text-sm text-center text-slate-600 mt-3 space-y-1">
           {% if match.first_scorer %}<div>⚽ {{ match.first_scorer.name(lang) }}</div>{% endif %}

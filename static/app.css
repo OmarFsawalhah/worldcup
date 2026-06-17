@@ -836,3 +836,14 @@ html[dir="rtl"] .rtl\:space-x-reverse > * + * { --tw-space-x-reverse: 1; }
     radial-gradient(45% 60% at 0% 100%, rgba(251, 191, 36, 0.10), transparent 70%);
   pointer-events: none;
 }
+
+/* ============================================================
+   RTL safety: lock match-score rows to LTR direction so the
+   score digits ("1-3") always stay next to the correct team
+   regardless of page language. Used on any flex row containing
+   home + score + away.
+   ============================================================ */
+.match-ltr {
+  direction: ltr !important;
+}
+.match-ltr .text-end { text-align: end; }

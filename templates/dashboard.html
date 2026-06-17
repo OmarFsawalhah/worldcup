@@ -83,7 +83,9 @@
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-2">
+          {# dir="ltr" keeps Home on the left and Away on the right even in Arabic mode
+             so the score digits stay visually next to the correct team. #}
+          <div class="flex items-center justify-between gap-2" dir="ltr">
             {# Home #}
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <img src="{{ flag_url(m.home_team) }}" alt="{{ m.home_team.name_en }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">

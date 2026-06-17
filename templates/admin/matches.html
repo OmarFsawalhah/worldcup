@@ -97,7 +97,7 @@
           {% else %}{{ t('dashboard.stage.' + m.stage) }}{% endif %}
         </td>
         <td>
-          <div class="flex items-center gap-2 whitespace-nowrap">
+          <div class="flex items-center gap-2 whitespace-nowrap match-ltr">
             <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm">
             <span>{{ m.home_team.name(lang) }}</span>
             <span class="text-slate-400">vs</span>
@@ -134,7 +134,7 @@
         </span>
         <span class="badge badge-{{ m.status if m.status in ['live','finished'] else 'upcoming' }}">{{ m.status }}</span>
       </div>
-      <div class="flex items-center justify-between gap-2 mb-2">
+      <div class="flex items-center justify-between gap-2 mb-2 match-ltr">
         <div class="flex items-center gap-2 min-w-0 flex-1">
           <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm shrink-0">
           <span class="text-sm font-medium truncate">{{ m.home_team.name(lang) }}</span>
