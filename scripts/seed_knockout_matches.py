@@ -74,12 +74,19 @@ def main():
         print("WARN: FOOTBALL_DATA_API_KEY not set; skipping knockout seed.")
         return
 
-    r = requests.get(
-        f"{API_BASE}/competitions/{COMPETITION}/matches",
-        headers={"X-Auth-Token": api_key, "Accept": "application/json"},
-        timeout=20,
-    )
-    r.raise_for_status()
+    try:
+        r = requests.get(
+            f"{API_BASE}/competitions/{COMPETITION}/matches",
+            headers={"X-Auth-Token": api_key, "Accept": "application/json"},
+            timeout=15,
+        )
+        r.raise_for_status()
+    except Exception as exc:
+        # The build must always succeed even if the API is down or
+        # slow. Existing rows stay in place; a future deploy with a
+        # healthy network can fill in any new ones.
+        print(f"WARN: knockout seeder could not reach football-data.org ({exc}); skipping.")
+        return
     data = r.json()
     api_matches = [m for m in data.get("matches", []) if m.get("stage") in STAGE_MAP]
 
