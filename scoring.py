@@ -1,8 +1,12 @@
-"""Auto-scoring logic. Pure function called when admin saves a match result."""
+"""Auto-scoring logic. Pure function called when admin saves a match result.
+
+The user only picks Home or Away on the prediction form. The rule for
+"who won" in a regulation-draw-then-penalties match is stored on the
+match itself in Match.winner_team_id (set by the API refresh)."""
 
 from models import db, Match, Prediction
 
-# Primary prediction: winner / draw
+# Primary prediction: correct winner
 POINTS_WINNER = 3
 # Bonus on top of winner: also picked the exact score
 POINTS_EXACT_BONUS = 2
@@ -10,12 +14,24 @@ POINTS_FIRST_SCORER = 3
 POINTS_MOTM = 3
 
 
-def _winner_side(home, away):
-    if home > away:
+def _winner_side(match: Match) -> str:
+    """Returns 'home' or 'away' for a finished match.
+    Tied regulation score + winner_team_id set -> that team wins
+    (penalty shootout). Pure draw with no winner_team_id -> 'draw',
+    which no user can have picked, so they get 0 winner points.
+    """
+    if match.home_score is None or match.away_score is None:
+        return "draw"
+    if match.home_score > match.away_score:
         return "home"
-    if away > home:
+    if match.away_score > match.home_score:
         return "away"
-    return "draw"
+    # Tied — was there a penalty shootout?
+    if match.winner_team_id is None:
+        return "draw"  # group-stage tie, no penalty
+    if match.winner_team_id == match.home_team_id:
+        return "home"
+    return "away"
 
 
 def score_match(match: Match) -> None:
@@ -25,17 +41,19 @@ def score_match(match: Match) -> None:
     if match.home_score is None or match.away_score is None:
         return
 
-    actual_winner = _winner_side(match.home_score, match.away_score)
+    actual_winner = _winner_side(match)
     actual_first = match.first_scorer_id
     actual_motm = match.motm_id
 
     for p in match.predictions:
         pts = 0
-        # Primary: did they pick the right winner / draw?
+        # Primary: did they pick the right winner?
         winner_hit = p.winner_prediction == actual_winner
         if winner_hit:
             pts += POINTS_WINNER
-            # Bonus: ALSO predicted exact score (only counts when winner is right too)
+            # Bonus: ALSO predicted exact score (only counts when winner
+            # is right too). For penalty wins, "exact score" is the
+            # regulation score (e.g. 1-1) which a user could predict.
             if (p.home_score is not None and p.away_score is not None
                     and p.home_score == match.home_score and p.away_score == match.away_score):
                 pts += POINTS_EXACT_BONUS
@@ -93,7 +111,7 @@ def prediction_breakdown(prediction, match) -> dict:
     if out["result_pending"]:
         return out
 
-    actual_winner = _winner_side(match.home_score, match.away_score)
+    actual_winner = _winner_side(match)
     if prediction.winner_prediction == actual_winner:
         out["winner"] = POINTS_WINNER
         out["winner_hit"] = True

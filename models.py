@@ -74,12 +74,17 @@ class Match(db.Model):
     first_scorer_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
     motm_id = db.Column(db.Integer, db.ForeignKey("players.id"), nullable=True)
     calculated_by_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    # Set when the match ended in a draw and went to penalties — this
+    # records who won the shootout so the scorer can award the +3 winner
+    # points to the right user. NULL = not a draw / not a penalty match.
+    winner_team_id = db.Column(db.Integer, db.ForeignKey("teams.id"), nullable=True)
 
     home_team = db.relationship("Team", foreign_keys=[home_team_id])
     away_team = db.relationship("Team", foreign_keys=[away_team_id])
     first_scorer = db.relationship("Player", foreign_keys=[first_scorer_id])
     motm = db.relationship("Player", foreign_keys=[motm_id])
     calculated_by = db.relationship("User", foreign_keys=[calculated_by_id])
+    penalty_winner = db.relationship("Team", foreign_keys=[winner_team_id])
     predictions = db.relationship("Prediction", backref="match", lazy="dynamic", cascade="all, delete-orphan")
     trivia = db.relationship("TriviaQuestion", backref="match", uselist=False, cascade="all, delete-orphan")
 

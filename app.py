@@ -129,6 +129,11 @@ def _auto_migrate():
         if "calculated_by_id" not in cols:
             with db.engine.begin() as conn:
                 conn.execute(text("ALTER TABLE matches ADD COLUMN calculated_by_id INTEGER"))
+        if "winner_team_id" not in cols:
+            # Set when a draw went to penalties; used by the scorer to
+            # award the +3 winner points to the right user.
+            with db.engine.begin() as conn:
+                conn.execute(text("ALTER TABLE matches ADD COLUMN winner_team_id INTEGER"))
     if "predictions" in insp.get_table_names():
         cols_info = {c["name"]: c for c in insp.get_columns("predictions")}
         cols = set(cols_info.keys())

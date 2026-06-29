@@ -59,7 +59,11 @@ def match_detail(match_id):
                 flash(t("match.locked_msg"), "error")
                 return redirect(url_for("public.match_detail", match_id=match.id))
             winner = request.form.get("winner_prediction") or None
-            if winner not in (None, "home", "draw", "away"):
+            # "draw" is no longer a valid choice — it falls back to None
+            # (i.e. user skipped the winner step). Old predictions in the DB
+            # with winner_prediction='draw' are left in place; they just
+            # never earn winner points.
+            if winner not in (None, "home", "away"):
                 winner = None
             hs_raw = (request.form.get("home_score") or "").strip()
             as_raw = (request.form.get("away_score") or "").strip()

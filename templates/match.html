@@ -85,10 +85,9 @@
           <div class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold mb-1">+3 pts</div>
           <h3 class="font-display text-xl">{{ t('match.step_winner') }}</h3>
         </div>
-        <div class="grid grid-cols-3 gap-2 sm:gap-3">
+        <div class="grid grid-cols-2 gap-2 sm:gap-3">
           {% for opt, label in [
               ('home', match.home_team.name(lang)),
-              ('draw', t('match.draw')),
               ('away', match.away_team.name(lang))
           ] %}
             {% set picked = prediction and prediction.winner_prediction == opt %}
@@ -96,10 +95,8 @@
               <input type="radio" name="winner_prediction" value="{{ opt }}" class="sr-only" {{ 'checked' if picked }}>
               {% if opt == 'home' %}
                 <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md mx-auto mb-2">
-              {% elif opt == 'away' %}
-                <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md mx-auto mb-2">
               {% else %}
-                <div class="text-3xl mb-2">🤝</div>
+                <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md mx-auto mb-2">
               {% endif %}
               <div class="font-display text-sm sm:text-base truncate">{{ label }}</div>
             </label>
@@ -254,7 +251,6 @@
             <span>
               {% if prediction.winner_prediction == 'home' %}{{ match.home_team.name(lang) }}
               {% elif prediction.winner_prediction == 'away' %}{{ match.away_team.name(lang) }}
-              {% elif prediction.winner_prediction == 'draw' %}🤝 {{ t('match.draw') }}
               {% else %}<span class="text-slate-400 text-base italic">{{ t('match.summary_none') }}</span>{% endif %}
             </span>
             {% if match.has_finished() and prediction.winner_prediction %}

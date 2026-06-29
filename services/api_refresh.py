@@ -181,6 +181,17 @@ def refresh_match_statuses():
                 m_local.away_score = api_a
                 updated_score += 1
 
+        # If the match ended in a draw and went to penalties, the API
+        # reports it in score.penalties. Set winner_team_id so the scorer
+        # can award +3 to users who picked the shootout winner.
+        # Only ever set it once — admin-set values win (only filled if NULL).
+        if m_local.winner_team_id is None and m_local.home_score is not None and m_local.away_score is not None:
+            if m_local.home_score == m_local.away_score:
+                pen = (m_api.get("score") or {}).get("penalties") or {}
+                ph, pa = pen.get("home"), pen.get("away")
+                if ph is not None and pa is not None and ph != pa:
+                    m_local.winner_team_id = home_id if ph > pa else away_id
+
         # If match is finished AND no first_scorer set yet, try the detail call.
         # Wrapped in try/except so a single bad detail call never crashes the
         # whole refresh.
