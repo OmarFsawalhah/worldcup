@@ -181,10 +181,27 @@ def seed_admins():
     print("Superuser: username='superuser', password='super123' (must change on first login)")
 
 
+def _ensure_schema():
+    """Post-create_all migration. Runs after create_all + seed_teams so
+    we know the matches table exists in the prod Postgres DB. Adds
+    columns that older deploys may be missing.
+    """
+    from sqlalchemy import inspect, text
+    insp = inspect(db.engine)
+    table_names = insp.get_table_names()
+    if "matches" in table_names:
+        cols = {c["name"] for c in insp.get_columns("matches")}
+        if "winner_team_id" not in cols:
+            with db.engine.begin() as conn:
+                conn.execute(text("ALTER TABLE matches ADD COLUMN winner_team_id INTEGER"))
+            print("  + added matches.winner_team_id")
+
+
 def main():
     with app.app_context():
         db.create_all()
         seed_teams()
+        _ensure_schema()           # only after teams exist (FK target)
         seed_players()
         seed_matches()
         seed_admins()
