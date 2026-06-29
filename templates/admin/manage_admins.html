@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-3xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('admin.superuser_section') }}</div>
+  <h1 class="page-title text-2xl sm:text-3xl">🛡️ {{ t('admin.manage_admins_title') }}</h1>
+  <p class="text-slate-300 text-sm mt-1">{{ t('admin.manage_admins_hint') }}</p>
+</div>
+
+<form method="post" class="card-pitch p-0 overflow-x-auto">
+  <table class="table-clean">
+    <thead>
+      <tr>
+        <th class="w-12"></th>
+        <th>{{ t('admin.username') }}</th>
+        <th class="w-24 text-center">{{ t('admin.is_admin') }}</th>
+        <th class="w-24 text-center">{{ t('admin.is_superuser') }}</th>
+        <th class="w-28 text-center">{{ t('admin.must_change') }}</th>
+        <th class="w-32 text-end">{{ t('admin.created') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+        <tr class="{{ 'bg-purple-50/40' if u.is_superuser else '' }}">
+          <td class="text-slate-400 text-xs">{{ u.id }}</td>
+          <td>
+            <span class="font-medium">{{ u.username }}</span>
+            {% if u.id == current_user.id %}
+              <span class="ms-2 text-[10px] uppercase tracking-wider bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">You</span>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            {% if u.is_superuser %}
+              <span class="text-slate-400 text-xs">—</span>
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+            {% elif u.id == current_user.id %}
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+              <input type="hidden" name="is_admin" value="{{ u.id }}">
+              <span class="text-slate-400 text-xs">—</span>
+            {% else %}
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="is_admin" value="{{ u.id }}"
+                       {{ 'checked' if u.is_admin }}
+                       class="w-4 h-4 accent-emerald-600">
+              </label>
+            {% endif %}
+          </td>
+          <td class="text-center">
+            {% if u.is_superuser %}
+              <span class="text-[10px] font-bold bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded uppercase tracking-wider">✓</span>
+            {% else %}
+              <span class="text-slate-300 text-xs">—</span>
+            {% endif %}
+          </td>
+          <td class="text-center text-xs">
+            {% if u.must_change_password %}
+              <span class="text-amber-700">⚠</span>
+            {% else %}
+              <span class="text-slate-300">—</span>
+            {% endif %}
+          </td>
+          <td class="text-end text-xs text-slate-500 font-mono">
+            {{ u.created_at.strftime('%Y-%m-%d') if u.created_at else '—' }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="px-4 py-3 border-t border-slate-200 flex justify-end gap-2">
+    <button class="btn btn-primary btn-sm">{{ t('admin.save_admins') }}</button>
+  </div>
+</form>
+
+<div class="card-pitch mt-4 text-xs text-slate-500">
+  <p class="font-bold text-slate-700 mb-1">{{ t('admin.manage_admins_note_title') }}</p>
+  <ul class="list-disc list-inside space-y-0.5">
+    <li>{{ t('admin.manage_admins_note_1') }}</li>
+    <li>{{ t('admin.manage_admins_note_2') }}</li>
+    <li>{{ t('admin.manage_admins_note_3') }}</li>
+  </ul>
+</div>
+{% endblock %}

@@ -294,3 +294,145 @@ def points_log():
             })
 
     return render_template("admin/points_log.html", timeline=timeline, users=users)
+
+
+# ============================================================
+#  Superuser-only: admin management + edit prediction
+# ============================================================
+
+@bp.route("/manage-admins", methods=["GET", "POST"])
+@superuser_required
+def manage_admins():
+    """Toggle is_admin for any user (except the current superuser, who
+    must always remain admin). The 'superuser' account is protected —
+    it cannot be demoted by anyone including another superuser."""
+    if request.method == "POST":
+        updated = 0
+        for uid_raw in request.form.getlist("user_id"):
+            try:
+                uid = int(uid_raw)
+            except ValueError:
+                continue
+            # Was the checkbox checked?
+            is_admin_now = uid in {int(x) for x in request.form.getlist("is_admin") if x.isdigit()}
+            user = db.session.get(User, uid)
+            if not user or user.username == "superuser":
+                continue  # protected
+            if user.id == current_user.id:
+                continue  # never let a superuser demote themselves
+            if user.is_admin != is_admin_now:
+                user.is_admin = is_admin_now
+                updated += 1
+        db.session.commit()
+        if updated:
+            flash(t("admin.admins_updated", n=updated), "success")
+        else:
+            flash(t("admin.no_changes"), "info")
+        return redirect(url_for("admin.manage_admins"))
+
+    # GET — list everyone, sorted by created_at (superuser first)
+    users = User.query.order_by(User.created_at.asc(), User.username.asc()).all()
+    return render_template("admin/manage_admins.html", users=users)
+
+
+@bp.route("/edit-prediction", methods=["GET", "POST"])
+@superuser_required
+def edit_prediction():
+    """Edit any user's prediction on any match — even if the match is
+    locked or already scored. Used to backfill predictions for users
+    who didn't predict in time. After saving, optionally rescores the
+    match so the leaderboard reflects the change immediately."""
+    from models import Prediction
+    users = User.query.order_by(User.username).all()
+    matches = Match.query.order_by(Match.kickoff_utc.desc()).all()
+
+    if request.method == "POST":
+        try:
+            uid = int(request.form.get("user_id"))
+            mid = int(request.form.get("match_id"))
+        except (TypeError, ValueError):
+            flash(t("admin.invalid_user_or_match"), "error")
+            return redirect(url_for("admin.edit_prediction"))
+
+        user = db.session.get(User, uid)
+        match = db.session.get(Match, mid)
+        if not user or not match:
+            flash(t("admin.invalid_user_or_match"), "error")
+            return redirect(url_for("admin.edit_prediction"))
+
+        winner = request.form.get("winner_prediction") or None
+        if winner not in (None, "home", "away"):
+            winner = None
+        hs_raw = (request.form.get("home_score") or "").strip()
+        as_raw = (request.form.get("away_score") or "").strip()
+        try:
+            hs = int(hs_raw) if hs_raw else None
+        except ValueError:
+            hs = None
+        try:
+            as_ = int(as_raw) if as_raw else None
+        except ValueError:
+            as_ = None
+        if (hs is None) != (as_ is None):
+            hs = as_ = None
+        fs_raw = request.form.get("first_scorer_id") or None
+        mm_raw = request.form.get("motm_id") or None
+        fs = int(fs_raw) if fs_raw and fs_raw.isdigit() else None
+        mm = int(mm_raw) if mm_raw and mm_raw.isdigit() else None
+
+        pred = Prediction.query.filter_by(user_id=uid, match_id=mid).first()
+        if pred is None:
+            pred = Prediction(user_id=uid, match_id=mid,
+                              winner_prediction=winner,
+                              home_score=hs, away_score=as_,
+                              first_scorer_id=fs, motm_id=mm)
+            db.session.add(pred)
+        else:
+            pred.winner_prediction = winner
+            pred.home_score = hs
+            pred.away_score = as_
+            pred.first_scorer_id = fs
+            pred.motm_id = mm
+        db.session.commit()
+
+        # Optionally rescore
+        if request.form.get("recalc") and match.has_finished():
+            try:
+                from scoring import score_match
+                pred.points_awarded = 0  # reset so score_match recomputes
+                score_match(match)
+                # After score_match, points_awarded may have been
+                # overwritten, but the local `pred` object is stale.
+                db.session.refresh(pred)
+            except Exception:
+                import logging
+                logging.exception("superuser rescore failed")
+
+        flash(t("admin.prediction_updated",
+               user=user.username, match=match.home_team.name_en + " vs " + match.away_team.name_en),
+              "success")
+        return redirect(url_for("admin.edit_prediction",
+                                user_id=uid, match_id=mid))
+
+    # GET — either show an empty form, or pre-fill if user_id+match_id
+    # are in the query string (came in via the "edit" link on a row)
+    selected_user_id = request.args.get("user_id", type=int)
+    selected_match_id = request.args.get("match_id", type=int)
+    selected_user = db.session.get(User, selected_user_id) if selected_user_id else None
+    selected_match = db.session.get(Match, selected_match_id) if selected_match_id else None
+    players = []
+    current_pred = None
+    if selected_match:
+        players = (Player.query
+                   .filter(Player.team_id.in_([selected_match.home_team_id,
+                                                selected_match.away_team_id]))
+                   .order_by(Player.shirt_number).all())
+        if selected_user:
+            current_pred = Prediction.query.filter_by(
+                user_id=selected_user.id, match_id=selected_match.id).first()
+    return render_template(
+        "admin/edit_prediction.html",
+        users=users, matches=matches, players=players,
+        selected_user=selected_user, selected_match=selected_match,
+        current_pred=current_pred,
+    )

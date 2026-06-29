@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block container_class %}max-w-4xl{% endblock %}
+{% block content %}
+{% set lang = current_lang() %}
+
+<div class="mb-5">
+  <div class="text-xs uppercase tracking-[0.2em] text-yellow-400 font-bold mb-1">{{ t('admin.superuser_section') }}</div>
+  <h1 class="page-title text-2xl sm:text-3xl">✏️ {{ t('admin.edit_prediction_title') }}</h1>
+  <p class="text-slate-300 text-sm mt-1">{{ t('admin.edit_prediction_hint') }}</p>
+</div>
+
+{# Step 1: pick a user + match #}
+<form method="get" class="card-pitch mb-4">
+  <div class="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+    <div>
+      <label class="label">{{ t('admin.user') }}</label>
+      <select name="user_id" class="input">
+        <option value="">— {{ t('admin.pick_user') }} —</option>
+        {% for u in users %}
+          <option value="{{ u.id }}" {{ 'selected' if selected_user and u.id == selected_user.id }}>
+            {{ u.username }}{% if u.is_admin %} ★{% endif %}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="label">{{ t('admin.match') }}</label>
+      <select name="match_id" class="input">
+        <option value="">— {{ t('admin.pick_match') }} —</option>
+        {% for m in matches %}
+          <option value="{{ m.id }}" {{ 'selected' if selected_match and m.id == selected_match.id }}>
+            {{ m.kickoff_utc.strftime('%Y-%m-%d %H:%M') }} ·
+            {{ m.home_team.name(lang) }} vs {{ m.away_team.name(lang) }}
+            ({{ m.status }})
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <button class="btn btn-soft btn-sm w-full sm:w-auto">{{ t('admin.load') }}</button>
+    </div>
+  </div>
+</form>
+
+{% if selected_user and selected_match %}
+  <div class="card-pitch mb-3 p-3 text-sm flex items-center gap-3">
+    {% if current_pred %}
+      <span class="text-amber-700 font-bold">⚠ {{ t('admin.will_update_existing') }}</span>
+    {% else %}
+      <span class="text-emerald-700 font-bold">+ {{ t('admin.will_create_new') }}</span>
+    {% endif %}
+    <span class="text-slate-500">
+      {{ t('admin.for_user_match', user=selected_user.username, match=selected_match.home_team.name(lang) + ' vs ' + selected_match.away_team.name(lang)) }}
+    </span>
+  </div>
+
+  <form method="post" class="space-y-4">
+    <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+    <input type="hidden" name="match_id" value="{{ selected_match.id }}">
+
+    {# Winner #}
+    <div class="card-pitch">
+      <div class="text-xs uppercase tracking-wider text-emerald-700 font-bold mb-2">+3 pts</div>
+      <div class="grid grid-cols-2 gap-2 sm:gap-3">
+        {% for opt, label in [
+            ('home', selected_match.home_team.name(lang)),
+            ('away', selected_match.away_team.name(lang))
+        ] %}
+          <label class="winner-card {{ 'winner-card-active' if current_pred and current_pred.winner_prediction == opt }}">
+            <input type="radio" name="winner_prediction" value="{{ opt }}" class="sr-only"
+                   {{ 'checked' if current_pred and current_pred.winner_prediction == opt }}>
+            <img src="{{ flag_url(selected_match.home_team if opt == 'home' else selected_match.away_team) }}"
+                 alt="" class="flag-img flag-img-md mx-auto mb-2">
+            <div class="font-display text-sm sm:text-base truncate">{{ label }}</div>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Exact score #}
+    <div class="card-pitch">
+      <div class="text-xs uppercase tracking-wider text-amber-700 font-bold mb-2">+2 pts</div>
+      <div class="flex items-center justify-center gap-3 sm:gap-4 mt-4">
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <img src="{{ flag_url(selected_match.home_team) }}" alt="" class="flag-img flag-img-sm">
+            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ selected_match.home_team.name(lang) }}</span>
+          </div>
+          <input type="number" min="0" max="20" name="home_score" inputmode="numeric"
+                 value="{{ current_pred.home_score if current_pred and current_pred.home_score is not none else '' }}"
+                 class="score-box">
+        </div>
+        <span class="font-display text-3xl text-slate-300 mt-7">–</span>
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ selected_match.away_team.name(lang) }}</span>
+            <img src="{{ flag_url(selected_match.away_team) }}" alt="" class="flag-img flag-img-sm">
+          </div>
+          <input type="number" min="0" max="20" name="away_score" inputmode="numeric"
+                 value="{{ current_pred.away_score if current_pred and current_pred.away_score is not none else '' }}"
+                 class="score-box">
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="card-pitch">
+        <div class="text-xs uppercase tracking-wider text-emerald-700 font-bold mb-2">+3 pts</div>
+        <label class="label">{{ t('admin.first_scorer') }}</label>
+        <select name="first_scorer_id" class="input">
+          <option value="">— {{ t('match.summary_none') }} —</option>
+          <optgroup label="{{ selected_match.home_team.name(lang) }}">
+            {% for p in players if p.team_id == selected_match.home_team_id %}
+              <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.first_scorer_id == p.id }}>
+                {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+              </option>
+            {% endfor %}
+          </optgroup>
+          <optgroup label="{{ selected_match.away_team.name(lang) }}">
+            {% for p in players if p.team_id == selected_match.away_team_id %}
+              <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.first_scorer_id == p.id }}>
+                {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+              </option>
+            {% endfor %}
+          </optgroup>
+        </select>
+      </div>
+      <div class="card-pitch">
+        <div class="text-xs uppercase tracking-wider text-emerald-700 font-bold mb-2">+3 pts</div>
+        <label class="label">{{ t('admin.motm') }}</label>
+        <select name="motm_id" class="input">
+          <option value="">— {{ t('match.summary_none') }} —</option>
+          <optgroup label="{{ selected_match.home_team.name(lang) }}">
+            {% for p in players if p.team_id == selected_match.home_team_id %}
+              <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.motm_id == p.id }}>
+                {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+              </option>
+            {% endfor %}
+          </optgroup>
+          <optgroup label="{{ selected_match.away_team.name(lang) }}">
+            {% for p in players if p.team_id == selected_match.away_team_id %}
+              <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.motm_id == p.id }}>
+                {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
+              </option>
+            {% endfor %}
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
+    {% if selected_match.has_finished() %}
+      <label class="flex items-center gap-2 text-sm text-slate-700 card-pitch p-3">
+        <input type="checkbox" name="recalc" value="1" checked class="w-4 h-4 accent-emerald-600">
+        <span>{{ t('admin.recalc_after_save') }}</span>
+      </label>
+    {% endif %}
+
+    <div class="flex justify-end gap-2">
+      <a href="{{ url_for('admin.edit_prediction') }}" class="btn btn-soft btn-sm">{{ t('admin.cancel') }}</a>
+      <button class="btn btn-primary btn-sm">{{ t('admin.save') }}</button>
+    </div>
+  </form>
+{% else %}
+  <div class="card-pitch text-center text-slate-500 py-10">
+    <div class="text-4xl mb-2">👆</div>
+    <p>{{ t('admin.pick_above') }}</p>
+  </div>
+{% endif %}
+{% endblock %}
