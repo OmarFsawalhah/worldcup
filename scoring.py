@@ -51,12 +51,13 @@ def score_match(match: Match) -> None:
         winner_hit = p.winner_prediction == actual_winner
         if winner_hit:
             pts += POINTS_WINNER
-            # Bonus: ALSO predicted exact score (only counts when winner
-            # is right too). For penalty wins, "exact score" is the
-            # regulation score (e.g. 1-1) which a user could predict.
-            if (p.home_score is not None and p.away_score is not None
-                    and p.home_score == match.home_score and p.away_score == match.away_score):
-                pts += POINTS_EXACT_BONUS
+        # Exact-score bonus: paid out for picking the right score, even
+        # on a pure draw (no winner_team_id) — nailing 1-1, 0-0, 2-2 etc.
+        # is rewarded with +2 even though no one wins the match.
+        if (p.home_score is not None and p.away_score is not None
+                and p.home_score == match.home_score
+                and p.away_score == match.away_score):
+            pts += POINTS_EXACT_BONUS
         if actual_first is not None and p.first_scorer_id == actual_first:
             pts += POINTS_FIRST_SCORER
         if actual_motm is not None and p.motm_id == actual_motm:
