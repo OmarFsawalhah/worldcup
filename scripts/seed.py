@@ -14,7 +14,7 @@ sys.path.insert(0, ROOT)
 from app import app
 from models import db, User, Team, Player, Match
 
-ADMIN_USERNAMES = ["anas", "ali", "ahmadokour"]
+ADMIN_USERNAMES = ["anas", "ali", "ahmad_okour"]
 DEFAULT_ADMIN_PASSWORD = "admin123"
 
 DATA_DIR = os.path.join(ROOT, "data")
