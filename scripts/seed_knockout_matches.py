@@ -67,8 +67,12 @@ def main():
 
     api_key = os.environ.get("FOOTBALL_DATA_API_KEY", "")
     if not api_key:
-        print("ERROR: FOOTBALL_DATA_API_KEY not set in .env")
-        sys.exit(1)
+        # Don't fail the Render build if the API key is missing — skip
+        # silently. Reseed can be triggered later by setting the env var
+        # and pushing a no-op commit. seed.py will run before us so the
+        # schema is already in place; this script is purely additive.
+        print("WARN: FOOTBALL_DATA_API_KEY not set; skipping knockout seed.")
+        return
 
     r = requests.get(
         f"{API_BASE}/competitions/{COMPETITION}/matches",
