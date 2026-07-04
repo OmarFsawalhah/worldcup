@@ -1,0 +1,10 @@
+[
+  {"stage": "LAST_16", "utcDate": "2026-07-04T17:00:00Z", "homeTla": "CAN", "awayTla": "MAR"},
+  {"stage": "LAST_16", "utcDate": "2026-07-04T21:00:00Z", "homeTla": "PAR", "awayTla": "FRA"},
+  {"stage": "LAST_16", "utcDate": "2026-07-05T20:00:00Z", "homeTla": "BRA", "awayTla": "NOR"},
+  {"stage": "LAST_16", "utcDate": "2026-07-06T00:00:00Z", "homeTla": "MEX", "awayTla": "ENG"},
+  {"stage": "LAST_16", "utcDate": "2026-07-06T19:00:00Z", "homeTla": "POR", "awayTla": "ESP"},
+  {"stage": "LAST_16", "utcDate": "2026-07-07T00:00:00Z", "homeTla": "USA", "awayTla": "BEL"},
+  {"stage": "LAST_16", "utcDate": "2026-07-07T16:00:00Z", "homeTla": "ARG", "awayTla": "EGY"},
+  {"stage": "LAST_16", "utcDate": "2026-07-07T20:00:00Z", "homeTla": "SUI", "awayTla": "COL"}
+]

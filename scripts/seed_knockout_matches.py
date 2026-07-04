@@ -22,6 +22,7 @@ Usage:
     python scripts/seed_knockout_matches.py --dry-run
 """
 import argparse
+import json
 import os
 import sys
 from datetime import datetime, timezone
@@ -59,36 +60,75 @@ def _parse_kickoff(iso: str) -> datetime:
     return datetime.fromisoformat(iso.replace("Z", "+00:00")).replace(tzinfo=None)
 
 
+# Local fallback so Render builds don't depend on the API being up.
+# Schema mirrors a subset of the football-data.org match record: only the
+# fields the rest of this script consumes.
+FIXTURE_PATH = os.path.join(ROOT, "data", "knockout_matches.json")
+
+
+def _load_fixture() -> list:
+    """Returns fixture matches in the same shape as the football-data.org
+    match records. Returns [] if no fixture file or it's malformed."""
+    if not os.path.exists(FIXTURE_PATH):
+        return []
+    try:
+        with open(FIXTURE_PATH, encoding="utf-8") as fh:
+            rows = json.load(fh)
+    except Exception as exc:
+        print(f"WARN: could not read {FIXTURE_PATH}: {exc}")
+        return []
+    out = []
+    for r in rows:
+        stage = STAGE_MAP.get(r.get("stage"))
+        if not stage:
+            continue
+        out.append({
+            "stage": r["stage"],
+            "utcDate": r["utcDate"],
+            "homeTeam": {"tla": r.get("homeTla")},
+            "awayTeam": {"tla": r.get("awayTla")},
+            "score": {"fullTime": {"home": None, "away": None}},
+        })
+    return out
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true",
                         help="Show what would change without saving.")
     args = parser.parse_args()
 
+    api_matches: list = []
+    api_used = False
     api_key = os.environ.get("FOOTBALL_DATA_API_KEY", "")
-    if not api_key:
-        # Don't fail the Render build if the API key is missing — skip
-        # silently. Reseed can be triggered later by setting the env var
-        # and pushing a no-op commit. seed.py will run before us so the
-        # schema is already in place; this script is purely additive.
-        print("WARN: FOOTBALL_DATA_API_KEY not set; skipping knockout seed.")
-        return
+    if api_key:
+        try:
+            r = requests.get(
+                f"{API_BASE}/competitions/{COMPETITION}/matches",
+                headers={"X-Auth-Token": api_key, "Accept": "application/json"},
+                timeout=15,
+            )
+            r.raise_for_status()
+            data = r.json()
+            api_matches = [m for m in data.get("matches", []) if m.get("stage") in STAGE_MAP]
+            api_used = True
+        except Exception as exc:
+            # The build must always succeed even if the API is down or
+            # slow. Fall back to the committed fixture so we still get
+            # the most recent round seeded.
+            print(f"WARN: knockout seeder could not reach football-data.org ({exc}); "
+                  f"falling back to local fixture.")
 
-    try:
-        r = requests.get(
-            f"{API_BASE}/competitions/{COMPETITION}/matches",
-            headers={"X-Auth-Token": api_key, "Accept": "application/json"},
-            timeout=15,
-        )
-        r.raise_for_status()
-    except Exception as exc:
-        # The build must always succeed even if the API is down or
-        # slow. Existing rows stay in place; a future deploy with a
-        # healthy network can fill in any new ones.
-        print(f"WARN: knockout seeder could not reach football-data.org ({exc}); skipping.")
-        return
-    data = r.json()
-    api_matches = [m for m in data.get("matches", []) if m.get("stage") in STAGE_MAP]
+    if not api_matches:
+        fixture = _load_fixture()
+        if fixture:
+            print(f"Using local fixture: {FIXTURE_PATH} ({len(fixture)} matches)")
+            api_matches = fixture
+        elif not api_used:
+            # No key, no fixture, nothing to do — but don't fail the build.
+            print("WARN: FOOTBALL_DATA_API_KEY not set and no local fixture; "
+                  "skipping knockout seed.")
+            return
 
     with app.app_context():
         code_to_team = {t.code: t for t in Team.query.all()}
