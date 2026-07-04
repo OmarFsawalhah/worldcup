@@ -119,7 +119,12 @@
             </div>
             <input type="number" min="0" max="20" name="home_score" inputmode="numeric"
                    value="{{ prediction.home_score if prediction and prediction.home_score is not none else '' }}"
-                   class="score-box">
+                   class="score-box" data-score-input="home">
+            <div class="score-pad mt-2" role="group" aria-label="Home score suggestions">
+              {% for n in range(10) %}
+                <button type="button" class="score-pad-btn" data-score-target="home" data-score-value="{{ n }}">{{ n }}</button>
+              {% endfor %}
+            </div>
           </div>
           <span class="font-display text-3xl text-slate-300 mt-7">–</span>
           <div class="text-center">
@@ -129,7 +134,12 @@
             </div>
             <input type="number" min="0" max="20" name="away_score" inputmode="numeric"
                    value="{{ prediction.away_score if prediction and prediction.away_score is not none else '' }}"
-                   class="score-box">
+                   class="score-box" data-score-input="away">
+            <div class="score-pad mt-2" role="group" aria-label="Away score suggestions">
+              {% for n in range(10) %}
+                <button type="button" class="score-pad-btn" data-score-target="away" data-score-value="{{ n }}">{{ n }}</button>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -388,6 +398,41 @@
         c.classList.toggle('winner-card-active', inp && inp.checked);
       });
     });
+  });
+
+  // 0-9 suggestion pad — click a number to fill the matching score input.
+  // After filling home_score, auto-focus away_score so a second tap on the
+  // away pad commits the full result with one tap per side.
+  const scoreInputs = {
+    home: form.querySelector('input[name="home_score"]'),
+    away: form.querySelector('input[name="away_score"]'),
+  };
+  function syncPadHighlight(input) {
+    const side = input.dataset.scoreInput;
+    const value = input.value;
+    form.querySelectorAll('.score-pad-btn[data-score-target="' + side + '"]').forEach(b => {
+      b.classList.toggle('score-pad-btn-active', b.dataset.scoreValue === value);
+    });
+  }
+  form.querySelectorAll('.score-pad-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const side = btn.dataset.scoreTarget;
+      const input = scoreInputs[side];
+      if (!input) return;
+      input.value = btn.dataset.scoreValue;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      syncPadHighlight(input);
+      // After tapping a home score, jump focus to the away box so the
+      // user can finish the prediction with a single second tap.
+      if (side === 'home') {
+        scoreInputs.away.focus();
+      }
+    });
+  });
+  // Manual typing in the input should keep the pad in sync.
+  Object.values(scoreInputs).forEach(inp => {
+    if (inp) inp.addEventListener('input', () => syncPadHighlight(inp));
+    if (inp) syncPadHighlight(inp);
   });
 
   if (new URLSearchParams(location.search).get('done') === '1') {

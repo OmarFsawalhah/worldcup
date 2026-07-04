@@ -506,6 +506,46 @@ html[dir="rtl"] body {
   box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25);
 }
 
+/* 0-9 suggestion pad under each score input */
+.score-pad {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.25rem;
+  max-width: 12rem;
+  margin-inline: auto;
+}
+.score-pad-btn {
+  font-family: "Oswald", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3rem 0;
+  border: 1px solid var(--surface-line);
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: var(--text-on-light);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  min-height: 1.9rem;
+}
+.score-pad-btn:hover {
+  border-color: var(--brand-gold);
+  background: #fffbeb;
+  color: var(--brand-deep);
+  transform: translateY(-1px);
+}
+.score-pad-btn:active {
+  transform: translateY(0);
+  background: var(--brand-gold);
+  color: #1a1a1a;
+}
+.score-pad-btn-active {
+  background: var(--brand-gold);
+  color: #1a1a1a;
+  border-color: var(--brand-gold);
+}
+
 /* Trivia choice card */
 .choice-card {
   display: flex;
