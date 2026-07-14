@@ -41,6 +41,30 @@ import requests
 from app import app
 from models import db, Match, Team
 
+# Render's free Postgres sometimes takes a few seconds for the internal
+# hostname to resolve right after a database restart or first deploy.
+# Retry the initial connect for up to ~30s before giving up.
+def _wait_for_db(max_seconds=30, interval=2):
+    import time
+    from sqlalchemy import text
+    from sqlalchemy.exc import OperationalError
+    deadline = time.monotonic() + max_seconds
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            with db.engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            print(f"DB ready (attempt {attempt})")
+            return
+        except OperationalError as exc:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise
+            print(f"DB not ready yet ({exc.__class__.__name__}); "
+                  f"retrying in {interval}s ({int(remaining)}s left)")
+            time.sleep(interval)
+
 
 API_BASE = "https://api.football-data.org/v4"
 COMPETITION = "WC"
@@ -131,6 +155,7 @@ def main():
             return
 
     with app.app_context():
+        _wait_for_db()
         code_to_team = {t.code: t for t in Team.query.all()}
         existing = Match.query.filter(
             Match.stage.in_(list(STAGE_MAP.values()))

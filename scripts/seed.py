@@ -14,6 +14,32 @@ sys.path.insert(0, ROOT)
 from app import app
 from models import db, User, Team, Player, Match
 
+# Render's free Postgres sometimes takes a few seconds for the internal
+# hostname (e.g. dpg-d8mvee3tqb8s73cjtnt0-a) to resolve right after a
+# database restart or first deploy. Retry the initial connect for up to
+# ~30s before giving up — saves the build from a one-time DNS hiccup.
+def _wait_for_db(max_seconds=30, interval=2):
+    import time
+    from sqlalchemy import text
+    from sqlalchemy.exc import OperationalError
+    deadline = time.monotonic() + max_seconds
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            with db.engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            print(f"DB ready (attempt {attempt})")
+            return
+        except OperationalError as exc:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise
+            print(f"DB not ready yet ({exc.__class__.__name__}); "
+                  f"retrying in {interval}s ({int(remaining)}s left)")
+            time.sleep(interval)
+
+
 ADMIN_USERNAMES = ["anas", "ali", "ahmad_okour"]
 DEFAULT_ADMIN_PASSWORD = "admin123"
 
@@ -199,6 +225,7 @@ def _ensure_schema():
 
 def main():
     with app.app_context():
+        _wait_for_db()
         db.create_all()
         seed_teams()
         _ensure_schema()           # only after teams exist (FK target)
