@@ -20,8 +20,8 @@
   <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-center" dir="ltr">
     {# Home #}
     <div class="flex flex-col items-center sm:flex-1">
-      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
-      <div class="font-display text-base sm:text-xl">{{ match.home_team.name(lang) }}</div>
+      <img src="{{ flag_url(match.home_team) }}" alt="{{ team_en(match.home_team) }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
+      <div class="font-display text-base sm:text-xl">{{ team_name(match.home_team, lang) }}</div>
       <div class="text-xs text-slate-400 mt-1">HOME</div>
     </div>
 
@@ -38,8 +38,8 @@
 
     {# Away #}
     <div class="flex flex-col items-center sm:flex-1">
-      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
-      <div class="font-display text-base sm:text-xl">{{ match.away_team.name(lang) }}</div>
+      <img src="{{ flag_url(match.away_team) }}" alt="{{ team_en(match.away_team) }}" class="flag-img flag-img-lg sm:flag-img-xl mb-2">
+      <div class="font-display text-base sm:text-xl">{{ team_name(match.away_team, lang) }}</div>
       <div class="text-xs text-slate-400 mt-1">AWAY</div>
     </div>
   </div>
@@ -87,8 +87,8 @@
         </div>
         <div class="grid grid-cols-2 gap-2 sm:gap-3">
           {% for opt, label in [
-              ('home', match.home_team.name(lang)),
-              ('away', match.away_team.name(lang))
+              ('home', team_name(match.home_team, lang)),
+              ('away', team_name(match.away_team, lang))
           ] %}
             {% set picked = prediction and prediction.winner_prediction == opt %}
             <label class="winner-card {{ 'winner-card-active' if picked }}">
@@ -115,7 +115,7 @@
           <div class="text-center">
             <div class="flex items-center justify-center gap-2 mb-2">
               <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm">
-              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ match.home_team.name(lang) }}</span>
+              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ team_name(match.home_team, lang) }}</span>
             </div>
             <input type="number" min="0" max="20" name="home_score" inputmode="numeric"
                    value="{{ prediction.home_score if prediction and prediction.home_score is not none else '' }}"
@@ -129,7 +129,7 @@
           <span class="font-display text-3xl text-slate-300 mt-7">–</span>
           <div class="text-center">
             <div class="flex items-center justify-center gap-2 mb-2">
-              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ match.away_team.name(lang) }}</span>
+              <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ team_name(match.away_team, lang) }}</span>
               <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm">
             </div>
             <input type="number" min="0" max="20" name="away_score" inputmode="numeric"
@@ -152,14 +152,14 @@
         </div>
         <select name="first_scorer_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
-          <optgroup label="{{ match.home_team.name(lang) }}">
+          <optgroup label="{{ team_name(match.home_team, lang) }}">
             {% for p in home_players %}
               <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.first_scorer_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
               </option>
             {% endfor %}
           </optgroup>
-          <optgroup label="{{ match.away_team.name(lang) }}">
+          <optgroup label="{{ team_name(match.away_team, lang) }}">
             {% for p in away_players %}
               <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.first_scorer_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
@@ -177,14 +177,14 @@
         </div>
         <select name="motm_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
-          <optgroup label="{{ match.home_team.name(lang) }}">
+          <optgroup label="{{ team_name(match.home_team, lang) }}">
             {% for p in home_players %}
               <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.motm_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
               </option>
             {% endfor %}
           </optgroup>
-          <optgroup label="{{ match.away_team.name(lang) }}">
+          <optgroup label="{{ team_name(match.away_team, lang) }}">
             {% for p in away_players %}
               <option value="{{ p.id }}" {{ 'selected' if prediction and prediction.motm_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
@@ -320,8 +320,8 @@
         <div class="text-center">
           <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold">{{ t('match.pick_winner') }}</div>
           <div class="font-display text-xl mt-1">
-            {% if actual_winner == 'home' %}{{ match.home_team.name(lang) }}
-            {% elif actual_winner == 'away' %}{{ match.away_team.name(lang) }}
+            {% if actual_winner == 'home' %}{{ team_name(match.home_team, lang) }}
+            {% elif actual_winner == 'away' %}{{ team_name(match.away_team, lang) }}
             {% else %}🤝 {{ t('match.draw') }}{% endif %}
           </div>
         </div>

@@ -23,7 +23,11 @@ def _normalize_db_url(url: str) -> str:
 def _flag_url(team, size=80):
     """Return a CDN URL for the team's flag. Decodes the regional-indicator
     emoji stored in Team.flag_emoji back into a 2-letter ISO code.
-    Falls back to a generic UN flag if decoding fails."""
+    Falls back to a generic UN flag if decoding fails or the team is
+    a NULL placeholder (knockout rounds whose participants aren't decided
+    yet — see scripts/seed_knockout_matches.py)."""
+    if team is None:
+        return f"https://flagcdn.com/w{size}/un.png"
     emoji = (team.flag_emoji or "").strip()
     code = ""
     for ch in emoji:
@@ -60,6 +64,22 @@ def create_app():
     app.jinja_env.globals["current_lang"] = current_lang
     app.jinja_env.globals["is_rtl"] = is_rtl
     app.jinja_env.globals["flag_url"] = _flag_url
+
+    def _team_name(team, lang="en"):
+        """Localized team name; 'TBD' for NULL placeholders (future knockout
+        rounds whose participants aren't decided yet)."""
+        if team is None:
+            return "TBD"
+        return team.name(lang)
+
+    def _team_en(team):
+        """English team name; '' for NULL placeholders."""
+        if team is None:
+            return ""
+        return team.name_en or ""
+
+    app.jinja_env.globals["team_name"] = _team_name
+    app.jinja_env.globals["team_en"] = _team_en
 
     from routes.auth import bp as auth_bp
     from routes.public import bp as public_bp

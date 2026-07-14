@@ -43,17 +43,17 @@
             <a href="{{ url_for('public.match_detail', match_id=m.id) }}" class="hover:underline">
               <span class="inline-flex items-center gap-2 whitespace-nowrap match-ltr">
                 <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm">
-                <span class="text-sm">{{ m.home_team.name(lang) }}</span>
+                <span class="text-sm">{{ team_name(m.home_team, lang) }}</span>
                 <span class="text-slate-400">vs</span>
-                <span class="text-sm">{{ m.away_team.name(lang) }}</span>
+                <span class="text-sm">{{ team_name(m.away_team, lang) }}</span>
                 <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm">
               </span>
             </a>
           </td>
           <td class="text-center text-xs">
             <div class="font-bold">
-              {% if p.winner_prediction == 'home' %}{{ m.home_team.name(lang) }}
-              {% elif p.winner_prediction == 'away' %}{{ m.away_team.name(lang) }}
+              {% if p.winner_prediction == 'home' %}{{ team_name(m.home_team, lang) }}
+              {% elif p.winner_prediction == 'away' %}{{ team_name(m.away_team, lang) }}
               {% elif p.winner_prediction == 'draw' %}🤝 {{ t('match.draw') }}
               {% else %}<span class="text-slate-400 italic">—</span>{% endif %}
             </div>

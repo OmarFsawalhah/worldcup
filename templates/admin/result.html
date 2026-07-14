@@ -10,13 +10,13 @@
 <div class="card-pitch mb-4 text-center">
   <div class="flex items-center justify-center gap-3 sm:gap-5 font-display text-lg sm:text-xl match-ltr">
     <div class="flex items-center gap-2">
-      <img src="{{ flag_url(match.home_team) }}" alt="{{ match.home_team.name_en }}" class="flag-img flag-img-md">
-      <span>{{ match.home_team.name(lang) }}</span>
+      <img src="{{ flag_url(match.home_team) }}" alt="{{ team_en(match.home_team) }}" class="flag-img flag-img-md">
+      <span>{{ team_name(match.home_team, lang) }}</span>
     </div>
     <span class="text-slate-300">vs</span>
     <div class="flex items-center gap-2">
-      <span>{{ match.away_team.name(lang) }}</span>
-      <img src="{{ flag_url(match.away_team) }}" alt="{{ match.away_team.name_en }}" class="flag-img flag-img-md">
+      <span>{{ team_name(match.away_team, lang) }}</span>
+      <img src="{{ flag_url(match.away_team) }}" alt="{{ team_en(match.away_team) }}" class="flag-img flag-img-md">
     </div>
   </div>
 </div>
@@ -26,14 +26,14 @@
     <div class="text-center">
       <div class="flex items-center justify-center gap-2 mb-2">
         <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-sm">
-        <span class="text-sm font-medium">{{ match.home_team.name(lang) }}</span>
+        <span class="text-sm font-medium">{{ team_name(match.home_team, lang) }}</span>
       </div>
       <input type="number" min="0" name="home_score" required value="{{ match.home_score if match.home_score is not none else '' }}" class="score-box">
     </div>
     <span class="font-display text-3xl text-slate-300 mt-7">–</span>
     <div class="text-center">
       <div class="flex items-center justify-center gap-2 mb-2">
-        <span class="text-sm font-medium">{{ match.away_team.name(lang) }}</span>
+        <span class="text-sm font-medium">{{ team_name(match.away_team, lang) }}</span>
         <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-sm">
       </div>
       <input type="number" min="0" name="away_score" required value="{{ match.away_score if match.away_score is not none else '' }}" class="score-box">

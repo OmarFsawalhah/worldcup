@@ -30,7 +30,7 @@
         {% for m in matches %}
           <option value="{{ m.id }}" {{ 'selected' if selected_match and m.id == selected_match.id }}>
             {{ m.kickoff_utc.strftime('%Y-%m-%d %H:%M') }} ·
-            {{ m.home_team.name(lang) }} vs {{ m.away_team.name(lang) }}
+            {{ team_name(m.home_team, lang) }} vs {{ team_name(m.away_team, lang) }}
             ({{ m.status }})
           </option>
         {% endfor %}
@@ -50,7 +50,7 @@
       <span class="text-emerald-700 font-bold">+ {{ t('admin.will_create_new') }}</span>
     {% endif %}
     <span class="text-slate-500">
-      {{ t('admin.for_user_match', user=selected_user.username, match=selected_match.home_team.name(lang) + ' vs ' + selected_match.away_team.name(lang)) }}
+      {{ t('admin.for_user_match', user=selected_user.username, match=team_name(selected_match.home_team, lang) + ' vs ' + team_name(selected_match.away_team, lang)) }}
     </span>
   </div>
 
@@ -63,8 +63,8 @@
       <div class="text-xs uppercase tracking-wider text-emerald-700 font-bold mb-2">+3 pts</div>
       <div class="grid grid-cols-2 gap-2 sm:gap-3">
         {% for opt, label in [
-            ('home', selected_match.home_team.name(lang)),
-            ('away', selected_match.away_team.name(lang))
+            ('home', team_name(selected_match.home_team, lang)),
+            ('away', team_name(selected_match.away_team, lang))
         ] %}
           <label class="winner-card {{ 'winner-card-active' if current_pred and current_pred.winner_prediction == opt }}">
             <input type="radio" name="winner_prediction" value="{{ opt }}" class="sr-only"
@@ -84,7 +84,7 @@
         <div class="text-center">
           <div class="flex items-center justify-center gap-2 mb-2">
             <img src="{{ flag_url(selected_match.home_team) }}" alt="" class="flag-img flag-img-sm">
-            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ selected_match.home_team.name(lang) }}</span>
+            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ team_name(selected_match.home_team, lang) }}</span>
           </div>
           <input type="number" min="0" max="20" name="home_score" inputmode="numeric"
                  value="{{ current_pred.home_score if current_pred and current_pred.home_score is not none else '' }}"
@@ -93,7 +93,7 @@
         <span class="font-display text-3xl text-slate-300 mt-7">–</span>
         <div class="text-center">
           <div class="flex items-center justify-center gap-2 mb-2">
-            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ selected_match.away_team.name(lang) }}</span>
+            <span class="text-xs sm:text-sm font-medium truncate max-w-[110px]">{{ team_name(selected_match.away_team, lang) }}</span>
             <img src="{{ flag_url(selected_match.away_team) }}" alt="" class="flag-img flag-img-sm">
           </div>
           <input type="number" min="0" max="20" name="away_score" inputmode="numeric"
@@ -109,14 +109,14 @@
         <label class="label">{{ t('admin.first_scorer') }}</label>
         <select name="first_scorer_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
-          <optgroup label="{{ selected_match.home_team.name(lang) }}">
+          <optgroup label="{{ team_name(selected_match.home_team, lang) }}">
             {% for p in players if p.team_id == selected_match.home_team_id %}
               <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.first_scorer_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
               </option>
             {% endfor %}
           </optgroup>
-          <optgroup label="{{ selected_match.away_team.name(lang) }}">
+          <optgroup label="{{ team_name(selected_match.away_team, lang) }}">
             {% for p in players if p.team_id == selected_match.away_team_id %}
               <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.first_scorer_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
@@ -130,14 +130,14 @@
         <label class="label">{{ t('admin.motm') }}</label>
         <select name="motm_id" class="input">
           <option value="">— {{ t('match.summary_none') }} —</option>
-          <optgroup label="{{ selected_match.home_team.name(lang) }}">
+          <optgroup label="{{ team_name(selected_match.home_team, lang) }}">
             {% for p in players if p.team_id == selected_match.home_team_id %}
               <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.motm_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}
               </option>
             {% endfor %}
           </optgroup>
-          <optgroup label="{{ selected_match.away_team.name(lang) }}">
+          <optgroup label="{{ team_name(selected_match.away_team, lang) }}">
             {% for p in players if p.team_id == selected_match.away_team_id %}
               <option value="{{ p.id }}" {{ 'selected' if current_pred and current_pred.motm_id == p.id }}>
                 {{ p.name(lang) }}{% if p.shirt_number %} (#{{ p.shirt_number }}){% endif %}

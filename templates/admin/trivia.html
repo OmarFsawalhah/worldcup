@@ -11,11 +11,11 @@
   <div class="flex items-center justify-center gap-3 sm:gap-5 font-display text-lg sm:text-xl">
     <div class="flex items-center gap-2">
       <img src="{{ flag_url(match.home_team) }}" alt="" class="flag-img flag-img-md">
-      <span>{{ match.home_team.name(lang) }}</span>
+      <span>{{ team_name(match.home_team, lang) }}</span>
     </div>
     <span class="text-slate-300">vs</span>
     <div class="flex items-center gap-2">
-      <span>{{ match.away_team.name(lang) }}</span>
+      <span>{{ team_name(match.away_team, lang) }}</span>
       <img src="{{ flag_url(match.away_team) }}" alt="" class="flag-img flag-img-md">
     </div>
   </div>

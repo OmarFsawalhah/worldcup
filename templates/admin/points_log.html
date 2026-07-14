@@ -17,13 +17,13 @@
           {% if entry.match %}
             <div class="flex items-center gap-2 min-w-0 flex-1 match-ltr">
               <img src="{{ flag_url(entry.match.home_team) }}" alt="" class="flag-img flag-img-sm">
-              <span class="font-display text-sm sm:text-base">{{ entry.match.home_team.name(lang) }}</span>
+              <span class="font-display text-sm sm:text-base">{{ team_name(entry.match.home_team, lang) }}</span>
               {% if entry.match.has_finished() %}
                 <span class="font-score text-base">{{ entry.match.home_score }}-{{ entry.match.away_score }}</span>
               {% else %}
                 <span class="text-slate-400 text-sm">vs</span>
               {% endif %}
-              <span class="font-display text-sm sm:text-base">{{ entry.match.away_team.name(lang) }}</span>
+              <span class="font-display text-sm sm:text-base">{{ team_name(entry.match.away_team, lang) }}</span>
               <img src="{{ flag_url(entry.match.away_team) }}" alt="" class="flag-img flag-img-sm">
             </div>
             <div class="text-xs font-mono text-slate-500">{{ entry.kickoff.strftime('%Y-%m-%d %H:%M') }} UTC</div>

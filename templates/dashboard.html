@@ -88,8 +88,8 @@
           <div class="flex items-center justify-between gap-2" dir="ltr">
             {# Home #}
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-              <img src="{{ flag_url(m.home_team) }}" alt="{{ m.home_team.name_en }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
-              <span class="font-display text-sm sm:text-base truncate">{{ m.home_team.name(current_lang()) }}</span>
+              <img src="{{ flag_url(m.home_team) }}" alt="{{ m.home_team.name_en if m.home_team else 'TBD' }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
+              <span class="font-display text-sm sm:text-base truncate">{{ m.home_team.name(current_lang()) if m.home_team else 'TBD' }}</span>
             </div>
 
             {# Center #}
@@ -101,8 +101,8 @@
 
             {# Away #}
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-end">
-              <span class="font-display text-sm sm:text-base truncate text-end">{{ m.away_team.name(current_lang()) }}</span>
-              <img src="{{ flag_url(m.away_team) }}" alt="{{ m.away_team.name_en }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
+              <span class="font-display text-sm sm:text-base truncate text-end">{{ m.away_team.name(current_lang()) if m.away_team else 'TBD' }}</span>
+              <img src="{{ flag_url(m.away_team) }}" alt="{{ m.away_team.name_en if m.away_team else 'TBD' }}" class="flag-img flag-img-md sm:flag-img-lg shrink-0">
             </div>
           </div>
 

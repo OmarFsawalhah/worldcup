@@ -73,10 +73,10 @@ def notify_match_scored(match: Match) -> int:
         link = url_for("public.match_detail", match_id=match.id)
     except RuntimeError:
         link = f"/match/{match.id}"
-    home = match.home_team.name_en
-    away = match.away_team.name_en
-    home_ar = match.home_team.name_ar
-    away_ar = match.away_team.name_ar
+    home = match.home_team.name_en if match.home_team else "TBD"
+    away = match.away_team.name_en if match.away_team else "TBD"
+    home_ar = match.home_team.name_ar if match.home_team else "TBD"
+    away_ar = match.away_team.name_ar if match.away_team else "TBD"
     n = 0
     for p in match.predictions:
         msg_en = f"{home} {match.home_score}-{match.away_score} {away} · You earned {p.points_awarded} pts"
@@ -172,10 +172,10 @@ def fire_starting_match_reminders() -> int:
         predicted_user_ids = {
             p.user_id for p in Prediction.query.filter_by(match_id=m.id).all()
         }
-        home_en = m.home_team.name_en
-        away_en = m.away_team.name_en
-        home_ar = m.home_team.name_ar
-        away_ar = m.away_team.name_ar
+        home_en = m.home_team.name_en if m.home_team else "TBD"
+        away_en = m.away_team.name_en if m.away_team else "TBD"
+        home_ar = m.home_team.name_ar if m.home_team else "TBD"
+        away_ar = m.away_team.name_ar if m.away_team else "TBD"
         link = f"/match/{m.id}"
         msg_en = f"⚽ Last hour to predict {home_en} vs {away_en}"
         msg_ar = f"⚽ آخر ساعة لتوقع {home_ar} ضد {away_ar}"

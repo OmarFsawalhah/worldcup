@@ -107,9 +107,9 @@
         <td>
           <div class="flex items-center gap-2 whitespace-nowrap match-ltr">
             <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm">
-            <span>{{ m.home_team.name(lang) }}</span>
+            <span>{{ team_name(m.home_team, lang) }}</span>
             <span class="text-slate-400">vs</span>
-            <span>{{ m.away_team.name(lang) }}</span>
+            <span>{{ team_name(m.away_team, lang) }}</span>
             <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm">
           </div>
         </td>
@@ -145,7 +145,7 @@
       <div class="flex items-center justify-between gap-2 mb-2 match-ltr">
         <div class="flex items-center gap-2 min-w-0 flex-1">
           <img src="{{ flag_url(m.home_team) }}" alt="" class="flag-img flag-img-sm shrink-0">
-          <span class="text-sm font-medium truncate">{{ m.home_team.name(lang) }}</span>
+          <span class="text-sm font-medium truncate">{{ team_name(m.home_team, lang) }}</span>
         </div>
         {% if m.home_score is not none %}
           <span class="font-display text-lg shrink-0">{{ m.home_score }} - {{ m.away_score }}</span>
@@ -153,7 +153,7 @@
           <span class="text-slate-400 text-sm shrink-0">vs</span>
         {% endif %}
         <div class="flex items-center gap-2 min-w-0 flex-1 justify-end">
-          <span class="text-sm font-medium truncate text-end">{{ m.away_team.name(lang) }}</span>
+          <span class="text-sm font-medium truncate text-end">{{ team_name(m.away_team, lang) }}</span>
           <img src="{{ flag_url(m.away_team) }}" alt="" class="flag-img flag-img-sm shrink-0">
         </div>
       </div>
